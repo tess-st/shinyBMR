@@ -42,7 +42,7 @@ observe({
 data.name = reactive({
   type = input$import.type
   if (type == "examples") {
-    return(getTaskId(get(input$import.mlr)))
+    return(input$import.examples$name)
   } 
   else{
     if(type == "RDS") {
