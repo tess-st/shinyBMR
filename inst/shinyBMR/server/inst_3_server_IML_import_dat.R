@@ -16,10 +16,10 @@ observe({
   } else if (imlimport.type == "examples") {
     path_dat <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/BMR", sep = "/")
     if(input$import.iml.example == "Classif: BreastCancer"){
-      f <- paste(path_dat, "bmr_example_classif_BreastCancer.RDS", sep = "/")
+      f <- paste(path_dat, "data_BreastCancer.rda", sep = "/")
     }
     if(input$import.iml.example == "Regr: LongleysEconomic"){
-      f <- paste(path_dat, "bmr_example_regr_LongleysEconomic_2measures.RDS", sep = "/")
+      f <- paste(path_dat, "data_LongleysEconomic.RData", sep = "/")
     }
     
     sessionEnvir <- sys.frame()
