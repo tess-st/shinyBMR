@@ -18,7 +18,8 @@ makeImportSideBar = function(type) {
       imptype.sel.input,
       sidebarMenu(
         menuItem("Choose example data"),
-        selectInput("import.bmr.example", "", choices = c("Classif: BreastCancer", "Regr: LongleysEconomic"))
+        selectInput("import.bmr.example", "", choices = c("Not Selected",
+"Classif: BreastCancer", "Regr: LongleysEconomic"))
       )
     )
   )
