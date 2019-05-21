@@ -1,5 +1,5 @@
 #Import Data
-output$imlimport.ui = renderUI({
+output$imlimport.ui <- renderUI({
   type = input$imlimport.type;
   if (is.null(type))
     type = "examples"
@@ -7,16 +7,16 @@ output$imlimport.ui = renderUI({
 })
 
 
-dataiml = reactiveValues(data = NULL, data.test = NULL, data.name = NULL)
+dataiml <- reactiveValues(data = NULL, data.test = NULL, data.name = NULL)
 
 
 observe({
   reqAndAssign(input$imlimport.type, "imlimport.type")
-  if (is.null(imlimport.type)) {
+  if (is.null(imlimport.type)){
     dataiml$data = NULL
-  } else if (imlimport.type == "examples") {
+  } else if (imlimport.type == "examples"){
     if(input$import.iml.example == "Not Selected"){
-      NULL  
+      "Select the Data for your IML Analysis"
     }
     else{
       path_dat <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/IML_dat", sep = "/")
@@ -28,12 +28,12 @@ observe({
     }
     
     sessionEnvir <- sys.frame()
-    if (is.null(f)) {
+    if (is.null(f)){
       dataiml$data = NULL
-    } else {
+    } else{
       e = new.env()
       load(f, envir = e)
-      for (obj in ls(e)) { 
+      for (obj in ls(e)){ 
         if(class(get(obj, envir = e)) == "data.frame")
           name <- obj
       }
@@ -43,37 +43,37 @@ observe({
     
   } 
   
-  else if (imlimport.type == "CSV") {
+  else if (imlimport.type == "CSV"){
     f = input$imlimport.csv$datapath
-    if (is.null(f)) {
+    if (is.null(f)){
       dataiml$data = NULL
     } 
-    else {
+    else{
       dataiml$data = read.csv(f, header = input$imlimport.header, sep = input$imlimport.sep,
         quote = input$imlimport.quote)
     }
   }
   
-  else if (imlimport.type == "RDS") {
+  else if (imlimport.type == "RDS"){
     f = input$imlimport.RDS$datapath
-    if (is.null(f)) {
+    if (is.null(f)){
       dataiml$data = NULL
-    } else {
+    } else{
       nam <- readRDS(f)
       dataiml$data <- getBMRAggrPerformances(nam, as.df = T)
     }
   }
   
-  else if (imlimport.type == "Rdata") {
+  else if (imlimport.type == "Rdata"){
     f = input$imlimport.Rdata$datapath
     sessionEnvir <- sys.frame()
-    if (is.null(f)) {
+    if (is.null(f)){
       dataiml$data = NULL
     } 
     else{
       e = new.env()
       load(f, envir = e)
-      for (obj in ls(e)) { 
+      for (obj in ls(e)){ 
         if(class(get(obj, envir = e)) == "data.frame")
           name <- obj
       }
@@ -83,17 +83,17 @@ observe({
 })
 
 
-df.name = reactive({
+df.name <- reactive({
   type = input$imlimport.type
-  if (type == "examples") {
+  if (type == "examples"){
     return(input$imlimport.examples$name)
   }  
-  else {
-    if (type == "CSV") {
+  else{
+    if (type == "CSV"){
       return(input$imlimport.csv$name)
     }
     else{
-      if(type == "RDS") {
+      if(type == "RDS"){
         return(input$imlimport.RDS$name)
       }else{
         if(type == "Rdata"){
@@ -113,7 +113,7 @@ observe({
 })
 
 
-output$imlimport.preview = DT::renderDataTable({
+output$imlimport.preview <- DT::renderDataTable({
   reqAndAssign(dataiml$data, "df_imp")
   colnames(df_imp) = make.names(colnames(df_imp))
   if(input$round == "Off"){
