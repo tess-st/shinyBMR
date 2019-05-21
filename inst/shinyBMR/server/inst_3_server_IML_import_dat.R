@@ -1,8 +1,8 @@
 #Import Data
 output$imlimport.ui = renderUI({
   type = input$imlimport.type;
-  if (is.null(type))
-    type = "examples"
+  #if (is.null(type))
+   # type = "examples"
   makeIMLImportSideBar(type)
 })
 
