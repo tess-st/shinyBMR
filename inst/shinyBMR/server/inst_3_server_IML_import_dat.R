@@ -14,7 +14,7 @@ observe({
   if (is.null(imlimport.type)) {
     dataiml$data = NULL
   } else if (imlimport.type == "examples") {
-    path_dat <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/BMR", sep = "/")
+    path_dat <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/IML_dat", sep = "/")
     if(input$import.iml.example == "Classif: BreastCancer"){
       f <- paste(path_dat, "data_BreastCancer.rda", sep = "/")
     }
