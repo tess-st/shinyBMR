@@ -21,8 +21,8 @@ makeIMLImportSideBar = function(data.type, mod.type) {
       imptype.sel.iml.input,
       sidebarMenu(
         menuItem("Choose example data"),
-        selectInput("import.iml.example", "", choices = c("Not Selected",
-          "Classif: BreastCancer", "Regr: LongleysEconomic"))
+        selectInput("import.iml.example", "", 
+          choices = c("Classif: BreastCancer", "Regr: LongleysEconomic"))
       )
     ),
     

@@ -15,11 +15,7 @@ observe({
   if (is.null(imlimport.type)){
     dataiml$data = NULL
   } else if (imlimport.type == "examples"){
-    if(input$import.iml.example == "Not Selected"){
-      "Select the Data for your IML Analysis"
-    }
-    else{
-      path_dat <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/IML_dat", sep = "/")
+    path_dat <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/IML_dat", sep = "/")
     if(input$import.iml.example == "Classif: BreastCancer"){
       f <- paste(path_dat, "data_BreastCancer.rda", sep = "/")
     }
@@ -30,7 +26,8 @@ observe({
     sessionEnvir <- sys.frame()
     if (is.null(f)){
       dataiml$data = NULL
-    } else{
+    }
+    else{
       e = new.env()
       load(f, envir = e)
       for (obj in ls(e)){ 
@@ -39,8 +36,6 @@ observe({
       }
       dataiml$data <- e[[name]]
     }
-    }
-    
   } 
   
   else if (imlimport.type == "CSV"){
@@ -58,7 +53,8 @@ observe({
     f = input$imlimport.RDS$datapath
     if (is.null(f)){
       dataiml$data = NULL
-    } else{
+    } 
+    else{
       nam <- readRDS(f)
       dataiml$data <- getBMRAggrPerformances(nam, as.df = T)
     }
