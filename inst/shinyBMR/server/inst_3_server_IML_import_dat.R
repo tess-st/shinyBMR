@@ -16,7 +16,7 @@ observe({
     dataiml$data = NULL
   } else if (imlimport.type == "examples") {
     if(input$import.iml.example == "Not Selected"){
-      dataiml$data = NULL  
+      NULL  
     }
     else{
       path_dat <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/IML_dat", sep = "/")
