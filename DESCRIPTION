@@ -1,7 +1,7 @@
 Package: shinyBMR
 Title: A graphical user interface to explore benchmark results.
 Description:
-  shinyBMR wraps the functionalities of the R-package mlr
+  shinyBMR wraps the benchmark functionalities of the R-package mlr
   into a graphical user-interface built with shiny.
   This enables the user to conduct all steps of the machine learning workflow from his browser.
 Authors@R: c(
