@@ -13,7 +13,18 @@ observe({
   if (is.null(import.type)) {
     data$data = NULL
   } else if (import.type == "examples") {
-    data$data = getTaskData(get(input$import.mlr))
+    path_BMR <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/BMR", sep = "/")
+    if(input$import.bmr.example == "Classif: BreastCancer"){
+      f <- paste(path_BMR, "bmr_example_classif_BreastCancer.RDS", sep = "/")
+    }
+    if(input$import.bmr.example == "Regr: LongleysEconomic"){
+      f <- paste(path_BMR, "bmr_example_regr_LongleysEconomic_2measures.RDS", sep = "/")
+    }
+    nam <- readRDS(f)
+    data$bmr <- nam
+    data$data <- getBMRAggrPerformances(nam, as.df = T)
+    data$data.notagg <- getBMRPerformances(nam, as.df = T)
+    #data$data = getTaskData(get(input$import.mlr))
   } 
   else if (import.type == "RDS") {
     f = input$import.RDS$datapath
