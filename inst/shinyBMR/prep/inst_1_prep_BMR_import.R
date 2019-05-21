@@ -11,11 +11,6 @@ makeImportSideBar = function(type) {
         menuItem("Import"),
         fileInput("import.RDS", "Choose RDS File",
           accept = c("text/RDS", ".RDS"))
-        #checkboxInput("import.header", "Header", TRUE),
-        #selectInput("import.sep", "Separator", selected = ",",
-        #           choices = c(Comma = ",", Semicolon = ";", Tab = "\t")),
-        #selectInput("import.quote", "Quote", selected = '"',
-        #             choices = c(None = "", "Double Quote" = '"', "Single Quote" = "'"))
       )
     ),
     
@@ -23,7 +18,7 @@ makeImportSideBar = function(type) {
       imptype.sel.input,
       sidebarMenu(
         menuItem("Choose example data"),
-        selectInput("import.mlr", "", choices = c("iris.task", "bh.task", "sonar.task"))
+        selectInput("import.bmr.example", "", choices = c("Classif: BreastCancer", "Regr: LongleysEconomic"))
       )
     )
   )
