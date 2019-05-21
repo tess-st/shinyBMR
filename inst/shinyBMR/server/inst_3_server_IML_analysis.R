@@ -94,7 +94,7 @@ imp_zoom <- reactive({
 })
 
 # imp_plot = observeEvent(input$button,
-#   # code für den plot von unten
+#   # code f?r den plot von unten
 # )
 # 
 # output$importance_plot = renderPlot(imp_plot)

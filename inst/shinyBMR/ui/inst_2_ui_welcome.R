@@ -41,7 +41,7 @@ tabpanel.welcome = dashboardPage(
           #An implementation of the iml-functions can be find in this ShinyApp. 
           #br(),
           p("This ShinyApp is part of my Master Thesis at the Institut of Statistics,
-        Ludwig-Maximilians-Universität München (LMU). I tried to provide a framework for analysing and visualizing the most
+        Ludwig-Maximilians-Universit?t M?nchen (LMU). I tried to provide a framework for analysing and visualizing the most
         important aspects of the BMRs resulting from the 'benchmark'-function of the 'mlr'-package. Furthermore should methods of
         interpretability be offered for (the best) models with help of the 'iml'-package. Main focus is here on model-agnostic 
         methods")
@@ -111,7 +111,7 @@ tabpanel.welcome = dashboardPage(
 #   step and in an interactive way as this package comes up with a ShinyApp."),
 # 
 # p("This ShinyApp is part of my Master Thesis at the Institut of Statistics, 
-#   Ludwig-Maximilians-Universität München (LMU)."),
+#   Ludwig-Maximilians-Universit?t M?nchen (LMU)."),
 # br()
 
 # p("p creates a paragraph of text."),
