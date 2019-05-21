@@ -1,18 +1,19 @@
-output$import.ui = renderUI({
+output$import.ui <- renderUI({
   type = input$import.type;
   if (is.null(type))
     type = "examples"
   makeImportSideBar(type)
 })
 
-data = reactiveValues(bmr = NULL, data = NULL, data.notagg = NULL, data.name = NULL)
+data <- reactiveValues(bmr = NULL, data = NULL, data.notagg = NULL, data.name = NULL)
 
 
 observe({
   reqAndAssign(input$import.type, "import.type")
   if (is.null(import.type)) {
     data$data = NULL
-  } else if (import.type == "examples") {
+  } 
+  else if (import.type == "examples") {
     path_BMR <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/BMR", sep = "/")
     if(input$import.bmr.example == "Classif: BreastCancer"){
       f <- paste(path_BMR, "bmr_example_classif_BreastCancer.RDS", sep = "/")
@@ -26,11 +27,12 @@ observe({
     data$data.notagg <- getBMRPerformances(nam, as.df = T)
     #data$data = getTaskData(get(input$import.mlr))
   } 
-  else if (import.type == "RDS") {
+  else if (import.type == "RDS"){
     f = input$import.RDS$datapath
     if (is.null(f)) {
       data$data = NULL
-    } else {
+    } 
+    else{
       nam <- readRDS(f)
       data$bmr <- nam
       data$data <- getBMRAggrPerformances(nam, as.df = T)
@@ -41,7 +43,7 @@ observe({
 
 data.name = reactive({
   type = input$import.type
-  if (type == "examples") {
+  if(type == "examples") {
     return(input$import.examples$name)
   } 
   else{
@@ -82,7 +84,7 @@ output$import.preview = DT::renderDataTable({
   caption = "The following Data Set was imported")
 
 
-output$import.analysis = DT::renderDataTable({
+output$import.analysis <- DT::renderDataTable({
   dataset <- isolate(data$data)
   if(input$round == "Off"){
     return(perfAggDf(dataset))

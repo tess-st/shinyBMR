@@ -14,7 +14,21 @@ observe({
   if (is.null(imlimport.type)) {
     dataiml$data = NULL
   } else if (imlimport.type == "examples") {
-    dataiml$data = getTaskData(get(input$imlimport.mlr))
+    path_dat <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/BMR", sep = "/")
+    if(input$import.iml.example == "Classif: BreastCancer"){
+      f <- paste(path_dat, "bmr_example_classif_BreastCancer.RDS", sep = "/")
+    }
+    if(input$import.iml.example == "Regr: LongleysEconomic"){
+      f <- paste(path_dat, "bmr_example_regr_LongleysEconomic_2measures.RDS", sep = "/")
+    }
+    
+    e = new.env()
+    load(f, envir = e)
+    for (obj in ls(e)) { 
+      if(class(get(obj, envir = e)) == "data.frame")
+        name <- obj
+    }
+    dataiml$data <- e[[name]]
   } 
   # else if (imlimport.type == "OpenML") {
   #   show("loading-openml")
@@ -91,7 +105,7 @@ observe({
 df.name = reactive({
   type = input$imlimport.type
   if (type == "examples") {
-    return(getTaskId(get(input$imlimport.mlr)))
+    return(input$imlimport.examples$name)
   } 
   # else {
   #   if (type == "OpenML") {

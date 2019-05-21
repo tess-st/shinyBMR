@@ -185,4 +185,4 @@ bench_BreastCancer <- benchmark(tasks = task, learners = c(lrns_untuned_all, #gr
                                                            lrns_tuned_smoted_all), #group 4
                                 resampling = outer, measures = measure, models = F)
 
-saveRDS(bench_BreastCancer , "bmr_example_classif_BreastCancer.RDS")
+#saveRDS(bench_BreastCancer , "bmr_example_classif_BreastCancer.RDS")
