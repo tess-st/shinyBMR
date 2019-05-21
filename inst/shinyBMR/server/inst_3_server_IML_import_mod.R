@@ -14,7 +14,7 @@ observe({
   if (is.null(imlimportmod.type)){
     modiml$mod = NULL
   } else if (imlimportmod.type == "examples"){
-    path_IML <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/BMR", sep = "/")
+    path_IML <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/IML_mod", sep = "/")
     if(input$import.iml.example == "BreastCancer: gbm, notuning_nosmote"){
       f <- paste(path_IML, "iml_example_classif_BreastCancer_gbm_notuning_nosmote.RDS", sep = "/")
     }
