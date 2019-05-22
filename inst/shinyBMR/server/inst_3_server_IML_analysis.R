@@ -277,115 +277,121 @@ observeEvent(input$iml_settings, {
   },height = function() {
     eff_zoom() * session$clientData$output_pdp_plot_width
   })
-})
-output$ice_plot <- renderPlot({
-  set.seed(seed())
-  reqAndAssign(input$iml.parallel, "iml_parallel")
   
-  feature <- eff_feature1()
-  grid <- eff_grid()
-  #center <- eff_center()
   
-  if(feature != "Not Selected"){
-    if(iml_parallel == "No"){
-      effect.ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-        method = "ice") 
+  
+  output$ice_plot <- renderPlot({
+    set.seed(seed())
+    reqAndAssign(input$iml.parallel, "iml_parallel")
+    
+    feature <- eff_feature1()
+    grid <- eff_grid()
+    #center <- eff_center()
+    
+    if(feature != "Not Selected"){
+      if(iml_parallel == "No"){
+        effect.ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
+          method = "ice") 
+      }
+      if(iml_parallel == "Yes"){
+        cl = makePSOCKcluster(input$iml.parallel.cores)
+        registerDoParallel(cl)
+        effect.ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
+          method = "ice", parallel = TRUE) 
+        stopCluster(cl)
+      }
+      
+      plot(effect.ice)
     }
-    if(iml_parallel == "Yes"){
-      cl = makePSOCKcluster(input$iml.parallel.cores)
-      registerDoParallel(cl)
-      effect.ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-        method = "ice", parallel = TRUE) 
-      stopCluster(cl)
+    # feature <- eff_feature1()
+    # grid <- eff_grid()
+    # 
+    # if(feature != "Not Selected"){
+    #   effect.ice <- FeatureEffect$new(predictor, feature = feature, grid.size = grid,
+    #                                   method = "ice") 
+    #   plot(effect.ice)
+    # }
+  },height = function() {
+    eff_zoom() * session$clientData$output_ice_plot_width
+  })
+  
+  output$pdp_ice_plot <- renderPlot({
+    set.seed(seed())
+    reqAndAssign(input$iml.parallel, "iml_parallel")
+    
+    feature <- eff_feature1()
+    grid <- eff_grid()
+    #center <- eff_center()
+    
+    #if(feature != "Not Selected"){
+    if(feature != "Not Selected"){
+      if(iml_parallel == "No"){
+        effect.pdp_ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
+          method = "pdp+ice") 
+      }
+      if(iml_parallel == "Yes"){
+        cl = makePSOCKcluster(input$iml.parallel.cores)
+        registerDoParallel(cl)
+        effect.pdp_ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
+          method = "pdp+ice", parallel = TRUE) 
+        stopCluster(cl)
+      }
+      
+      plot(effect.pdp_ice)
+    }
+    # predictor <- makePredictor(data = dataiml$data, model = modiml$mod)
+    # feature <- eff_feature1()
+    # grid <- eff_grid()
+    # 
+    # if(feature != "Not Selected"){
+    #   effect.pdp_ice <- FeatureEffect$new(predictor, feature = feature, grid.size = grid,
+    #                                       method = "pdp+ice") 
+    #   plot(effect.pdp_ice)
+    # }
+  },height = function() {
+    eff_zoom() * session$clientData$output_pdp_ice_plot_width
+  })
+  
+  output$ale_plot <- renderPlot({
+    set.seed(seed())
+    reqAndAssign(input$iml.parallel, "iml_parallel")
+    
+    feature <- c(eff_feature1(), eff_feature2())
+    grid <- eff_grid()
+    
+    if(feature != "Not Selected"){
+      if(iml_parallel == "No"){
+        effect.ale <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
+          method = "ale") 
+      }
+      if(iml_parallel == "Yes"){
+        cl = makePSOCKcluster(input$iml.parallel.cores)
+        registerDoParallel(cl)
+        effect.ale <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
+          method = "ale", parallel = TRUE) 
+        stopCluster(cl)
+      }
+      
+      plot(effect.ale)
     }
     
-    plot(effect.ice)
-  }
-  # feature <- eff_feature1()
-  # grid <- eff_grid()
-  # 
-  # if(feature != "Not Selected"){
-  #   effect.ice <- FeatureEffect$new(predictor, feature = feature, grid.size = grid,
-  #                                   method = "ice") 
-  #   plot(effect.ice)
-  # }
-},height = function() {
-  eff_zoom() * session$clientData$output_ice_plot_width
+    # predictor <- makePredictor(data = dataiml$data, model = modiml$mod)
+    # #feature <- eff_feature()
+    # feature <- c(eff_feature1(), eff_feature2())
+    # grid <- eff_grid()
+    # 
+    # if(feature != "Not Selected"){
+    #   effect.ale <- FeatureEffect$new(predictor, feature = feature, grid.size = grid,
+    #                                   method = "ale") 
+    #   plot(effect.ale)
+    # }
+  },height = function() {
+    eff_zoom() * session$clientData$output_ale_plot_width
+  })  
+  
+  
 })
 
-output$pdp_ice_plot <- renderPlot({
-  set.seed(seed())
-  reqAndAssign(input$iml.parallel, "iml_parallel")
-  
-  feature <- eff_feature1()
-  grid <- eff_grid()
-  #center <- eff_center()
-  
-  #if(feature != "Not Selected"){
-  if(feature != "Not Selected"){
-    if(iml_parallel == "No"){
-      effect.pdp_ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-        method = "pdp+ice") 
-    }
-    if(iml_parallel == "Yes"){
-      cl = makePSOCKcluster(input$iml.parallel.cores)
-      registerDoParallel(cl)
-      effect.pdp_ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-        method = "pdp+ice", parallel = TRUE) 
-      stopCluster(cl)
-    }
-    
-    plot(effect.pdp_ice)
-  }
-  # predictor <- makePredictor(data = dataiml$data, model = modiml$mod)
-  # feature <- eff_feature1()
-  # grid <- eff_grid()
-  # 
-  # if(feature != "Not Selected"){
-  #   effect.pdp_ice <- FeatureEffect$new(predictor, feature = feature, grid.size = grid,
-  #                                       method = "pdp+ice") 
-  #   plot(effect.pdp_ice)
-  # }
-},height = function() {
-  eff_zoom() * session$clientData$output_pdp_ice_plot_width
-})
-
-output$ale_plot <- renderPlot({
-  set.seed(seed())
-  reqAndAssign(input$iml.parallel, "iml_parallel")
-  
-  feature <- c(eff_feature1(), eff_feature2())
-  grid <- eff_grid()
-  
-  if(feature != "Not Selected"){
-    if(iml_parallel == "No"){
-      effect.ale <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-        method = "ale") 
-    }
-    if(iml_parallel == "Yes"){
-      cl = makePSOCKcluster(input$iml.parallel.cores)
-      registerDoParallel(cl)
-      effect.ale <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-        method = "ale", parallel = TRUE) 
-      stopCluster(cl)
-    }
-    
-    plot(effect.ale)
-  }
-  
-  # predictor <- makePredictor(data = dataiml$data, model = modiml$mod)
-  # #feature <- eff_feature()
-  # feature <- c(eff_feature1(), eff_feature2())
-  # grid <- eff_grid()
-  # 
-  # if(feature != "Not Selected"){
-  #   effect.ale <- FeatureEffect$new(predictor, feature = feature, grid.size = grid,
-  #                                   method = "ale") 
-  #   plot(effect.ale)
-  # }
-},height = function() {
-  eff_zoom() * session$clientData$output_ale_plot_width
-})
 
 
 ############### Feature Interaction
