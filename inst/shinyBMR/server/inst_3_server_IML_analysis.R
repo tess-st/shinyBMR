@@ -137,7 +137,7 @@ observeEvent(input$iml_settings, {
   
 })
 
- 
+
 # output$importance_plot <- renderPlot({
 #   if(modiml$type == "classif"){
 #     imp_loss <- imp_loss_classif()
@@ -183,14 +183,14 @@ output$effMethodInfo <- renderText({
 
 output$effectFeature1 <- renderUI({
   selectizeInput("effFeature1", "Select Feature 1 (necessary)", 
-                 choices = c('Not Selected', as.list(getLearnerModel(modiml$mod)$features)),
-                 selected = NULL, multiple = FALSE)
+    choices = c('Not Selected', as.list(getLearnerModel(modiml$mod)$features)),
+    selected = NULL, multiple = FALSE)
 })
 
 output$effectFeature2 <- renderUI({
   selectizeInput("effFeature2", "Select Feature 2 (optional)", 
-                 choices = c('Not Selected', as.list(getLearnerModel(modiml$mod)$features)),
-                 selected = NULL, multiple = FALSE)
+    choices = c('Not Selected', as.list(getLearnerModel(modiml$mod)$features)),
+    selected = NULL, multiple = FALSE)
 })
 
 eff_feature1 <- reactive({
@@ -218,17 +218,17 @@ output$effFeatureInfo <- renderText({
   "The names of the features for which the effects were computed."
 })
 
-eff_grid <- reactive({
-  req(input$effGrid)
-})
+# eff_grid <- reactive({
+#   req(input$effGrid)
+# })
 
 output$effGridInfo <- renderText({
   "The size of the grid for evaluating the predictions."
 })
 
-eff_zoom <- reactive({
-  req(input$effZoom)
-})
+# eff_zoom <- reactive({
+#   req(input$effZoom)
+# })
 
 # eff_center <- reactive({
 #   if(is.null(input$effCenter)){
@@ -238,38 +238,46 @@ eff_zoom <- reactive({
 #   }
 #   
 # })
-output$seed.text = renderText({seed()})
+#output$seed.text = renderText({seed()})
 
 
-
-output$pdp_plot <- renderPlot({
-  set.seed(seed())
-  reqAndAssign(input$iml.parallel, "iml_parallel")
+observeEvent(input$iml_settings, {
+  req(input$effGrid)
+  req(input$effZoom)
+  
+  grid <- isolate(input$effGrid)
+  zoom <- isolate(input$effZoom)
   
   feature <- c(eff_feature1(), eff_feature2())
-  grid <- eff_grid()
-  #center <- eff_center()
   
-  #if(feature != "Not Selected"){
-  if(!is.null(feature)){
-    if(iml_parallel == "No"){
-      effect.pdp <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-                                      method = "pdp") 
-    }
-    if(iml_parallel == "Yes"){
-      cl = makePSOCKcluster(input$iml.parallel.cores)
-      registerDoParallel(cl)
-      effect.pdp <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-                                      method = "pdp", parallel = TRUE) 
-      stopCluster(cl)
-    }
+  output$pdp_plot <- renderPlot({
+    set.seed(seed())
+    reqAndAssign(input$iml.parallel, "iml_parallel")
     
-    plot(effect.pdp)
-  }
-},height = function() {
-  eff_zoom() * session$clientData$output_pdp_plot_width
+    #feature <- c(eff_feature1(), eff_feature2())
+    #grid <- eff_grid()
+    #center <- eff_center()
+    
+    #if(feature != "Not Selected"){
+    if(!is.null(feature)){
+      if(iml_parallel == "No"){
+        effect.pdp <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
+          method = "pdp") 
+      }
+      if(iml_parallel == "Yes"){
+        cl = makePSOCKcluster(input$iml.parallel.cores)
+        registerDoParallel(cl)
+        effect.pdp <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
+          method = "pdp", parallel = TRUE) 
+        stopCluster(cl)
+      }
+      
+      plot(effect.pdp)
+    }
+  },height = function() {
+    eff_zoom() * session$clientData$output_pdp_plot_width
+  })
 })
-
 output$ice_plot <- renderPlot({
   set.seed(seed())
   reqAndAssign(input$iml.parallel, "iml_parallel")
@@ -281,13 +289,13 @@ output$ice_plot <- renderPlot({
   if(feature != "Not Selected"){
     if(iml_parallel == "No"){
       effect.ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-                                      method = "ice") 
+        method = "ice") 
     }
     if(iml_parallel == "Yes"){
       cl = makePSOCKcluster(input$iml.parallel.cores)
       registerDoParallel(cl)
       effect.ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-                                      method = "ice", parallel = TRUE) 
+        method = "ice", parallel = TRUE) 
       stopCluster(cl)
     }
     
@@ -317,13 +325,13 @@ output$pdp_ice_plot <- renderPlot({
   if(feature != "Not Selected"){
     if(iml_parallel == "No"){
       effect.pdp_ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-                                          method = "pdp+ice") 
+        method = "pdp+ice") 
     }
     if(iml_parallel == "Yes"){
       cl = makePSOCKcluster(input$iml.parallel.cores)
       registerDoParallel(cl)
       effect.pdp_ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-                                          method = "pdp+ice", parallel = TRUE) 
+        method = "pdp+ice", parallel = TRUE) 
       stopCluster(cl)
     }
     
@@ -352,13 +360,13 @@ output$ale_plot <- renderPlot({
   if(feature != "Not Selected"){
     if(iml_parallel == "No"){
       effect.ale <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-                                      method = "ale") 
+        method = "ale") 
     }
     if(iml_parallel == "Yes"){
       cl = makePSOCKcluster(input$iml.parallel.cores)
       registerDoParallel(cl)
       effect.ale <- FeatureEffect$new(predictor(), feature = feature, grid.size = grid, #center.at = center,
-                                      method = "ale", parallel = TRUE) 
+        method = "ale", parallel = TRUE) 
       stopCluster(cl)
     }
     
@@ -383,8 +391,8 @@ output$ale_plot <- renderPlot({
 ############### Feature Interaction
 output$interactionFeature <- renderUI({
   selectizeInput("intFeature", "Select Feature", 
-                 choices = c('Not Selected', 'All', as.list(getLearnerModel(modiml$mod)$features)),
-                 selected = NULL, multiple = FALSE)
+    choices = c('Not Selected', 'All', as.list(getLearnerModel(modiml$mod)$features)),
+    selected = NULL, multiple = FALSE)
 })
 
 int_feature <- reactive({
@@ -432,7 +440,7 @@ output$interaction_plot <- renderPlot({
       cl = makePSOCKcluster(input$iml.parallel.cores)
       registerDoParallel(cl)
       interaction <<- Interaction$new(predictor(), feature = feature, grid.size = grid,
-                                      parallel = TRUE)
+        parallel = TRUE)
       stopCluster(cl)
     }
     
@@ -447,8 +455,8 @@ output$interaction_plot <- renderPlot({
 ############### LIME   
 output$limeInterest <- renderUI({
   selectizeInput("limeInstance", "Select Instance you are intrested in",
-                 choices = c('Not Selected', as.list(as.numeric(rownames(dataiml$data)))),
-                 selected = NULL, multiple = FALSE)
+    choices = c('Not Selected', as.list(as.numeric(rownames(dataiml$data)))),
+    selected = NULL, multiple = FALSE)
 })
 
 data_instance_lime <- reactive({
@@ -477,8 +485,8 @@ max_features <- reactive({
 
 output$limeMaxFeatures <- renderUI({
   numericInput("limeK", "Number of Features for Surrogate Model",
-               value = 3, min = 1, max = max_features(),
-               step = 1)
+    value = 3, min = 1, max = max_features(),
+    step = 1)
 })
 
 lime_k <-reactive({
@@ -492,8 +500,8 @@ output$limeMaxFeaturesInfo <- renderText({
 output$limeDistance <- renderUI({
   list(
     selectInput("limeDist", "Distance Function",
-                choices = c("gower","euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski"),
-                selected = "gower", multiple = FALSE),
+      choices = c("gower","euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski"),
+      selected = "gower", multiple = FALSE),
     numericInput("kernelWidth", "Kernel Width", value = 0.75, min = 0, max = Inf, step = 0.05)
   )
 })
@@ -535,10 +543,10 @@ output$lime_plot <- renderPlot({
   
   if(lime_dist() == "gower"){
     lime <- LocalModel$new(predictor(), x.interest = interest, k = k,
-                           dist.fun = "gower")
+      dist.fun = "gower")
   }else{
     lime <- LocalModel$new(predictor(), x.interest = interest, k = k,
-                           dist.fun = lime_dist(), kernel.width = kernel_width())
+      dist.fun = lime_dist(), kernel.width = kernel_width())
   }
   
   plot(lime)
@@ -548,8 +556,8 @@ output$lime_plot <- renderPlot({
 ############### Shapley  
 output$shapleyInterest <- renderUI({
   selectizeInput("shapleyInstance", "Select Instance you are intrested in",
-                 choices = c('Not Selected', as.list(as.numeric(rownames(dataiml$data)))),
-                 selected = NULL, multiple = FALSE)
+    choices = c('Not Selected', as.list(as.numeric(rownames(dataiml$data)))),
+    selected = NULL, multiple = FALSE)
 })
 
 data_instance_shapley <- reactive({
