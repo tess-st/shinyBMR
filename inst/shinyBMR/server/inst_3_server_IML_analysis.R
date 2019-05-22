@@ -26,9 +26,9 @@ seed <- reactive({
 })
 
 
-# predictor <- reactive({
-#   makePredictor(data = dataiml$data, model = modiml$mod)
-# })
+predictor <- reactive({
+  makePredictor(data = dataiml$data, model = modiml$mod)
+})
 
 #Feature Importance
 #tricky
@@ -107,18 +107,17 @@ output$importance_plot <- renderPlot({
   if(modiml$type == "regr"){
     imp_loss <- imp_loss_regr
   }
-  predictor <- makePredictor(data = dataiml$data, model = modiml$mod)
   
   set.seed(seed())
   reqAndAssign(input$iml.parallel, "iml_parallel")
   
   if(iml_parallel == "No"){ # || is.null(iml_parallel)
-    importance <<- FeatureImp$new(predictor, loss = imp_loss, compare = imp_compare(), n.repetitions = imp_rep())
+    importance <<- FeatureImp$new(predictor(), loss = imp_loss, compare = imp_compare(), n.repetitions = imp_rep())
   }
   if(iml_parallel == "Yes"){
     cl = makePSOCKcluster(input$iml.parallel.cores)
     registerDoParallel(cl)
-    importance <<- FeatureImp$new(predictor, loss = imp_loss, compare = imp_compare(), n.repetitions = imp_rep(),
+    importance <<- FeatureImp$new(predictor(), loss = imp_loss, compare = imp_compare(), n.repetitions = imp_rep(),
                                   parallel = TRUE)
     stopCluster(cl)
   }
