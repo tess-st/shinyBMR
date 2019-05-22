@@ -53,9 +53,9 @@ output$modeltype <- renderText({
 })
 outputOptions(output, "modeltype", suspendWhenHidden = FALSE)
 
-imp_compare <- reactive({
-  req(input$impCompare)
-})
+# imp_compare <- reactive({
+#   req(input$impCompare)
+# })
 
 output$impCompareInfo <- renderText({
   req(input$impCompare)
@@ -67,9 +67,9 @@ output$impCompareInfo <- renderText({
   }
 })
 
-imp_rep <- reactive({
-  req(input$impRep)
-})
+# imp_rep <- reactive({
+#   req(input$impRep)
+# })
 
 output$impRepInfo <- renderText({
   req(input$impRep)
@@ -77,55 +77,93 @@ output$impRepInfo <- renderText({
   accurate the results become."
 })
 
-imp_loss_classif <- reactive({
-  req(input$impLossClassif)
-})
-
-imp_loss_regr <- reactive({
-  req(input$impLossRegr)
-})
+# imp_loss_classif <- reactive({
+#   req(input$impLossClassif)
+# })
+# 
+# imp_loss_regr <- reactive({
+#   req(input$impLossRegr)
+# })
 
 output$impLossInfo <- renderText({
   "Choose one of the listed loss functions (selection depending on the type of your task)."
 })
 
-imp_zoom <- reactive({
+# imp_zoom <- reactive({
+#   req(input$impZoom)
+# })
+
+
+observeEvent(input$iml_settings, {
+  req(input$impCompare)
+  req(input$impRep)
+  req(input$impLossClassif)
+  req(input$impLossRegr)
   req(input$impZoom)
+  
+  comp <- isolate(input$impCompare)
+  rep <- isolate(input$impRep)
+  zoom <- isolate(input$impZoom)
+  
+  output$importance_plot <- renderPlot({
+    if(modiml$type == "classif"){
+      loss <- input$impLossClassif
+    }
+    if(modiml$type == "regr"){
+      loss <-  input$impLossRegr
+    }
+    
+    set.seed(seed())
+    predictor <- makePredictor(data = dataiml$data, model = modiml$mod)
+    reqAndAssign(input$iml.parallel, "iml_parallel")
+    
+    if(iml_parallel == "No"){ 
+      importance <<- FeatureImp$new(predictor, loss = loss, compare = comp, n.repetitions = rep)
+    }
+    if(iml_parallel == "Yes"){
+      cl = makePSOCKcluster(input$iml.parallel.cores)
+      registerDoParallel(cl)
+      importance <<- FeatureImp$new(predictor, loss = loss, compare = comp, n.repetitions = rep,
+        parallel = TRUE)
+      stopCluster(cl)
+    }
+    
+    plot(importance)
+    
+    
+  },height = function() {
+    zoom * session$clientData$output_importance_plot_width
+  })
+  
 })
 
-# imp_plot = observeEvent(input$button,
-#   # code f?r den plot von unten
-# )
-# 
-# output$importance_plot = renderPlot(imp_plot)
-
-
-output$importance_plot <- renderPlot({
-  if(modiml$type == "classif"){
-    imp_loss <- imp_loss_classif()
-  }
-  if(modiml$type == "regr"){
-    imp_loss <- imp_loss_regr
-  }
-  
-  set.seed(seed())
-  reqAndAssign(input$iml.parallel, "iml_parallel")
-  
-  if(iml_parallel == "No"){ # || is.null(iml_parallel)
-    importance <<- FeatureImp$new(predictor(), loss = imp_loss, compare = imp_compare(), n.repetitions = imp_rep())
-  }
-  if(iml_parallel == "Yes"){
-    cl = makePSOCKcluster(input$iml.parallel.cores)
-    registerDoParallel(cl)
-    importance <<- FeatureImp$new(predictor(), loss = imp_loss, compare = imp_compare(), n.repetitions = imp_rep(),
-                                  parallel = TRUE)
-    stopCluster(cl)
-  }
-  
-  plot(importance)
-},height = function() {
-  imp_zoom() * session$clientData$output_importance_plot_width
-})
+ 
+# output$importance_plot <- renderPlot({
+#   if(modiml$type == "classif"){
+#     imp_loss <- imp_loss_classif()
+#   }
+#   if(modiml$type == "regr"){
+#     imp_loss <- imp_loss_regr
+#   }
+#   
+#   set.seed(seed())
+#   reqAndAssign(input$iml.parallel, "iml_parallel")
+#   
+#   if(iml_parallel == "No"){ # || is.null(iml_parallel)
+#     importance <<- FeatureImp$new(predictor(), loss = imp_loss, compare = imp_compare(), n.repetitions = imp_rep())
+#   }
+#   if(iml_parallel == "Yes"){
+#     cl = makePSOCKcluster(input$iml.parallel.cores)
+#     registerDoParallel(cl)
+#     importance <<- FeatureImp$new(predictor(), loss = imp_loss, compare = imp_compare(), n.repetitions = imp_rep(),
+#                                   parallel = TRUE)
+#     stopCluster(cl)
+#   }
+#   
+#   plot(importance)
+# },height = function() {
+#   imp_zoom() * session$clientData$output_importance_plot_width
+# })
 
 
 output$imp_summary <- renderPrint({
