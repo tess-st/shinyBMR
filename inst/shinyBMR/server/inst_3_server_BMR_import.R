@@ -58,39 +58,51 @@ observe({
   data$data.name = data.name()
 })
 
-output$import.preview = DT::renderDataTable({
-  reqAndAssign(data$data, "data_imp")
-  reqAndAssign(data$data.notagg, "data_imp.notagg")
-  colnames(data_imp) = make.names(colnames(data_imp))
-  colnames(data_imp.notagg) = make.names(colnames(data_imp.notagg))
-  if(input$aggregatedBMR){
-    if(input$round == "Off"){
-      data_imp
-    }
-    else{
-      format(data_imp, digits = 3, nsmall = 3)
-    }
-  }
-  else{
-    if(input$round == "Off"){
-      data_imp.notagg
-    }
-    else{
-      format(data_imp.notagg, digits = 3, nsmall = 3)
-    }
-  }
-  
-}, options = list(scrollX = TRUE),
-  caption = "The following Data Set was imported")
+# output$import.preview = DT::renderDataTable({
+#   reqAndAssign(data$data, "data_imp")
+#   reqAndAssign(data$data.notagg, "data_imp.notagg")
+#   colnames(data_imp) = make.names(colnames(data_imp))
+#   colnames(data_imp.notagg) = make.names(colnames(data_imp.notagg))
+#   if(input$aggregatedBMR){
+#     if(input$round == "Off"){
+#       data_imp
+#     }
+#     else{
+#       format(data_imp, digits = 3, nsmall = 3)
+#     }
+#   }
+#   else{
+#     if(input$round == "Off"){
+#       data_imp.notagg
+#     }
+#     else{
+#       format(data_imp.notagg, digits = 3, nsmall = 3)
+#     }
+#   }
+#   
+# }, options = list(scrollX = TRUE),
+#   caption = "The following Data Set was imported")
 
 
 output$import.analysis <- DT::renderDataTable({
-  dataset <- isolate(data$data)
+  reqAndAssign(data$data, "data_agg")
+  reqAndAssign(data$data.notagg, "data_unagg")
+  
+  if(input$aggregatedBMR){
   if(input$round == "Off"){
-    return(perfAggDf(dataset))
+    tabImport(perfAggDf(data_agg))
   }
   else{
-    format(perfAggDf(dataset), digits = 3, nsmall = 3)
+    format(tabImport(perfAggDf(data_agg)), digits = 3, nsmall = 3)
+  }
+  }
+  else{
+    if(input$round == "Off"){
+      tabImport(perfAggDf(data_unagg))
+    }
+    else{
+      format(tabImport(perfAggDf(data_unagg)), digits = 3, nsmall = 3)
+    }
   }
 }, options = list(scrollX = TRUE),
   caption = "The Data Set for the BMR Analysis has the following structure")

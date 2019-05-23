@@ -39,6 +39,7 @@ Imports:
   BBmisc,
   ParamHelpers,
   DT,
+  parallel,
   doParallel,
   xtable,
   gridExtra,

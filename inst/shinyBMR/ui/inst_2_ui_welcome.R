@@ -4,6 +4,14 @@ tabpanel.welcome = dashboardPage(
   
   dashboardBody(tags$head(tags$style(
     HTML('.wrapper {height: auto !important; position:relative; overflow-x:hidden; overflow-y:auto; max-height:90vh}'))),#680px
+    tags$head(tags$style(HTML('
+        a[href="#shiny-tab-widgets"] {
+      z-index: -99999;
+      }
+      a[href="#"] {
+      z-index: -99999;
+      }
+      '))),
     #for global Plotting Window
     setShadow("card"),
     fluidRow(
@@ -41,7 +49,7 @@ tabpanel.welcome = dashboardPage(
           #An implementation of the iml-functions can be find in this ShinyApp. 
           #br(),
           p("This ShinyApp is part of my Master Thesis at the Institut of Statistics,
-        Ludwig-Maximilians-Universit?t M?nchen (LMU). I tried to provide a framework for analysing and visualizing the most
+        Ludwig-Maximilians-University (LMU) of Munich. I tried to provide a framework for analysing and visualizing the most
         important aspects of the BMRs resulting from the 'benchmark'-function of the 'mlr'-package. Furthermore should methods of
         interpretability be offered for (the best) models with help of the 'iml'-package. Main focus is here on model-agnostic 
         methods")
