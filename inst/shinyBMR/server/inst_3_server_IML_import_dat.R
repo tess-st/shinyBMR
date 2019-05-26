@@ -1,4 +1,4 @@
-#Import Data
+# Import Data
 output$imlimport.ui <- renderUI({
   type = input$imlimport.type;
   if (is.null(type))
@@ -122,6 +122,40 @@ output$imlimport.preview <- DT::renderDataTable({
   caption = "The following Data Set was imported")
 
 
-output$summaryDataSet <- renderPrint({
-  summary(dataiml$data)
+# output$summaryDataSet <- renderPrint({
+#   summary(dataiml$data)
+# })
+
+
+# Summary
+summarize.data = reactive({
+  if(is.null(dataiml$data)){
+    NULL
+  }
+  else{
+    d = dataiml$data
+    
+    validate(need(class(d) == "data.frame", "You didn't import any Data."))
+    colnames(d) = make.names(colnames(d))
+    pos.x = colnames(Filter(function(x) "POSIXt" %in% class(x) , d))
+    d = dropNamed(d, drop = pos.x)    
+    summarizeColumns(d)
+  }
 })
+
+output$summary.dat = renderUI({
+  # if (input$show_help)
+  #   text = htmlOutput("summary.text")
+  # else
+  #   text = NULL
+  
+  ui = box(width = 12, title = "Summary",
+    br(),
+    DT::dataTableOutput("summary.datatable")
+  )
+  ui
+})
+
+output$summary.datatable = DT::renderDataTable({
+  summarize.data()
+}, options = list(scrollX = TRUE))

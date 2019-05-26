@@ -8,7 +8,7 @@ observeEvent(once = TRUE,ignoreNULL = FALSE, ignoreInit = FALSE, eventExpr = dat
     hr(),
     p("BMR: Analyse Results from the benchmark()-function in 'mlr'"),
     p("IML: Make Models (Blackbox-Methods) interpretable with help of the 'iml' package")
-   # actionLink("link_to_tabpanel_a", "Link to panel A")
+    # actionLink("link_to_tabpanel_a", "Link to panel A")
   ))
 })
 # 
@@ -23,6 +23,40 @@ observeEvent(once = TRUE,ignoreNULL = FALSE, ignoreInit = FALSE, eventExpr = dat
 #     helpText("Here you can create your task. If your target variable is numeric, you will get a regression task while you will get a classification task for factor variables.")
 #   )
 # })
+
+########### Summary Import IML Data
+output$summary_info <- renderUI({
+  widgetUserBox(
+    title = "Information Summary",
+    subtitle = "Interpretabel Machine Learning in R",
+    type = NULL,
+    width = 12,
+    background = TRUE,
+    backgroundUrl = "https://raw.githubusercontent.com/tess-st/shinyBMR/master/www/BlueGalaxy.jpg",
+    closable = FALSE,
+    p("NAME ~ Name of column,"),
+    p("TYPE ~ Data type of column,"), 
+    p("NA ~ Number of NAs in column"),
+    p("DISP ~ Measure of dispersion, for numerics and integers [sd] is used, for categorical columns the 
+      qualitative variation,"),
+    p("MEAN ~ Mean value of column, NA for categorical columns,"),
+    p("MEDIAN ~ Median value of column, NA for categorical columns,"),
+    p("MAD ~ MAD of column, NA for categorical columns,"),
+    p("MIN ~ Minimal value of column, for categorical columns the size of the smallest category,"),
+    p("MAX ~ Maximal value of column, for categorical columns the size of the largest category,"),
+    p("NLEVELS ~ For categorical columns, the number of factor levels, NA else."),
+    footer = tags$div(
+      tagList(a("R Documentation: summarizeColumns()", 
+        href="https://www.rdocumentation.org/packages/mlr/versions/2.13/topics/summarizeColumns")),
+      tags$br(),
+      p("provided by Bischl B., Lang M., Kotthoff L., Schiffner J., Richter J., Studerus E., 
+        Casalicchio G.,Jones Z. (2016). 'mlr: Machine Learning in R.' Journal of Machine Learning 
+        Research, 17(170), 1-5. http://jmlr.org/papers/v17/15-066.html."),
+      tags$hr(),
+      "Image Source: https://wallpapersafari.com/w/q8koJO"
+    )
+  )
+})
 
 
 ########### Feature Importance
@@ -49,15 +83,15 @@ output$iml_info <- renderUI({
       tagList(a("CRAN: IML Package - FeatureImp", href="https://rdrr.io/cran/iml/man/FeatureImp.html#heading-7")),
       tags$br(),
       tagList(a("Book IML: Model-agnostic Methods - Feature Importance", 
-                href="https://christophm.github.io/interpretable-ml-book/feature-importance.html")),
+        href="https://christophm.github.io/interpretable-ml-book/feature-importance.html")),
       tags$br(),
       p("provided by Molnar C., Bischl B., Casalicchio G. (2018). 'iml: An R package 
         for Interpretable Machine Learning.' JOSS, 3(26), 786. doi: 10.21105/joss.00786, 
         http://joss.theoj.org/papers/10.21105/joss.00786."),
       tags$hr(),
       "Image Source: https://wallpapersafari.com/w/q8koJO"
-      )
     )
+  )
 })
 
 
@@ -83,7 +117,7 @@ output$imp_info <- renderUI({
       tagList(a("CRAN: IML Package - FeatureImp", href="https://rdrr.io/cran/iml/man/FeatureImp.html#heading-7")),
       tags$br(),
       tagList(a("Book IML: Model-agnostic Methods - Feature Importance", 
-                href="https://christophm.github.io/interpretable-ml-book/feature-importance.html")),
+        href="https://christophm.github.io/interpretable-ml-book/feature-importance.html")),
       tags$br(),
       p("provided by Molnar C., Bischl B., Casalicchio G. (2018). 'iml: An R package 
             for Interpretable Machine Learning.' JOSS, 3(26), 786. doi: 10.21105/joss.00786, 
@@ -91,7 +125,7 @@ output$imp_info <- renderUI({
       tags$hr(),
       "Image Source: https://wallpapersafari.com/w/q8koJO"
     )
-    )
+  )
 })
 
 
@@ -120,15 +154,15 @@ output$pdp_info <- renderUI({
       tagList(a("CRAN: IML Package - FeatureEffect", href="https://rdrr.io/cran/iml/man/FeatureEffect.html")),
       tags$br(),
       tagList(a("Book IML: Model-agnostic Methods - Partial Dependence Plot", 
-                href="https://christophm.github.io/interpretable-ml-book/pdp.html")),
+        href="https://christophm.github.io/interpretable-ml-book/pdp.html")),
       tags$br(),
       p("provided by Molnar C., Bischl B., Casalicchio G. (2018). 'iml: An R package 
         for Interpretable Machine Learning.' JOSS, 3(26), 786. doi: 10.21105/joss.00786, 
         http://joss.theoj.org/papers/10.21105/joss.00786."),
       tags$hr(),
       "Image Source: https://wallpapersafari.com/w/q8koJO"
-      )
     )
+  )
 })
 
 #ICE
@@ -157,15 +191,15 @@ output$ice_info <- renderUI({
       tagList(a("CRAN: IML Package - FeatureEffect", href="https://rdrr.io/cran/iml/man/FeatureEffect.html")),
       tags$br(),
       tagList(a("Book IML: Model-agnostic Methods - Individual Conditional Expectation", 
-                href="https://christophm.github.io/interpretable-ml-book/ice.html")),
+        href="https://christophm.github.io/interpretable-ml-book/ice.html")),
       tags$br(),
       p("provided by Molnar C., Bischl B., Casalicchio G. (2018). 'iml: An R package 
         for Interpretable Machine Learning.' JOSS, 3(26), 786. doi: 10.21105/joss.00786, 
         http://joss.theoj.org/papers/10.21105/joss.00786."),
       tags$hr(),
       "Image Source: https://wallpapersafari.com/w/q8koJO"
-      )
     )
+  )
 })
 
 #ALE
@@ -190,15 +224,15 @@ output$ale_info <- renderUI({
       tagList(a("CRAN: IML Package - FeatureEffect", href="https://rdrr.io/cran/iml/man/FeatureEffect.html")),
       tags$br(),
       tagList(a("Book IML: Model-agnostic Methods - Accumulated Local Effects", 
-                href="https://christophm.github.io/interpretable-ml-book/ale.html")),
+        href="https://christophm.github.io/interpretable-ml-book/ale.html")),
       tags$br(),
       p("provided by Molnar C., Bischl B., Casalicchio G. (2018). 'iml: An R package 
         for Interpretable Machine Learning.' JOSS, 3(26), 786. doi: 10.21105/joss.00786, 
         http://joss.theoj.org/papers/10.21105/joss.00786."),
       tags$hr(),
       "Image Source: https://wallpapersafari.com/w/q8koJO"
-      )
     )
+  )
 })
 
 
@@ -226,15 +260,15 @@ output$lime_info <- renderUI({
       tagList(a("CRAN: IML Package - Local Model", href="https://rdrr.io/cran/iml/man/LocalModel.html")),
       tags$br(),
       tagList(a("Book IML: Model-agnostic Methods - Accumulated Local Effects", 
-                href="https://christophm.github.io/interpretable-ml-book/lime.html")),
+        href="https://christophm.github.io/interpretable-ml-book/lime.html")),
       tags$br(),
       p("provided by Molnar C., Bischl B., Casalicchio G. (2018). 'iml: An R package 
         for Interpretable Machine Learning.' JOSS, 3(26), 786. doi: 10.21105/joss.00786, 
         http://joss.theoj.org/papers/10.21105/joss.00786."),
       tags$hr(),
       "Image Source: https://wallpapersafari.com/w/q8koJO"
-      )
     )
+  )
 })
 
 
@@ -259,7 +293,7 @@ output$shapley_info <- renderUI({
       tagList(a("CRAN: IML Package - Shapley", href="https://rdrr.io/cran/iml/man/Shapley.html")),
       tags$br(),
       tagList(a("Book IML: Model-agnostic Methods - Shapley Values", 
-                href="https://christophm.github.io/interpretable-ml-book/shapley.html")),
+        href="https://christophm.github.io/interpretable-ml-book/shapley.html")),
       tags$br(),
       p("provided by Molnar C., Bischl B., Casalicchio G. (2018). 'iml: An R package 
         for Interpretable Machine Learning.' JOSS, 3(26), 786. doi: 10.21105/joss.00786, 
