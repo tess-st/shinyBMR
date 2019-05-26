@@ -11,6 +11,15 @@ tabpanel.imlimportdat = dashboardPage(
       tabPanel("Summary Data Set",
         #verbatimTextOutput("summaryDataSet"))
         uiOutput("summary.dat"),
+        fluidRow(
+          column(12,
+            uiOutput("summary.vis.hist")),
+          column(12,
+            plotlyOutput("summary.vis"),
+            br(),
+            br()
+          )
+        ),
         prettySwitch("summaryInfo", "Show Information about the Summary Table", value = FALSE),
         conditionalPanel(condition = "input.summaryInfo == true",
           fluidRow(htmlOutput("summary_info")))

@@ -1,4 +1,4 @@
-#Landing Page
+########### Landing Page
 observeEvent(once = TRUE,ignoreNULL = FALSE, ignoreInit = FALSE, eventExpr = data, { 
   # event will be called when histdata changes, which only happens once, when it is initially calculated
   showModal(modalDialog(
@@ -11,18 +11,7 @@ observeEvent(once = TRUE,ignoreNULL = FALSE, ignoreInit = FALSE, eventExpr = dat
     # actionLink("link_to_tabpanel_a", "Link to panel A")
   ))
 })
-# 
-# observeEvent(input$link_to_tabpanel_a, {
-#   newvalue <- "tabpanel.import"
-#   updateTabsetPanel(session, "app-content", newvalue)
-# })
 
-# 
-# output$boxplot.text = renderUI({
-#   informationBox(
-#     helpText("Here you can create your task. If your target variable is numeric, you will get a regression task while you will get a classification task for factor variables.")
-#   )
-# })
 
 ########### Summary Import IML Data
 output$summary_info <- renderUI({
@@ -52,6 +41,11 @@ output$summary_info <- renderUI({
       p("provided by Bischl B., Lang M., Kotthoff L., Schiffner J., Richter J., Studerus E., 
         Casalicchio G.,Jones Z. (2016). 'mlr: Machine Learning in R.' Journal of Machine Learning 
         Research, 17(170), 1-5. http://jmlr.org/papers/v17/15-066.html."),
+      tagList(a("R Code: Summary Plots", 
+        href="https://github.com/mlr-org/shinyMlr/blob/master/inst/shinyMlr/server/summary.R")),
+      tags$br(),
+      p("provided by Florian Fendt, Stefan Coors. 'shinyMlr: Integration of the mlr package into shiny'. 
+        https://github.com/mlr-org/shinyMlr." ),
       tags$hr(),
       "Image Source: https://wallpapersafari.com/w/q8koJO"
     )
@@ -93,7 +87,6 @@ output$iml_info <- renderUI({
     )
   )
 })
-
 
 
 ########### Feature Importance
@@ -303,6 +296,7 @@ output$shapley_info <- renderUI({
     )
   )
 })
+
 
 ########### Surrogate
 output$surrogate_info <- renderUI({
