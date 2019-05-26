@@ -3,13 +3,14 @@ measure <- reactive({
   req(data$data)
   if(is.null(data$data)){
     names <- NULL
-  }else{
-    data <- perfAggDf(data$data)
-  pos <- grep("measure_*", names(data))
-  names <- NA
-  for(i in 1:length(pos)){
-    names[i] <- data[1,pos[i]]
   }
+  else{
+    data <- perfAggDf(data$data)
+    pos <- grep("measure_*", names(data))
+    names <- NA
+    for(i in 1:length(pos)){
+      names[i] <- data[1,pos[i]]
+    }
   }
   return(names)
 })
@@ -65,20 +66,20 @@ bestValueOfMeasure <- reactive({
     best <- bestPerfMod(perfAggDf(data$data), measure = input$select.measure)
     pos <- findValue(best, measure = input$select.measure)
     value <- best[1, pos]
-  # pos <- findValue(data = perfAggDf(data$data), measure = input$select.measure)
-  # if(input$select.minmax == "Minimum"){
-  #   value <- min(perfAggDf(data$data)[pos])
-  # }
-  # if(input$select.minmax == "Maximum"){
-  #   value <- max(perfAggDf(data$data)[pos])
-  # } 
-  
-  if(input$roundOverview == "Off"){
-   return(value)
-  }
-  else{
-    return(format(value, digits = 3, nsmall = 3))
-  }
+    # pos <- findValue(data = perfAggDf(data$data), measure = input$select.measure)
+    # if(input$select.minmax == "Minimum"){
+    #   value <- min(perfAggDf(data$data)[pos])
+    # }
+    # if(input$select.minmax == "Maximum"){
+    #   value <- max(perfAggDf(data$data)[pos])
+    # } 
+    
+    if(input$roundOverview == "Off"){
+      return(value)
+    }
+    else{
+      return(format(value, digits = 3, nsmall = 3))
+    }
   }
 })
 
@@ -97,17 +98,17 @@ bestValueOfMeasure <- reactive({
 #InfoBox
 output$Data_Names <- renderInfoBox({
   infoBox("Data Set(s)", textInfobox(perfAggDf(data$data)$task.id), icon = icon ("address-card"),
-          color = "navy")
+    color = "navy")
 })
 
 output$Methods <- renderInfoBox({
   infoBox("Method(s)", textInfobox(perfAggDf(data$data)$learner), icon = icon ("cut"),
-          color = "blue")
+    color = "blue")
 })
 
 output$Tasks <- renderInfoBox({
   infoBox("Task(s)", textInfobox(perfAggDf(data$data)$classif.reg), icon = icon ("pen-fancy"),
-          color = "aqua")
+    color = "aqua")
 })
 
 # output$Measures <- renderInfoBox({
@@ -121,17 +122,17 @@ output$Measures <- renderInfoBox({
 
 output$Tunings <- renderInfoBox({
   infoBox("Tuning Levels", textInfobox(perfAggDf(data$data)$tuning), icon = icon ("chart-line"),
-          color = "blue")
+    color = "blue")
 })
 
 output$SMOTEs <- renderInfoBox({
   infoBox("SMOTE Levels", textInfobox(perfAggDf(data$data)$smote), icon = icon ("search-plus"),
-          color = "aqua")
+    color = "aqua")
 })
 
 output$Values <- renderInfoBox({
   infoBox("Value of selected Measure", measureName(), icon = icon ("battery-three-quarters"),
-          color = "navy")
+    color = "navy")
 })
 
 
@@ -140,21 +141,21 @@ output$Values <- renderInfoBox({
 #ValueBox
 output$Data_Names_Lev <- renderValueBox({
   valueBox(tags$p("DATA SET(S)", style = "font-size: 55%;"), 
-           tags$p(nlevels(perfAggDf(data$data)$task.id), style = "font-size: 150%;"), 
-           icon = icon("address-card"), color = "navy")
+    tags$p(nlevels(perfAggDf(data$data)$task.id), style = "font-size: 150%;"), 
+    icon = icon("address-card"), color = "navy")
 })
 
 
 output$Methods_Lev <- renderValueBox({
   valueBox(tags$p("METHOD(S)", style = "font-size: 55%;"), 
-           tags$p(nlevels(perfAggDf(data$data)$learner), style = "font-size: 150%;"),
-           icon = icon("cut"), color = "blue")
+    tags$p(nlevels(perfAggDf(data$data)$learner), style = "font-size: 150%;"),
+    icon = icon("cut"), color = "blue")
 })
 
 output$Tasks_Lev <- renderValueBox({
   valueBox(tags$p("TASK(S)", style = "font-size: 55%;"), 
-           tags$p(length(unique(perfAggDf(data$data)$classif.reg)), style = "font-size: 150%;"),
-           icon = icon("pen-fancy"), color = "aqua")
+    tags$p(length(unique(perfAggDf(data$data)$classif.reg)), style = "font-size: 150%;"),
+    icon = icon("pen-fancy"), color = "aqua")
 })
 
 # output$Measures_Lev <- renderValueBox({
@@ -170,14 +171,14 @@ output$Measures_Lev <- renderValueBox({
 
 output$Tunings_Lev <- renderValueBox({
   valueBox(tags$p("TUNING LEVELS", style = "font-size: 55%;"), 
-           tags$p(nlevels(perfAggDf(data$data)$tuning), style = "font-size: 150%;"),
-           icon = icon ("chart-line"), color = "blue")
+    tags$p(nlevels(perfAggDf(data$data)$tuning), style = "font-size: 150%;"),
+    icon = icon ("chart-line"), color = "blue")
 })
 
 output$SMOTEs_Lev <- renderValueBox({
   valueBox(tags$p("SMOTE LEVELS", style = "font-size: 55%;"),
-           tags$p(nlevels(perfAggDf(data$data)$smote), style = "font-size: 150%;"),
-           icon = icon ("search-plus"), color = "aqua")
+    tags$p(nlevels(perfAggDf(data$data)$smote), style = "font-size: 150%;"),
+    icon = icon ("search-plus"), color = "aqua")
 })
 
 output$Values_Lev <- renderValueBox({
@@ -191,10 +192,10 @@ output$Values_Lev <- renderValueBox({
   #   
   # }
   valueBox(tags$p("Value of selected Measure", style = "font-size: 55%;"),
-           tags$p(valuesOfMeasure(), #paste(min, max, sep = " - ")
-                  #min(perfAggDf(data$data)$value), max(perfAggDf(data$data)$value)
-                  style = "font-size: 150%;"),
-           icon = icon ("battery-three-quarters"), color = "navy")
+    tags$p(valuesOfMeasure(), #paste(min, max, sep = " - ")
+      #min(perfAggDf(data$data)$value), max(perfAggDf(data$data)$value)
+      style = "font-size: 150%;"),
+    icon = icon ("battery-three-quarters"), color = "navy")
 })
 
 
@@ -203,20 +204,20 @@ output$selectionTable1 <- renderUI({
   #                choices = as.list(levels(dat_plot()$learner)), 
   #                multiple = TRUE)
   selectizeInput("table1", "First Table Element", 
-              choices = c('Not Selected', as.list(names(perfAggDf(data$data)))),
-              multiple = FALSE, selected = NULL)
+    choices = c('Not Selected', as.list(names(perfAggDf(data$data)))),
+    multiple = FALSE, selected = NULL)
 })
 
 output$selectionTable2 <- renderUI({
   selectizeInput("table2", "Second Table Element", 
-              choices = c('Not Selected', as.list(names(perfAggDf(data$data)))),
-              multiple = FALSE, selected = NULL)
+    choices = c('Not Selected', as.list(names(perfAggDf(data$data)))),
+    multiple = FALSE, selected = NULL)
 })
 
 output$selectionTable3 <- renderUI({
   selectizeInput("table3", "Third Table Element", 
-              choices = c('Not Selected', as.list(names(perfAggDf(data$data)))),
-              multiple = FALSE, selected = NULL)
+    choices = c('Not Selected', as.list(names(perfAggDf(data$data)))),
+    multiple = FALSE, selected = NULL)
 })
 
 var1 <- reactive({
@@ -270,7 +271,7 @@ best <- reactive({
   req(input$select.measure)
   #req(input$select.minmax)
   if(input$select.measure == "Not Selected"){
-   NULL
+    NULL
   }
   else{
     bestPerfMod(dat = perfAggDf(data$data), measure = input$select.measure)#, min_max = input$select.minmax)
@@ -279,37 +280,37 @@ best <- reactive({
 
 output$Data_Name <- renderInfoBox({
   infoBox("Name of Data", best()$task.id, icon = icon("address-card"),
-          color = "navy")
+    color = "navy")
 })
 
 
 output$Method <- renderInfoBox({
   infoBox("Method", best()$learner, icon = icon("cut"),
-           color = "blue")
+    color = "blue")
 })
 
 output$Task <- renderInfoBox({
   infoBox("Task", best()$classif.reg, icon = icon("pen-fancy"),
-          color = "aqua")
+    color = "aqua")
 })
 
 output$Measure <- renderInfoBox({
   infoBox("Measure", measureName(), icon = icon("chart-bar"),
-          color = "navy")
+    color = "navy")
 })
 
 output$Tuning <- renderInfoBox({
   infoBox("Tuning", best()$tuning, icon = icon ("chart-line"),
-          color = "blue")
+    color = "blue")
 })
 
 output$SMOTE <- renderInfoBox({
   infoBox("SMOTE", best()$smote, icon = icon ("search-plus"),
-          color = "aqua")
+    color = "aqua")
 })
 
 output$Value <- renderValueBox({
   valueBox(tags$p("Value of selected Measure", style = "font-size: 55%;"), 
-           tags$p(bestValueOfMeasure(), style = "font-size: 150%;"), 
-           icon = icon("battery-three-quarters"), color = "navy") #light-blue
+    tags$p(bestValueOfMeasure(), style = "font-size: 150%;"), 
+    icon = icon("battery-three-quarters"), color = "navy") #light-blue
 })

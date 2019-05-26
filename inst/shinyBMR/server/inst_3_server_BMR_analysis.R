@@ -44,14 +44,6 @@ size_text_B <- reactive({
   return(size)
 })
 
-zoom_B <- reactive({
-  req(input$zoomB)
-})
-
-size_symbols_B <- reactive({
-  req(input$sizeSymbolsB)
-})
-
 jitter_symbols <- reactive({
   req(input$jitterSymbols)
   if(input$jitterSymbols == "Off"){
@@ -62,9 +54,6 @@ jitter_symbols <- reactive({
   }
 })
 
-add_lines <- reactive({
-  req(input$addLines)  
-})
 
 # range_B <- reactive({
 #   reqAndAssign(input$select.measure.ana, "measure")
@@ -185,54 +174,26 @@ col_Palette_B <- reactive({
   return(pal)
 })
 
-label_symbol_B <- reactive({
-  req(input$labelSymbolB)
-})
-
-label_xaxis_B <- reactive({
-  req(input$labelXlabB)
-})
-
-label_yaxis_B <- reactive({
-  req(input$labelYlabB)
-})
-
 
 output$ggplot <- renderPlot({
-  boxplot <- PerfBoxplot(dat_plot(), size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = add_lines(),
-    range_yaxis = input$rangeYaxisB, size_symbols = size_symbols_B(), jitter_symbols = jitter_symbols(),
-    label_xaxis = label_xaxis_B(), label_yaxis = label_yaxis_B(), label_symbol = label_symbol_B())
+  boxplot <- PerfBoxplot(dat_plot(), size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = input$addLines,
+    range_yaxis = input$rangeYaxisB, size_symbols = input$sizeSymbolsB, jitter_symbols = jitter_symbols(),
+    label_xaxis = input$labelXlabB, label_yaxis = input$labelYlabB, label_symbol = input$labelSymbolB)
   boxplot
 },height = function() {
-  zoom_B() * session$clientData$output_ggplot_width
+  input$zoomB * session$clientData$output_ggplot_width
 })#,  height = 200, width = 300)
 
 output$plotly <- renderPlotly({
-  ggplotly(PerfBoxplot(dat_plot(), size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = add_lines(),
-    range_yaxis = range_yaxis_B(), size_symbols = size_symbols_B(), jitter_symbols = jitter_symbols(),
-    label_xaxis = label_xaxis_B(), label_yaxis = label_yaxis_B(), label_symbol = label_symbol_B()))
+  ggplotly(PerfBoxplot(dat_plot(), size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = input$addLines,
+    range_yaxis = input$rangeYaxisB, size_symbols = input$sizeSymbolsB, jitter_symbols = jitter_symbols(),
+    label_xaxis = input$labelXlabB, label_yaxis = input$labelYlabB, label_symbol = input$labelSymbolB))
 })
 
 
 #####################################################################################################################
 ###################################################### Heatmap ######################################################
 #####################################################################################################################
-
-col_min_H <- reactive({
-  req(input$colMinH)
-})
-
-col_max_H <- reactive({
-  req(input$colMaxH)
-})
-
-col_text_H <- reactive({
-  req(input$colTextH)
-})
-
-range_value_H <- reactive({
-  req(input$rangeValueH)
-})
 
 size_text_H <- reactive({
   size <- req(input$sizeTextH)
@@ -242,53 +203,25 @@ size_text_H <- reactive({
   return(size)
 })
 
-zoom_H <- reactive({
-  req(input$zoomH)
-})
-
-label_value_H <- reactive({
-  req(input$labelValueH)
-})
-
-label_xaxis_H <- reactive({
-  req(input$labelXlabH)
-})
-
-label_yaxis_H <- reactive({
-  req(input$labelYlabH)
-})
-
 
 output$ggplot_heatmap <- renderPlot({
-  PerfHeatmap_Def(dat_plot(), col_text = col_text_H(), col_min = col_min_H(), col_max = col_max_H(), 
-    label_value = label_value_H(), label_xaxis = label_xaxis_H(), label_yaxis = label_yaxis_H(),
-    size_text = size_text_H(),range_value = range_value_H(), aggregate = aggregation())
+  PerfHeatmap_Def(dat_plot(), col_text = input$colTextH, col_min = input$colMinH, col_max = input$colMaxH, 
+    label_value = input$labelValueH, label_xaxis = input$labelXlabH, label_yaxis = input$labelYlabH,
+    size_text = size_text_H(),range_value = input$rangeValueH, aggregate = aggregation())
 }, height = function() {
-  zoom_H() * session$clientData$output_ggplot_heatmap_width
+  input$zoomH * session$clientData$output_ggplot_heatmap_width
 }) 
 
 output$plotly_heatmap <- renderPlotly({
-  PerfHeatmap_Def(dat_plot(), col_text = col_text_H(), col_min = col_min_H(), col_max = col_max_H(), 
-    label_value = label_value_H(), label_xaxis = label_xaxis_H(), label_yaxis = label_yaxis_H(),
-    size_text = size_text_H(),range_value = range_value_H(), aggregate = aggregation())
+  PerfHeatmap_Def(dat_plot(), col_text = input$colTextH, col_min = input$colMinH, col_max = input$colMaxH, 
+    label_value = input$labelValueH, label_xaxis = input$labelXlabH, label_yaxis = input$labelYlabH,
+    size_text = size_text_H(),range_value = input$rangeValueH, aggregate = aggregation())
 })
 
 
 #####################################################################################################################
 ##################################################### mlr Plots #####################################################
 #####################################################################################################################
-
-style_plot_mlr <- reactive({
-  req(input$stylePlot)
-})
-
-size_text_mlr <- reactive({
-  req(input$sizeTextMlr)
-})
-
-zoom_mlr <- reactive({
-  req(input$zoomMlr)
-})
 
 col_Palette_mlr <- reactive({
   req(input$colPaletteMlr)
@@ -337,9 +270,9 @@ col_Palette_mlr <- reactive({
 
 
 output$mlr_boxplot <- renderPlot({
-  MlrBoxplot(dat = data$bmr, style = style_plot_mlr(), size_text = size_text_mlr(), col_palette = col_Palette_mlr())
+  MlrBoxplot(dat = data$bmr, style = input$stylePlot, size_text = input$sizeTextMlr, col_palette = col_Palette_mlr())
 }, height = function() {
-  zoom_mlr() * session$clientData$output_mlr_boxplot_width
+  input$zoomMlr * session$clientData$output_mlr_boxplot_width
 })
 
 
