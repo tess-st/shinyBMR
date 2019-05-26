@@ -66,9 +66,79 @@ add_lines <- reactive({
   req(input$addLines)  
 })
 
-range_yaxis_B <- reactive({
-  req(input$rangeYaxisB)
+# range_B <- reactive({
+#   reqAndAssign(input$select.measure.ana, "measure")
+#   if(is.null(measure)){
+#     NULL
+#   }
+#   else{
+#     value <- c(get(measure)$worst, get(measure)$best)
+#     value
+#   }
+# })
+
+# range_yaxis_B <- renderUI({
+#   sliderInput("rangeYaxisB", "Range y-Axis", value = getRange(input$select.measure.ana), 
+#     min = 0, max =10, step = 0.05)
+# })
+
+# observe({
+#   req(input$rangeEndB)
+#   updateSliderInput(session, "rangeYaxisB", value = c(0, input$rangeEndB))
+# })
+
+
+# observeEvent(input$select.measure.ana, {
+#   if(get(input$select.measure.ana)$worst == Inf){
+#     shinyjs::show("rangeEndB", anim = TRUE)
+#   }
+#   else{
+#     shinyjs::hide("rangeEndB", animType = "fade")
+#   }
+# })
+
+
+# toListen <- reactive({
+#   list(input$select.measure.ana, input$rangeEndB)
+# })
+
+# end <- reactive({
+#   if(any(c(get(input$select.measure.ana)$best, get(input$select.measure.ana)$worst) == Inf)){
+#      req(input$rangeEndB)
+#   }
+#   else{
+#     NULL
+#   }
+# })
+
+output$rangeEndB <- renderUI({
+  numericInput("range.end.B", "Choose the upper Limit of the selected Value",
+    value = 10, min = 0, max = Inf, step = 1)
 })
+
+# observeEvent(input$select.measure.ana, {#toListen(), {
+#  # range <- c(get(input$select.measure.ana)$best, get(input$select.measure.ana)$worst)
+#   #if(any(range == Inf)){
+#     # output$rangeEndB <- renderUI({
+#     #   numericInput("range.end.B", "Choose the upper Limit of the selected Value",
+#     #     value = 10, min = 0, max = Inf, step = 1)
+#     # })
+#    # min <- getRange(input$select.measure.ana)[1]
+#     #max <- input$range.end.B
+#   #  updateSliderInput(session, "rangeYaxisB", value = c(min, input$range.end.B))#end()))#htmlOutput("rangeY_B")))
+#   #}
+#   #else{
+#   # updateSliderInput(session, "rangeYaxisB", value = c(get(input$select.measure.ana)$best, get(input$select.measure.ana)$worst))
+#    updateSliderInput(session, "rangeYaxisB", value = getRange(input$select.measure.ana))
+#   #}
+# })
+
+# observe({
+#   updateSliderInput(session, "rangeYaxisB", value = getRange(input$select.measure.ana))
+# })
+# range_yaxis_B <- reactive({
+#   req(input$rangeYaxisB)
+# })
 
 col_Palette_B <- reactive({
   req(input$colPaletteB)
@@ -130,7 +200,7 @@ label_yaxis_B <- reactive({
 
 output$ggplot <- renderPlot({
   boxplot <- PerfBoxplot(dat_plot(), size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = add_lines(),
-    range_yaxis = range_yaxis_B(), size_symbols = size_symbols_B(), jitter_symbols = jitter_symbols(),
+    range_yaxis = input$rangeYaxisB, size_symbols = size_symbols_B(), jitter_symbols = jitter_symbols(),
     label_xaxis = label_xaxis_B(), label_yaxis = label_yaxis_B(), label_symbol = label_symbol_B())
   boxplot
 },height = function() {
@@ -139,7 +209,7 @@ output$ggplot <- renderPlot({
 
 output$plotly <- renderPlotly({
   ggplotly(PerfBoxplot(dat_plot(), size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = add_lines(),
-    range_yaxis = range_y_axis_B(), size_symbols = size_symbols_B(), jitter_symbols = jitter_symbols(),
+    range_yaxis = range_yaxis_B(), size_symbols = size_symbols_B(), jitter_symbols = jitter_symbols(),
     label_xaxis = label_xaxis_B(), label_yaxis = label_yaxis_B(), label_symbol = label_symbol_B()))
 })
 

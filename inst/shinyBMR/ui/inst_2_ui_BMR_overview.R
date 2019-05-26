@@ -10,8 +10,8 @@ tabpanel.overview =  dashboardPage(
     
     tags$div(title = "Select one of the Measures you performed the Benchmark-Study on",
       htmlOutput("selected.measure")),
-    tags$div(title = "Is the better Performance marked by high (max.) or low (min.) Values of your selected Measure",
-      htmlOutput("selected.minmax")),
+    # tags$div(title = "Is the better Performance marked by high (max.) or low (min.) Values of your selected Measure",
+    #   htmlOutput("selected.minmax")),
     
     hr(),
     

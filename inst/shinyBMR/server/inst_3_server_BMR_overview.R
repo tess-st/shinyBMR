@@ -20,11 +20,11 @@ output$selected.measure <- renderUI({
     multiple = FALSE)#, selected = NULL)
 })
 
-output$selected.minmax <- renderUI({
-  selectizeInput("select.minmax", "Best Performance Value signified by",
-    choices = c("Minimum", "Maximum"),
-    multiple = FALSE, selected = "Minimum")
-})
+# output$selected.minmax <- renderUI({
+#   selectizeInput("select.minmax", "Best Performance Value signified by",
+#     choices = c("Minimum", "Maximum"),
+#     multiple = FALSE, selected = "Minimum")
+# })
 
 measureName <- reactive({
   req(input$select.measure) 
@@ -62,13 +62,16 @@ bestValueOfMeasure <- reactive({
     NULL
   }
   else{
-  pos <- findValue(data = perfAggDf(data$data), measure = input$select.measure)
-  if(input$select.minmax == "Minimum"){
-    value <- min(perfAggDf(data$data)[pos])
-  }
-  if(input$select.minmax == "Maximum"){
-    value <- max(perfAggDf(data$data)[pos])
-  } 
+    best <- bestPerfMod(perfAggDf(data$data), measure = input$select.measure)
+    pos <- findValue(best, measure = input$select.measure)
+    value <- best[1, pos]
+  # pos <- findValue(data = perfAggDf(data$data), measure = input$select.measure)
+  # if(input$select.minmax == "Minimum"){
+  #   value <- min(perfAggDf(data$data)[pos])
+  # }
+  # if(input$select.minmax == "Maximum"){
+  #   value <- max(perfAggDf(data$data)[pos])
+  # } 
   
   if(input$roundOverview == "Off"){
    return(value)
@@ -166,13 +169,13 @@ output$Measures_Lev <- renderValueBox({
 })
 
 output$Tunings_Lev <- renderValueBox({
-  valueBox(tags$p("TUNING", style = "font-size: 55%;"), 
+  valueBox(tags$p("TUNING LEVELS", style = "font-size: 55%;"), 
            tags$p(nlevels(perfAggDf(data$data)$tuning), style = "font-size: 150%;"),
            icon = icon ("chart-line"), color = "blue")
 })
 
 output$SMOTEs_Lev <- renderValueBox({
-  valueBox(tags$p("SMOTE", style = "font-size: 55%;"),
+  valueBox(tags$p("SMOTE LEVELS", style = "font-size: 55%;"),
            tags$p(nlevels(perfAggDf(data$data)$smote), style = "font-size: 150%;"),
            icon = icon ("search-plus"), color = "aqua")
 })
@@ -265,12 +268,12 @@ output$tuneResults <- renderPrint({
 #####################################################################################################################
 best <- reactive({
   req(input$select.measure)
-  req(input$select.minmax)
+  #req(input$select.minmax)
   if(input$select.measure == "Not Selected"){
    NULL
   }
   else{
-    bestPerfMod(dat = perfAggDf(data$data), measure = input$select.measure, min_max = input$select.minmax)
+    bestPerfMod(dat = perfAggDf(data$data), measure = input$select.measure)#, min_max = input$select.minmax)
   }
 })
 

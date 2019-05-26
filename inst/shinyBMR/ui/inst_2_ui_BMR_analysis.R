@@ -51,7 +51,11 @@ tabpanel.bmr = dashboardPage(
                 choices = c("Off", "On"), selected = "Off"),
               selectInput("addLines", "Add Line per Group of Learner Information",
                 choices = c("On", "Off"), selected = "On"),
-              sliderInput("rangeYaxisB", "Range y-Axis", value = c(0,1), min = 0, max = 10, step = 0.05)
+              #htmlOutput("rangeY_B")
+              sliderInput("rangeYaxisB", "Range y-Axis", value = c(0,1), min = 0, max = 10, step = 0.05),
+              htmlOutput("rangeEndB")
+              #numericInput("rangeEndB", "Choose the upper Limit of the selected Value",
+              #  value = 10, min = 0, max = Inf, step = 1)
             ),
             column(4,
               h4("Change Labels"), 

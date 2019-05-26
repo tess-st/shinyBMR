@@ -32,8 +32,15 @@ tabImport <- function(data){
 }
 
 #Extraction of the model with the highest performance
-bestPerfMod = function(dat, measure, min_max){
+bestPerfMod = function(dat, measure){
   pos <- findValue(data = dat, measure = measure)
+  if(get(measure)$minimize == FALSE){
+    min_max <- "Maximum"
+  }
+  else{
+    min_max <- "Minimum"
+  }
+  
   if(min_max == "Minimum"){
     min <- min(dat[pos])
     row <- dat[dat[,pos] == min,]

@@ -14,6 +14,17 @@ subsetAnalysis = function(data, measure){
 }
 
 
+getRange = function(measure){
+  m <- get(measure)#, as.environment(system.file(package = "mlr")))
+  if(m$minimize == TRUE){
+    range <- c(m$best, m$worst)
+  }
+  else{
+    range <- c(m$worst, m$best) 
+  }
+  range
+}
+
 ##################################################### Boxplot #######################################################
 
 PerfBoxplot = function(dat, size_text, col_palette, range_yaxis, size_symbols, label_symbol, jitter_symbols,
@@ -22,8 +33,8 @@ PerfBoxplot = function(dat, size_text, col_palette, range_yaxis, size_symbols, l
     t <- theme()
   }else{
     t <- theme(text = element_text(size = rel(size_text+2)), 
-               legend.text = element_text(size = 0.6*rel(size_text+3)), 
-               legend.key.height = unit(0.25*rel(size_text+3), "cm"))
+      legend.text = element_text(size = 0.6*rel(size_text+3)), 
+      legend.key.height = unit(0.25*rel(size_text+3), "cm"))
   }
   
   boxplot <- ggplot(dat, aes(x = learner, y = value)) +
@@ -34,7 +45,7 @@ PerfBoxplot = function(dat, size_text, col_palette, range_yaxis, size_symbols, l
     labs(color = label_xaxis, shape = label_symbol, linetype = label_symbol) +
     t +
     scale_colour_manual(values = col_palette)
-    
+  
   if(nrow(dat)/nlevels(dat$learner)>= 4){
     boxplot <- boxplot +  geom_boxplot(alpha = .25)
   }
@@ -58,20 +69,20 @@ PerfHeatmap_Def = function(dat, col_min, col_max, col_text, range_value, size_te
   }else{
     g <- geom_text(color = col_text, size = rel(size_text+2))
     t <- theme(text = element_text(size = rel(size_text+2)), 
-               legend.text = element_text(size = 0.6*rel(size_text+3)), 
-               legend.key.height = unit(0.25*rel(size_text+3), "cm")
-      )
+      legend.text = element_text(size = 0.6*rel(size_text+3)), 
+      legend.key.height = unit(0.25*rel(size_text+3), "cm")
+    )
   }
   
   if(aggregate == "On"){
     heatmap <- ggplot(dat, aes(x = learner.info, y = learner, fill = value, label = paste(round(value,3)))) +
-    geom_tile() +
-    scale_fill_gradient2(label_value, mid = col_min, midpoint = 0, high = col_max, limit = range_value, space = "Lab") +
-    geom_text(color = col_text, size = rel(size_text+2)) +
-    xlab(label_xaxis) + 
-    ylab(label_yaxis) +
-    g +
-    t
+      geom_tile() +
+      scale_fill_gradient2(label_value, mid = col_min, midpoint = 0, high = col_max, limit = range_value, space = "Lab") +
+      geom_text(color = col_text, size = rel(size_text+2)) +
+      xlab(label_xaxis) + 
+      ylab(label_yaxis) +
+      g +
+      t
   }
   if(aggregate == "Off"){
     xpos <- 0
@@ -97,7 +108,7 @@ PerfHeatmap_Def = function(dat, col_min, col_max, col_text, range_value, size_te
       g +
       t  
   }
-
+  
   return(heatmap)
 }
 
@@ -129,9 +140,9 @@ MlrBoxplot = function(dat, style, size_text, col_palette){# , size_symbols, labe
   boxplot_mlr <- plotBMRBoxplots(dat, style = style) +
     aes(color = learner.id) +
     theme(text = element_text(size = rel(size_text+1.5)), 
-          legend.text = element_text(size = 0.6*rel(size_text+2)), 
-          legend.key.height = unit(0.25*rel(size_text+1), "cm"),
-          strip.text.x = element_text(size = rel(size_text+1.5))) +
+      legend.text = element_text(size = 0.6*rel(size_text+2)), 
+      legend.key.height = unit(0.25*rel(size_text+1), "cm"),
+      strip.text.x = element_text(size = rel(size_text+1.5))) +
     scale_colour_manual(values = col_palette)
   #theme(strip.text.x = element_text(size = 8))
   
