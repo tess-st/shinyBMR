@@ -162,13 +162,13 @@ output$summary.datatable = DT::renderDataTable({
 
 
 # Summary Plots
+# from shinyMlr: https://github.com/mlr-org/shinyMlr/blob/master/inst/shinyMlr/server/explanations.R
 numericFeatures = reactive({
   d = dataiml$data
   return(colnames(Filter(is.numeric, d)))
 })
 
 factorFeatures = reactive({
-  # req(data$data)
   d = dataiml$data
   return(colnames(Filter(is.factor, d)))
 })
@@ -222,7 +222,6 @@ summary.vis.out = reactive({
   reqAndAssign(summary.vis.var(), "feature")
   d = na.omit(dataiml$data)
   req(all(feature %in% colnames(d)))
-  #reqNFeat(feature, d)
   barfill = "#3c8dbc"
   barlines = "#1d5a92"
   if (length(feature) == 1L) {
@@ -234,7 +233,8 @@ summary.vis.out = reactive({
       if (density == "Density")
         summary.plot = summary.plot + geom_density(fill = "blue", alpha = 0.1)
       else
-        summary.plot = summary.plot + geom_histogram(colour = barlines, fill = barfill, stat = "bin", bins = input$summary.vis.hist.nbins)
+        summary.plot = summary.plot + geom_histogram(colour = barlines, fill = barfill, stat = "bin", 
+          bins = input$summary.vis.hist.nbins)
       
       summary.plot = summary.plot + xlab(feature) +
         geom_vline(aes(xintercept = quantile(x, 0.05)), color = "blue", size = 0.5, linetype = "dashed") +
@@ -262,14 +262,11 @@ output$summary.vis = renderPlotly({
   ggplotly(summary.vis.out())
 })
 
-summary.vis.collection = reactiveValues(var.plots = NULL)#var.names = NULL, var.plots = NULL)
+summary.vis.collection = reactiveValues(var.plots = NULL)
 
 observeEvent(summary.vis.out(), {
   q = summary.vis.out()
   feat = isolate(summary.vis.var())
   feat = paste(feat, collapse = ".x.")
-  
-  # summary.vis.collection$var.names = c(summary.vis.collection$var.names, feat)
   summary.vis.collection$var.plots[[feat]] = q
-  
 })
