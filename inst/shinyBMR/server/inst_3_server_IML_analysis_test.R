@@ -210,11 +210,11 @@ iml_plot_obj <- reactive({
       loss <-  input$impLossRegr
     }
     
-    # cl = makePSOCKcluster(detectCores() - 1)
-    # registerDoParallel(cl)
-    importance <- FeatureImp$new(predictor(), loss = loss, compare = input$impComp, n.repetitions = input$impRep)
+    #cl = makePSOCKcluster(detectCores() - 1)
+    #registerDoParallel(cl)
+    importance <- FeatureImp$new(predictor(), loss = loss, compare = input$impComp, n.repetitions = input$impRep)#,
     #   parallel = TRUE)
-    # stopCluster(cl)
+     #stopCluster(cl)
     
     plot(importance)
   }
@@ -226,8 +226,9 @@ iml_plot_obj <- reactive({
       if(!is.null(feature)){
         # cl = makePSOCKcluster(detectCores() - 1)
         # registerDoParallel(cl)
-        effect.pdp <- FeatureEffect$new(predictor(), feature = feature, grid.size = input$effGrid) #center.at = center,
-        #   method = "pdp", parallel = TRUE)
+        effect.pdp <- FeatureEffect$new(predictor(), feature = feature, grid.size = input$effGrid, #center.at = center,
+          method = "pdp") 
+        # parallel = TRUE)
         # stopCluster(cl)
         # 
         plot(effect.pdp)
