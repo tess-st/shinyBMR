@@ -263,7 +263,7 @@ summarize.tune = reactive({
     colnames(d) = make.names(colnames(d))
     pos.x = colnames(Filter(function(x) "POSIXt" %in% class(x) , d))
     d = dropNamed(d, drop = pos.x)    
-   d# summarizeColumns(d)
+    d
   }
 })
 
