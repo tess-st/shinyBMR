@@ -94,7 +94,7 @@ eff_zoom <- reactive({
 # Feature Interaction
 output$interactionFeature <- renderUI({
   selectizeInput("intFeature", "Select Feature",
-    choices = c('Not Selected', as.list(getLearnerModel(modiml$mod)$features)), #"All"
+    choices = c('Not Selected', 'All', as.list(getLearnerModel(modiml$mod)$features)), #"All"
     selected = NULL, multiple = FALSE)
 })
 
@@ -274,10 +274,16 @@ iml_plot_obj <- reactive({
       # }
       # else{
         feature_int <- int_feature()
+        if(feature_int == "All"){
+          interaction <- Interaction$new(predictor(), feature = NULL, grid.size = input$interactionGrid)
+        }
+        else{
+          interaction <- Interaction$new(predictor(), feature = feature_int, grid.size = input$interactionGrid)
+        }
      # }
         # cl = makePSOCKcluster(detectCores() - 1)
         # registerDoParallel(cl)
-      interaction <- Interaction$new(predictor(), feature = feature_int, grid.size = input$interactionGrid)
+      #interaction <- Interaction$new(predictor(), feature = feature_int, grid.size = input$interactionGrid)
 
       #   parallel = TRUE)
       # stopCluster(cl)
