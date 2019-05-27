@@ -69,10 +69,14 @@ overflow-y:scroll; background: ghostwhite;}"))#
           ),
           
           tabPanel("Tuning Results",
-            verbatimTextOutput("tuneResults")
-          #  tags$head(tags$style("#crossTables{font-size:12px; font-style:italic; height:70vh !important; 
-#overflow-y:scroll; background: ghostwhite;}"))
+            uiOutput("summary.tune")
           )
+          
+          # tabPanel("Tuning Results",
+          #   verbatimTextOutput("tuneResults")
+            #  tags$head(tags$style("#crossTables{font-size:12px; font-style:italic; height:70vh !important; 
+            #overflow-y:scroll; background: ghostwhite;}"))
+          # )
         )
       ),
       

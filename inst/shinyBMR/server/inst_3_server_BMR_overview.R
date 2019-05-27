@@ -251,9 +251,38 @@ output$summaryData <- renderPrint({
 })
 
 
-output$tuneResults <- renderPrint({
-  getBMRTuneResults(data$bmr)
+# Tuning
+summarize.tune = reactive({
+  if(is.null(data$bmr)){
+    NULL
+  }
+  else{
+    d = getBMRTuneResults(data$bmr, as.df = TRUE) 
+    
+    validate(need(class(d) == "data.frame", "You didn't import any Data."))
+    colnames(d) = make.names(colnames(d))
+    pos.x = colnames(Filter(function(x) "POSIXt" %in% class(x) , d))
+    d = dropNamed(d, drop = pos.x)    
+   d# summarizeColumns(d)
+  }
 })
+
+output$summary.tune = renderUI({
+  ui = box(width = 12, title = "Summary Tuning",
+    br(),
+    DT::dataTableOutput("summary.tuning")
+  )
+  ui
+})
+
+output$summary.tuning = DT::renderDataTable({
+  summarize.tune()
+}, options = list(scrollX = TRUE))
+
+
+# output$tuneResults <- renderPrint({
+#   getBMRTuneResults(data$bmr)
+# })
 
 
 
