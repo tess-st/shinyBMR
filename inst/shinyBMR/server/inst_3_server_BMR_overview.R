@@ -293,29 +293,28 @@ selected.learner = eventReactive(input$summary.tuning_rows_selected, {
   #pos.x = colnames(Filter(function(x) "POSIXt" %in% class(x) , d))
   #d = dropNamed(d, drop = pos.x)
   # if(input$par.dep == "On"){
-  #   partial.dep == TRUE
+  #   partial.dep <- TRUE
   # }
   # else{
-  #   partial.dep == FALSE
+  #   partial.dep <- FALSE
   # }
   
   l = getBMRTuneResults(data$bmr) #data$bmr
   unlist <- unlist(l, recursive = FALSE)
   l2 <- Filter(Negate(is.null), unlist)
   unlist2 <- unlist(l2, recursive = FALSE)
-  #element <- unlist(l, recursive = F)[input$summary.tuning_rows_selected]
   element <- unlist2[input$summary.tuning_rows_selected][[1]]
-  generateHyperParsEffectData(element, partial.dep = T)#partial.dep)
-  #}
-  #learner <- l$learner.id[input$summary.tuning_rows_selected]
-  #iter <- l$iter[input$summary_tuning_rows_selected]
+  eff <- generateHyperParsEffectData(element, partial.dep = T)#partial.dep())
+  # Because of bug in function generateHyperParsEffectData
+  if(any(names(eff) == "rmse.test.rmse")){
+    names(eff$data)[names(eff$data)=="rmse.test.rmse"] <- "rmse.test.mean"
+    t1$measures[eff$measures=="rmse.test.rmse"] <- "rmse.test.mean"
+  }
+  eff
 })
 
 output$hyperPars <- renderUI({
   list(
-    column(3,
-      selectInput("par.dep", "Partial Dependence", choices = c("On", "Off"), selected = "On")
-    ),
     column(3,
       selectizeInput("xAxisT", "Specify x-Axis (necessary)",
         choices = c('Not Selected', as.list(names(selected.learner()$data))),
@@ -325,9 +324,27 @@ output$hyperPars <- renderUI({
       selectizeInput("yAxisT", "Specify y-Axis (necessary)",
         choices = c('Not Selected', as.list(names(selected.learner()$data))),
         selected = NULL, multiple = FALSE)
+    ),
+    column(3,
+      selectizeInput("zAxisT", "Specify z-Axis (optional)",
+        choices = c('Not Selected', as.list(names(selected.learner()$data))),
+        selected = NULL, multiple = FALSE)
     )
+    # column(3,
+    #   selectInput("par.dep", "Partial Dependence", choices = c("On", "Off"), selected = "On")
+    # )
   )
 })
+
+# partial.dependence <- reactive({
+#   req(input$par.dep)
+#   if(input$par.dep == "On"){
+#     partial.dep <- TRUE
+#   }
+#   else{
+#     partial.dep <- FALSE
+#   }
+# })
 
 xaxis_T <- reactive({
   validate(
@@ -355,17 +372,22 @@ yaxis_T <- reactive({
   }
 })
 
+zaxis_T <- reactive({
+  if(input$zAxisT == "Not Selected"){
+    NULL
+  }
+  else{
+    req(input$zAxisT)
+  }
+})
+
 output$plot.hyperPars <- renderPlot({
   req(input$summary.tuning_rows_selected)
 
-  plotHyperParsEffect(selected.learner(), x = xaxis_T(), y = yaxis_T(), partial.dep.learn = "regr.bst")
+  plotHyperParsEffect(selected.learner(), x = xaxis_T(), y = yaxis_T(), z = zaxis_T(),
+    partial.dep.learn = "regr.bst")
 })
 
-#selectedRow <- eventReactive(input$summary_tuning)
-
-output$test <- renderText({
-  paste(selected.learner())
-})
 
 # output$tuneResults <- renderPrint({
 #   getBMRTuneResults(data$bmr)
