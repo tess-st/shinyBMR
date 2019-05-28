@@ -69,7 +69,15 @@ overflow-y:scroll; background: ghostwhite;}"))#
           ),
           
           tabPanel("Tuning Results",
-            uiOutput("summary.tune")
+            uiOutput("summary.tune"),
+            fluidRow(
+              column(12,
+                uiOutput("hyperPars")),
+              column(12,
+                plotOutput("plot.hyperPars")
+                )
+              ),
+            textOutput("test")
           )
           
           # tabPanel("Tuning Results",

@@ -277,8 +277,95 @@ output$summary.tune = renderUI({
 
 output$summary.tuning = DT::renderDataTable({
   summarize.tune()
-}, options = list(scrollX = TRUE))
+}, options = list(scrollX = TRUE), server = F, selection = "single")
 
+
+
+# Tuning Plots
+selected.learner = eventReactive(input$summary.tuning_rows_selected, {
+  #reqAndAssign(data$bmr, "d")
+  # if(is.null(data$bmr)){
+  #   NULL
+  # }
+#  else{
+  #  d = getBMRTuneResults(data$bmr, as.df = TRUE) 
+  #d = getBMRTuneResults(d, as.df = T)
+  #pos.x = colnames(Filter(function(x) "POSIXt" %in% class(x) , d))
+  #d = dropNamed(d, drop = pos.x)
+  # if(input$par.dep == "On"){
+  #   partial.dep == TRUE
+  # }
+  # else{
+  #   partial.dep == FALSE
+  # }
+  
+  l = getBMRTuneResults(data$bmr) #data$bmr
+  unlist <- unlist(l, recursive = FALSE)
+  l2 <- Filter(Negate(is.null), unlist)
+  unlist2 <- unlist(l2, recursive = FALSE)
+  #element <- unlist(l, recursive = F)[input$summary.tuning_rows_selected]
+  element <- unlist2[input$summary.tuning_rows_selected][[1]]
+  generateHyperParsEffectData(element, partial.dep = T)#partial.dep)
+  #}
+  #learner <- l$learner.id[input$summary.tuning_rows_selected]
+  #iter <- l$iter[input$summary_tuning_rows_selected]
+})
+
+output$hyperPars <- renderUI({
+  list(
+    column(3,
+      selectInput("par.dep", "Partial Dependence", choices = c("On", "Off"), selected = "On")
+    ),
+    column(3,
+      selectizeInput("xAxisT", "Specify x-Axis (necessary)",
+        choices = c('Not Selected', as.list(names(selected.learner()$data))),
+        selected = NULL, multiple = FALSE)
+    ),
+    column(3,
+      selectizeInput("yAxisT", "Specify y-Axis (necessary)",
+        choices = c('Not Selected', as.list(names(selected.learner()$data))),
+        selected = NULL, multiple = FALSE)
+    )
+  )
+})
+
+xaxis_T <- reactive({
+  validate(
+    need(input$xAxisT != "Not Selected", "Please choose what should be plotted on the x-Axis for showing 
+      the Tuning Results")
+  )
+  if(input$xAxisT == "Not Selected"){
+    NULL
+  }
+  else{
+    req(input$xAxisT)
+  }
+})
+
+yaxis_T <- reactive({
+  validate(
+    need(input$yAxisT != "Not Selected", "Please choose what should be plotted on the y-Axis for showing 
+      the Tuning Results")
+    )
+  if(input$yAxisT == "Not Selected"){
+    NULL
+  }
+  else{
+    req(input$yAxisT)
+  }
+})
+
+output$plot.hyperPars <- renderPlot({
+  req(input$summary.tuning_rows_selected)
+
+  plotHyperParsEffect(selected.learner(), x = xaxis_T(), y = yaxis_T(), partial.dep.learn = "regr.bst")
+})
+
+#selectedRow <- eventReactive(input$summary_tuning)
+
+output$test <- renderText({
+  paste(selected.learner())
+})
 
 # output$tuneResults <- renderPrint({
 #   getBMRTuneResults(data$bmr)
