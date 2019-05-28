@@ -50,7 +50,8 @@ Imports:
   devtools,
   mlrHyperopt,
   iml,
-  gower
+  gower,
+  mmpf
 Suggests:
   testthat,
   roxygen2,
