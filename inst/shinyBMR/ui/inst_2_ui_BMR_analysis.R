@@ -95,8 +95,7 @@ tabpanel.bmr = dashboardPage(
               colourInput("colTextH", "Colour of Value in Plot", "grey", showColour = "background"),
               colourInput("colMaxH", "Maximum Colour", "#56B1F7", showColour = "background"),
               colourInput("colMinH", "Minimum Colour", "#132B43", showColour = "background"),
-              sliderInput("rangeValueH", "Range Value", 
-                min = 0, max = 10, value = c(0, 1), step = 0.01)
+              uiOutput("rangeHeatmap")
             ),
             column(4,
               h4("Change Labels"), 

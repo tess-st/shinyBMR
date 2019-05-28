@@ -77,7 +77,7 @@ PerfHeatmap_Def = function(dat, col_min, col_max, col_text, range_value, size_te
   if(aggregate == "On"){
     heatmap <- ggplot(dat, aes(x = learner.info, y = learner, fill = value, label = paste(round(value,3)))) +
       geom_tile() +
-      scale_fill_gradient2(label_value, mid = col_min, midpoint = 0, high = col_max, limit = range_value, space = "Lab") +
+      scale_fill_gradient2(label_value, mid = col_min, midpoint = range_value[1], high = col_max, limits = range_value, space = "Lab") +
       geom_text(color = col_text, size = rel(size_text+2)) +
       xlab(label_xaxis) + 
       ylab(label_yaxis) +
@@ -97,7 +97,7 @@ PerfHeatmap_Def = function(dat, col_min, col_max, col_text, range_value, size_te
     
     heatmap <- ggplot(dat, aes(x = learner.info.iter, y = learner, fill = value, label = paste(round(value,3)))) + 
       geom_tile() +
-      scale_fill_gradient2(label_value, mid = col_min, midpoint = 0, high = col_max, limit = range_value, space = "Lab") +
+      scale_fill_gradient2(label_value, mid = col_min, midpoint = range_value[1], high = col_max, limits = range_value, space = "Lab") +
       geom_text(color = col_text, size = rel(size_text+2)) +
       xlab(label_xaxis) + 
       scale_x_discrete(labels = paste("Iter", rep(1:max(dat$iter), times = nlevels(dat$learner.info)), sep = " ")) + 
