@@ -88,20 +88,20 @@ output$import.analysis <- DT::renderDataTable({
   reqAndAssign(data$data, "data_agg")
   reqAndAssign(data$data.notagg, "data_unagg")
   
-  if(input$aggregatedBMR){
-  if(input$round == "Off"){
-    tabImport(perfAggDf(data_agg))
-  }
-  else{
-    format(tabImport(perfAggDf(data_agg)), digits = 3, nsmall = 3)
-  }
+  if(input$aggregated == "On"){
+    if(input$round == "Off"){
+      tabImport(perfAggDf(data_agg))
+    }
+    else{
+      format(tabImport(perfAggDf(data_agg)), digits = 3, nsmall = 3)
+    }
   }
   else{
     if(input$round == "Off"){
-      tabImport(perfAggDf(data_unagg))
+      tabImportUnagg(perfAggDf(data_unagg))
     }
     else{
-      format(tabImport(perfAggDf(data_unagg)), digits = 3, nsmall = 3)
+      format(tabImportUnagg(perfAggDf(data_unagg)), digits = 3, nsmall = 3)
     }
   }
 }, options = list(scrollX = TRUE),

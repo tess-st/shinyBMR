@@ -7,7 +7,7 @@ tabpanel.bmr = dashboardPage(
     
     menuItem("Boxplot", tabName = "boxplot", icon = icon("mortar-board")),
     menuItem("Heatmap", tabName = "heatmap", icon = icon("thermometer-2")),
-    tags$div(title = "Use aggregated Dataof the BMR",
+    tags$div(title = "Use aggregated Data of the BMR",
       selectInput("aggregate", "Aggregated BMR",
         choices = c("On", "Off"), selected = "On", multiple=F, selectize=TRUE,
         width = '98%')),
@@ -51,9 +51,10 @@ tabpanel.bmr = dashboardPage(
                 choices = c("Off", "On"), selected = "Off"),
               selectInput("addLines", "Add Line per Group of Learner Information",
                 choices = c("On", "Off"), selected = "On"),
-              #htmlOutput("rangeY_B")
-              sliderInput("rangeYaxisB", "Range y-Axis", value = c(0,1), min = 0, max = 10, step = 0.05),
-              htmlOutput("rangeEndB")
+              uiOutput("sliderBoxplot")
+              
+              #sliderInput("rangeYaxisB", "Range y-Axis", value = c(0,1), min = 0, max = 10, step = 0.05)
+              #htmlOutput("rangeEndB")
               #numericInput("rangeEndB", "Choose the upper Limit of the selected Value",
               #  value = 10, min = 0, max = Inf, step = 1)
             ),

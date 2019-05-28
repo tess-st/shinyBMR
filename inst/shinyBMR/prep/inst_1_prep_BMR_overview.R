@@ -1,4 +1,4 @@
-#Find Values of specific selected Measure for self-created Data Set
+# Find Values of specific selected Measure for self-created Data Set
 findValue = function(data, measure){
   v <- data[1,] == measure
   for(i in 1:length(v)){
@@ -13,28 +13,12 @@ findValue = function(data, measure){
   return(number)
 }
 
-tabImport <- function(data){
-  measures <- grep("measure_", names(data))
-  values <- grep("value_", names(data))
-  names <- NA
-  for(i in 1:length(measures)){
-    names[i] <- data[1,measures[i]] 
-    names(data)[values[i]] <- names[i]
-  }
-  data$task.id <- with(data, paste(task.id, classif.reg, sep = ", "))
-  data_tab<- subset(data, select = -c(measures, learner.id, classif.reg, learner.info))
-  names(data_tab)[1] <- "Name and Art of Task"
-  names(data_tab)[names(data_tab) == "learner"] <- "Learner"
-  names(data_tab)[names(data_tab) == "tuning"] <- "Tuning"
-  names(data_tab)[names(data_tab) == "smote"] <- "SMOTE"
-  
-  return(data_tab)
-}
-
-#Extraction of the model with the highest performance
+# Extraction of the model with the highest performance
 bestPerfMod = function(dat, measure){
   pos <- findValue(data = dat, measure = measure)
-  if(get(measure)$minimize == FALSE){
+  measure <- getFromNamespace(measure, "mlr")
+  
+  if(measure$minimize == FALSE){
     min_max <- "Maximum"
   }
   else{
@@ -52,6 +36,8 @@ bestPerfMod = function(dat, measure){
   
   return(row)
 } 
+
+
 
 
 textInfobox = function(levels){

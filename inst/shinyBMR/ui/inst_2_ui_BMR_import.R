@@ -5,6 +5,13 @@ tabpanel.import = dashboardPage(
     
     hr(),
     
+    tags$div(title = "Show aggregated Data of the BMR",
+      selectInput("aggregated", "Aggregated BMR",
+        choices = c("On", "Off"), selected = "On", multiple=F, selectize=TRUE,
+        width = '98%')),
+    
+    hr(),
+    
     tags$div(title="Choose 'On' for only showing 4 decimal places", 
       selectInput("round", "Round Values",
         choices = c("Off", "On"), selected = "Off", multiple = FALSE, selectize = TRUE,
@@ -13,19 +20,6 @@ tabpanel.import = dashboardPage(
   ),
   
   dashboardBody(
-    box(width = 12, DT::dataTableOutput("import.analysis")),
-    checkboxInput("aggregatedBMR", "Show aggregated Benchmark Results", value = TRUE)
-    # tabsetPanel(id = "dataset",
-    #   tabPanel("Imported Dataset",
-    #     htmlOutput("import.text"),
-    #     box(width = 12, DT::dataTableOutput("import.preview")),
-    #     uiOutput("tabpanel.browse.openml"),
-    #     checkboxInput("aggregatedBMR", "Show aggregated Benchmark Results", value = TRUE)
-    #   ),
-    #   
-    #   tabPanel("Dataset BMR Analysis",
-    #     box(width = 12, DT::dataTableOutput("import.analysis"))
-    #   )
-    # )
+    box(width = 12, DT::dataTableOutput("import.analysis"))
   )
 )

@@ -15,7 +15,7 @@ subsetAnalysis = function(data, measure){
 
 
 getRange = function(measure){
-  m <- get(measure)#, as.environment(system.file(package = "mlr")))
+  m <- getFromNamespace(measure, "mlr")#, as.environment(system.file(package = "mlr")))
   if(m$minimize == TRUE){
     range <- c(m$best, m$worst)
   }

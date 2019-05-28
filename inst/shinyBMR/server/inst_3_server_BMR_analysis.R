@@ -54,80 +54,36 @@ jitter_symbols <- reactive({
   }
 })
 
-
-# range_B <- reactive({
-#   reqAndAssign(input$select.measure.ana, "measure")
-#   if(is.null(measure)){
-#     NULL
-#   }
-#   else{
-#     value <- c(get(measure)$worst, get(measure)$best)
-#     value
-#   }
-# })
-
-# range_yaxis_B <- renderUI({
-#   sliderInput("rangeYaxisB", "Range y-Axis", value = getRange(input$select.measure.ana), 
-#     min = 0, max =10, step = 0.05)
-# })
-
-# observe({
-#   req(input$rangeEndB)
-#   updateSliderInput(session, "rangeYaxisB", value = c(0, input$rangeEndB))
-# })
-
-
-# observeEvent(input$select.measure.ana, {
-#   if(get(input$select.measure.ana)$worst == Inf){
-#     shinyjs::show("rangeEndB", anim = TRUE)
-#   }
-#   else{
-#     shinyjs::hide("rangeEndB", animType = "fade")
-#   }
-# })
-
-
-# toListen <- reactive({
-#   list(input$select.measure.ana, input$rangeEndB)
-# })
-
-# end <- reactive({
-#   if(any(c(get(input$select.measure.ana)$best, get(input$select.measure.ana)$worst) == Inf)){
-#      req(input$rangeEndB)
-#   }
-#   else{
-#     NULL
-#   }
-# })
-
-output$rangeEndB <- renderUI({
-  numericInput("range.end.B", "Choose the upper Limit of the selected Value",
-    value = 10, min = 0, max = Inf, step = 1)
+output$sliderBoxplot <- renderUI({
+  req(input$select.measure.ana)
+  if(!is.null(data$data)){
+    m <- getFromNamespace(input$select.measure.ana, "mlr")
+    range <- c(m$best, m$worst)
+    pos <- findValue(data = perfAggDf(data$data.notagg), measure = input$select.measure.ana)
+    min <- getRange(input$select.measure.ana)[1]
+    max <- getRange(input$select.measure.ana)[2]
+    minimum <- min(perfAggDf(data$data.notagg)[pos])
+    maximum <- max(perfAggDf(data$data.notagg)[pos])
+    if(any(range == Inf)){
+      max <- mround(maximum + 0.1* maximum, 0.05) 
+    }
+    if(round(minimum - 0.05* maximum, 2) < min){
+      value <- c(min, mround(maximum + 0.05* maximum, 0.05))
+    }
+    else{
+      value <- c(mround((minimum - 0.05* maximum), 0.05), mround(maximum + 0.05* maximum, 0.05))
+    }
+    sliderInput("rangeYaxisB", "Range y-Axis", value = value, 
+      min = min, max = max, step = 0.05)
+  }
 })
 
-# observeEvent(input$select.measure.ana, {#toListen(), {
-#  # range <- c(get(input$select.measure.ana)$best, get(input$select.measure.ana)$worst)
-#   #if(any(range == Inf)){
-#     # output$rangeEndB <- renderUI({
-#     #   numericInput("range.end.B", "Choose the upper Limit of the selected Value",
-#     #     value = 10, min = 0, max = Inf, step = 1)
-#     # })
-#    # min <- getRange(input$select.measure.ana)[1]
-#     #max <- input$range.end.B
-#   #  updateSliderInput(session, "rangeYaxisB", value = c(min, input$range.end.B))#end()))#htmlOutput("rangeY_B")))
-#   #}
-#   #else{
-#   # updateSliderInput(session, "rangeYaxisB", value = c(get(input$select.measure.ana)$best, get(input$select.measure.ana)$worst))
-#    updateSliderInput(session, "rangeYaxisB", value = getRange(input$select.measure.ana))
-#   #}
-# })
-
-# observe({
-#   updateSliderInput(session, "rangeYaxisB", value = getRange(input$select.measure.ana))
-# })
-# range_yaxis_B <- reactive({
-#   req(input$rangeYaxisB)
-# })
+# solve problem of sliderInput, as the values are returned as list
+range <- reactive({
+  reqAndAssign(input$rangeYaxisB, "range")
+  vec <- c(input$rangeYaxisB[1], input$rangeYaxisB[2])
+  vec
+})
 
 col_Palette_B <- reactive({
   req(input$colPaletteB)
@@ -177,7 +133,8 @@ col_Palette_B <- reactive({
 
 output$ggplot <- renderPlot({
   boxplot <- PerfBoxplot(dat_plot(), size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = input$addLines,
-    range_yaxis = input$rangeYaxisB, size_symbols = input$sizeSymbolsB, jitter_symbols = jitter_symbols(),
+    range_yaxis = range(),#input$rangeYaxisB, 
+    size_symbols = input$sizeSymbolsB, jitter_symbols = jitter_symbols(),
     label_xaxis = input$labelXlabB, label_yaxis = input$labelYlabB, label_symbol = input$labelSymbolB)
   boxplot
 },height = function() {
@@ -186,7 +143,8 @@ output$ggplot <- renderPlot({
 
 output$plotly <- renderPlotly({
   ggplotly(PerfBoxplot(dat_plot(), size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = input$addLines,
-    range_yaxis = input$rangeYaxisB, size_symbols = input$sizeSymbolsB, jitter_symbols = jitter_symbols(),
+    range_yaxis = range(),#input$rangeYaxisB, 
+    size_symbols = input$sizeSymbolsB, jitter_symbols = jitter_symbols(),
     label_xaxis = input$labelXlabB, label_yaxis = input$labelYlabB, label_symbol = input$labelSymbolB))
 })
 
