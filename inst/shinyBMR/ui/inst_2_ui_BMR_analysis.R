@@ -7,6 +7,7 @@ tabpanel.bmr = dashboardPage(
     
     menuItem("Boxplot", tabName = "boxplot", icon = icon("mortar-board")),
     menuItem("Heatmap", tabName = "heatmap", icon = icon("thermometer-2")),
+    menuItem("PCP", tabName = "pcp", icon = icon("connectdevelop")),
     tags$div(title = "Use aggregated Data of the BMR",
       selectInput("aggregate", "Aggregated BMR",
         choices = c("On", "Off"), selected = "On", multiple=F, selectize=TRUE,
@@ -122,6 +123,13 @@ tabpanel.bmr = dashboardPage(
         conditionalPanel(condition = "input.type == true",
           fluidRow(fillPage(plotlyOutput("plotly_heatmap"))))
       ),
+      
+      tabItem(tabName = "pcp",
+        h2("Parallel Coordinates Plot"),
+        conditionalPanel(condition = "output$disable_pcp",
+          plotOutput("ggplot_pcp")
+          )
+        ),
       
       tabItem(tabName = "plotMLR",
         h2("Boxplots: Distribution of Performance Values across Resampling Iterations (unagg. data)"),

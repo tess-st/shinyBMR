@@ -121,12 +121,12 @@ valuesOfMeasure <- reactive({
   else{
     pos <- findValue(data = perfAggDf(data$data), measure = input$select.measure)
     if(input$roundOverview == "Off"){
-      min <- min(perfAggDf(data$data)[pos])
-      max <- max(perfAggDf(data$data)[pos])
+      min <- min(perfAggDf(data$data)[,pos])
+      max <- max(perfAggDf(data$data)[,pos])
     }
     else{
-      min <- format(min(perfAggDf(data$data)[pos]), digits = 3, nsmall = 3)
-      max <- format(max(perfAggDf(data$data)[pos]), digits = 3, nsmall = 3)
+      min <- format(min(perfAggDf(data$data)[,pos]), digits = 3, nsmall = 3)
+      max <- format(max(perfAggDf(data$data)[,pos]), digits = 3, nsmall = 3)
     }
     return(paste(min, max, sep = " - "))
   }
