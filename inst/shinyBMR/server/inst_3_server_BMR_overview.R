@@ -1,4 +1,74 @@
-#UI
+#####################################################################################################################
+# Preparation Overview
+#####################################################################################################################
+
+# Show/hide elements with Info Text
+output$help_summary <- renderText({
+  "You first need to import a BMR Object. Go to 'BMR Import' and upload your Data."
+})
+
+output$help_tuning <- renderText({
+  "You didn't import any Data yet."
+})
+
+output$help_tables <- renderText({
+  "You didn't import any Data yet."
+})
+
+observe({
+  if(!is.null(data$data)){
+    shinyjs::hide("help_summary", animType = "fade")
+    shinyjs::hide("help_tuning", animType = "fade")
+    shinyjs::hide("help_tables", animType = "fade")
+    # InfoBox
+    shinyjs::show("Data_Names", anim = TRUE)
+    shinyjs::show("Methods", anim = TRUE)
+    shinyjs::show("Tasks", anim = TRUE)
+    shinyjs::show("Measures", anim = TRUE)
+    shinyjs::show("Tunings", anim = TRUE)
+    shinyjs::show("SMOTEs", anim = TRUE)
+    shinyjs::show("Values", anim = TRUE)
+    # ValueBox
+    shinyjs::show("Data_Names_Lev", anim = TRUE)
+    shinyjs::show("Methods_Lev", anim = TRUE)
+    shinyjs::show("Tasks_Lev", anim = TRUE)
+    shinyjs::show("Measures_Lev", anim = TRUE)
+    shinyjs::show("Tunings_Lev", anim = TRUE)
+    shinyjs::show("SMOTEs_Lev", anim = TRUE)
+    shinyjs::show("Values_Lev", anim = TRUE)
+    # Tuning
+    shinyjs::show("summary.tune", anim = TRUE)
+    # Cross Tables
+    shinyjs::show("crossTables", anim = TRUE)
+  }
+  else{
+    shinyjs::show("help_summary", anim = TRUE)
+    shinyjs::show("help_tuning", anim = TRUE)
+    shinyjs::show("help_tables", anim = TRUE)
+    # InfoBox
+    shinyjs::hide("Data_Names", animType = "fade")
+    shinyjs::hide("Methods", animType = "fade")
+    shinyjs::hide("Tasks", animType = "fade")
+    shinyjs::hide("Measures", animType = "fade")
+    shinyjs::hide("Tunings", animType = "fade")
+    shinyjs::hide("SMOTEs", animType = "fade")
+    shinyjs::hide("Values", animType = "fade")
+    # ValueBox
+    shinyjs::hide("Data_Names_Lev", animType = "fade")
+    shinyjs::hide("Methods_Lev", animType = "fade")
+    shinyjs::hide("Tasks_Lev", animType = "fade")
+    shinyjs::hide("Measures_Lev", animType = "fade")
+    shinyjs::hide("Tunings_Lev", animType = "fade")
+    shinyjs::hide("SMOTEs_Lev", animType = "fade")
+    shinyjs::hide("Values_Lev", animType = "fade")
+    # Tuning
+    shinyjs::hide("summary.tune", animType = "fade")
+    # Cross Tables
+    shinyjs::hide("crossTables", animType = "fade")
+  }
+})
+
+# Initialize InfoBox and ValueBox
 measure <- reactive({
   req(data$data)
   if(is.null(data$data)){
@@ -91,11 +161,12 @@ bestValueOfMeasure <- reactive({
 #   }
 # })
 
+
 #####################################################################################################################
-##################################################### Summary #######################################################
+# Summary
 #####################################################################################################################
 
-#InfoBox
+# InfoBox
 output$Data_Names <- renderInfoBox({
   infoBox("Data Set(s)", textInfobox(perfAggDf(data$data)$task.id), icon = icon ("address-card"),
     color = "navy")
@@ -111,10 +182,6 @@ output$Tasks <- renderInfoBox({
     color = "aqua")
 })
 
-# output$Measures <- renderInfoBox({
-#   infoBox("Measure(s)", textInfobox(perfAggDf(data$data)$measure), icon = icon ("chart-bar"),
-#           color = "navy")
-# })
 output$Measures <- renderInfoBox({
   infoBox("Measure(s)", textInfoboxMeasure(perfAggDf(data$data)), icon = icon ("chart-bar"),
     color = "navy")
@@ -136,15 +203,12 @@ output$Values <- renderInfoBox({
 })
 
 
-
-
-#ValueBox
+# ValueBox
 output$Data_Names_Lev <- renderValueBox({
   valueBox(tags$p("DATA SET(S)", style = "font-size: 55%;"), 
     tags$p(nlevels(perfAggDf(data$data)$task.id), style = "font-size: 150%;"), 
     icon = icon("address-card"), color = "navy")
 })
-
 
 output$Methods_Lev <- renderValueBox({
   valueBox(tags$p("METHOD(S)", style = "font-size: 55%;"), 
@@ -158,11 +222,6 @@ output$Tasks_Lev <- renderValueBox({
     icon = icon("pen-fancy"), color = "aqua")
 })
 
-# output$Measures_Lev <- renderValueBox({
-#   valueBox(tags$p("MEASURE(S)", style = "font-size: 55%;"), 
-#            tags$p(length(unique(perfAggDf(data$data)$measure)), style = "font-size: 150%;"),
-#            icon = icon("chart-bar"), color = "navy")
-# })
 output$Measures_Lev <- renderValueBox({
   valueBox(tags$p("MEASURE(S)", style = "font-size: 55%;"), 
     tags$p(sapply(strsplit(textInfoboxMeasure(perfAggDf(data$data)), ", "), length), style = "font-size: 150%;"),
@@ -182,42 +241,48 @@ output$SMOTEs_Lev <- renderValueBox({
 })
 
 output$Values_Lev <- renderValueBox({
-  # if(input$roundOverview == "Off"){
-  #   min <- min(perfAggDf(data$data)$value)
-  #   max <- max(perfAggDf(data$data)$value)
-  # }
-  # else{
-  #   min <- format(min(perfAggDf(data$data)$value), digits = 3, nsmall = 3)
-  #   max <- format(max(perfAggDf(data$data)$value), digits = 3, nsmall = 3)
-  #   
-  # }
   valueBox(tags$p("Value of selected Measure", style = "font-size: 55%;"),
-    tags$p(valuesOfMeasure(), #paste(min, max, sep = " - ")
-      #min(perfAggDf(data$data)$value), max(perfAggDf(data$data)$value)
+    tags$p(valuesOfMeasure(), 
       style = "font-size: 150%;"),
     icon = icon ("battery-three-quarters"), color = "navy")
 })
 
 
+#####################################################################################################################
+# Cross Tables
+#####################################################################################################################
+
 output$selectionTable1 <- renderUI({
-  # selectizeInput("select", "Select:", 
-  #                choices = as.list(levels(dat_plot()$learner)), 
-  #                multiple = TRUE)
-  selectizeInput("table1", "First Table Element", 
-    choices = c('Not Selected', as.list(names(perfAggDf(data$data)))),
-    multiple = FALSE, selected = NULL)
+  if(is.null(data$data)){
+    NULL
+  }
+  else{
+    selectizeInput("table1", "First Table Element", 
+      choices = c('Not Selected', as.list(names(tabImport(perfAggDf(data$data))))),
+      multiple = FALSE, selected = NULL)
+  }
 })
 
 output$selectionTable2 <- renderUI({
-  selectizeInput("table2", "Second Table Element", 
-    choices = c('Not Selected', as.list(names(perfAggDf(data$data)))),
-    multiple = FALSE, selected = NULL)
+  if(is.null(data$data)){
+    NULL
+  }
+  else{
+    selectizeInput("table2", "Second Table Element", 
+      choices = c('Not Selected', as.list(names(tabImport(perfAggDf(data$data))))),
+      multiple = FALSE, selected = NULL)
+  }
 })
 
 output$selectionTable3 <- renderUI({
-  selectizeInput("table3", "Third Table Element", 
-    choices = c('Not Selected', as.list(names(perfAggDf(data$data)))),
-    multiple = FALSE, selected = NULL)
+  if(is.null(data$data)){
+    NULL
+  }
+  else{
+    selectizeInput("table3", "Third Table Element", 
+      choices = c('Not Selected', as.list(names(tabImport(perfAggDf(data$data))))),
+      multiple = FALSE, selected = NULL)
+  }
 })
 
 var1 <- reactive({
@@ -233,7 +298,8 @@ var3 <- reactive({
 })
 
 output$crossTables <- renderPrint({
-  dataset <- perfAggDf(data$data)
+  validate(need(data$data, "You didn't import any Data yet."))
+  dataset <- tabImport(perfAggDf(data$data))
   var1 <- var1()
   var2 <- var2()
   var3 <- var3()
@@ -243,15 +309,16 @@ output$crossTables <- renderPrint({
   crossTab(dataset, vec, position)
 })
 
+# output$summaryData <- renderPrint({
+#   summary(perfAggDf(data$data))
+# })
 
 
+#####################################################################################################################
+# Tuning Results
+#####################################################################################################################
 
-output$summaryData <- renderPrint({
-  summary(perfAggDf(data$data))
-})
-
-
-# Tuning
+# Tuning Summary
 summarize.tune = reactive({
   if(is.null(data$bmr)){
     NULL
@@ -259,7 +326,7 @@ summarize.tune = reactive({
   else{
     d = getBMRTuneResults(data$bmr, as.df = TRUE) 
     
-    validate(need(class(d) == "data.frame", "You didn't import any Data."))
+    validate(need(class(d) == "data.frame", "You didn't import any Data yet."))
     colnames(d) = make.names(colnames(d))
     pos.x = colnames(Filter(function(x) "POSIXt" %in% class(x) , d))
     d = dropNamed(d, drop = pos.x)    
@@ -268,6 +335,7 @@ summarize.tune = reactive({
 })
 
 output$summary.tune = renderUI({
+ # validate(need(data$bmr, "You didn't import any Data yet."))
   ui = box(width = 12, title = "Summary Tuning",
     br(),
     DT::dataTableOutput("summary.tuning")
@@ -280,14 +348,13 @@ output$summary.tuning = DT::renderDataTable({
 }, options = list(scrollX = TRUE), server = F, selection = "single")
 
 
-
 # Tuning Plots
 selected.learner = eventReactive(input$summary.tuning_rows_selected, {
   #reqAndAssign(data$bmr, "d")
   # if(is.null(data$bmr)){
   #   NULL
   # }
-#  else{
+  #  else{
   #  d = getBMRTuneResults(data$bmr, as.df = TRUE) 
   #d = getBMRTuneResults(d, as.df = T)
   #pos.x = colnames(Filter(function(x) "POSIXt" %in% class(x) , d))
@@ -363,7 +430,7 @@ yaxis_T <- reactive({
   validate(
     need(input$yAxisT != "Not Selected", "Please choose what should be plotted on the y-Axis for showing 
       the Tuning Results")
-    )
+  )
   if(input$yAxisT == "Not Selected"){
     NULL
   }
@@ -383,7 +450,7 @@ zaxis_T <- reactive({
 
 output$plot.hyperPars <- renderPlot({
   req(input$summary.tuning_rows_selected)
-
+  
   plotHyperParsEffect(selected.learner(), x = xaxis_T(), y = yaxis_T(), z = zaxis_T(),
     partial.dep.learn = "regr.bst")
 })

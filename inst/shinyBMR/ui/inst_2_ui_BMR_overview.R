@@ -28,6 +28,7 @@ tabpanel.overview =  dashboardPage(
         h4("Summary of the Benchmark Analysis"),
         tabsetPanel(
           tabPanel("Categories/Levels",
+            textOutput("help_summary"),
             fluidRow(infoBoxOutput("Data_Names"),
               infoBoxOutput("Methods"),
               infoBoxOutput("Tasks"),
@@ -54,21 +55,8 @@ tabpanel.overview =  dashboardPage(
             fluidRow(valueBoxOutput("Values_Lev"))
           ),
           
-          tabPanel("Cross Tables",
-            fluidRow(column(3, htmlOutput("selectionTable1")),
-              column(3,htmlOutput("selectionTable2")),
-              column(3,htmlOutput("selectionTable3"))),
-            
-            verbatimTextOutput("crossTables"),
-            tags$head(tags$style("#crossTables{font-size:12px; font-style:italic; height:60vh !important; 
-overflow-y:scroll; background: ghostwhite;}"))#
-          ),
-          
-          tabPanel("Summary of BMR-Data",
-            verbatimTextOutput("summaryData")
-          ),
-          
           tabPanel("Tuning Results",
+            textOutput("help_tuning"),
             uiOutput("summary.tune"),
             br(),
             fluidRow(
@@ -76,15 +64,30 @@ overflow-y:scroll; background: ghostwhite;}"))#
                 uiOutput("hyperPars")),
               column(12,
                 plotOutput("plot.hyperPars")
-                )
               )
-          )
+            )
+          ),
           
           # tabPanel("Tuning Results",
           #   verbatimTextOutput("tuneResults")
-            #  tags$head(tags$style("#crossTables{font-size:12px; font-style:italic; height:70vh !important; 
-            #overflow-y:scroll; background: ghostwhite;}"))
+          #  tags$head(tags$style("#crossTables{font-size:12px; font-style:italic; height:70vh !important; 
+          #overflow-y:scroll; background: ghostwhite;}"))
           # )
+          
+          tabPanel("Cross Tables",
+            textOutput("help_tables"),
+            fluidRow(column(3, htmlOutput("selectionTable1")),
+              column(3,htmlOutput("selectionTable2")),
+              column(3,htmlOutput("selectionTable3"))),
+            
+            verbatimTextOutput("crossTables"),
+            tags$head(tags$style("#crossTables{font-size:12px; font-style:italic; height:60vh !important; 
+overflow-y:scroll; background: ghostwhite;}"))#
+          )
+          # tabPanel("Summary of BMR-Data",
+          #   verbatimTextOutput("summaryData")
+          # ),
+          
         )
       ),
       
