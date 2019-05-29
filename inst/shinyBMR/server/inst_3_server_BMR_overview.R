@@ -1,4 +1,8 @@
 #####################################################################################################################
+#################################################### BMR Models #####################################################
+#####################################################################################################################
+
+#####################################################################################################################
 # Preparation Overview
 #####################################################################################################################
 
@@ -247,68 +251,6 @@ output$Values_Lev <- renderValueBox({
     icon = icon ("battery-three-quarters"), color = "navy")
 })
 
-
-#####################################################################################################################
-# Cross Tables
-#####################################################################################################################
-
-output$selectionTable1 <- renderUI({
-  if(is.null(data$data)){
-    NULL
-  }
-  else{
-    selectizeInput("table1", "First Table Element", 
-      choices = c('Not Selected', as.list(names(tabImport(perfAggDf(data$data))))),
-      multiple = FALSE, selected = NULL)
-  }
-})
-
-output$selectionTable2 <- renderUI({
-  if(is.null(data$data)){
-    NULL
-  }
-  else{
-    selectizeInput("table2", "Second Table Element", 
-      choices = c('Not Selected', as.list(names(tabImport(perfAggDf(data$data))))),
-      multiple = FALSE, selected = NULL)
-  }
-})
-
-output$selectionTable3 <- renderUI({
-  if(is.null(data$data)){
-    NULL
-  }
-  else{
-    selectizeInput("table3", "Third Table Element", 
-      choices = c('Not Selected', as.list(names(tabImport(perfAggDf(data$data))))),
-      multiple = FALSE, selected = NULL)
-  }
-})
-
-var1 <- reactive({
-  req(input$table1)
-})
-
-var2 <- reactive({
-  req(input$table2)
-})
-
-var3 <- reactive({
-  req(input$table3)
-})
-
-output$crossTables <- renderPrint({
-  validate(need(data$data, "You didn't import any Data yet."))
-  dataset <- tabImport(perfAggDf(data$data))
-  var1 <- var1()
-  var2 <- var2()
-  var3 <- var3()
-  vec <- c(var1, var2, var3)
-  position <- c(NULL, NULL)
-  
-  crossTab(dataset, vec, position)
-})
-
 # output$summaryData <- renderPrint({
 #   summary(perfAggDf(data$data))
 # })
@@ -335,7 +277,7 @@ summarize.tune = reactive({
 })
 
 output$summary.tune = renderUI({
- # validate(need(data$bmr, "You didn't import any Data yet."))
+  # validate(need(data$bmr, "You didn't import any Data yet."))
   ui = box(width = 12, title = "Summary Tuning",
     br(),
     DT::dataTableOutput("summary.tuning")
@@ -455,23 +397,78 @@ output$plot.hyperPars <- renderPlot({
     partial.dep.learn = "regr.bst")
 })
 
-
 # output$tuneResults <- renderPrint({
 #   getBMRTuneResults(data$bmr)
 # })
 
 
+#####################################################################################################################
+# Cross Tables
+#####################################################################################################################
 
-# output$crossTables <- renderPrint({
-#   dataset <- perfAggDf(data$data)
-#   table(dataset$learner, dataset$tuning)
-# })
+output$selectionTable1 <- renderUI({
+  if(is.null(data$data)){
+    NULL
+  }
+  else{
+    selectizeInput("table1", "First Table Element", 
+      choices = c('Not Selected', as.list(names(tabImport(perfAggDf(data$data))))),
+      multiple = FALSE, selected = NULL)
+  }
+})
+
+output$selectionTable2 <- renderUI({
+  if(is.null(data$data)){
+    NULL
+  }
+  else{
+    selectizeInput("table2", "Second Table Element", 
+      choices = c('Not Selected', as.list(names(tabImport(perfAggDf(data$data))))),
+      multiple = FALSE, selected = NULL)
+  }
+})
+
+output$selectionTable3 <- renderUI({
+  if(is.null(data$data)){
+    NULL
+  }
+  else{
+    selectizeInput("table3", "Third Table Element", 
+      choices = c('Not Selected', as.list(names(tabImport(perfAggDf(data$data))))),
+      multiple = FALSE, selected = NULL)
+  }
+})
+
+var1 <- reactive({
+  req(input$table1)
+})
+
+var2 <- reactive({
+  req(input$table2)
+})
+
+var3 <- reactive({
+  req(input$table3)
+})
+
+output$crossTables <- renderPrint({
+  validate(need(data$data, "You didn't import any Data yet."))
+  dataset <- tabImport(perfAggDf(data$data))
+  var1 <- var1()
+  var2 <- var2()
+  var3 <- var3()
+  vec <- c(var1, var2, var3)
+  position <- c(NULL, NULL)
+  
+  crossTab(dataset, vec, position)
+})
 
 
 
 #####################################################################################################################
-#################################################### Best Modell ####################################################
+#################################################### Best Model #####################################################
 #####################################################################################################################
+
 best <- reactive({
   req(input$select.measure)
   #req(input$select.minmax)
