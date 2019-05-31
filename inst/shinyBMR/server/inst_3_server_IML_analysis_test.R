@@ -11,9 +11,15 @@ output$iml.set = renderUI({
   )
 })
 
-observeEvent(input$iml_sets, {
+observe({
   req(dataiml$data)
   req(modiml$mod)
+  if(is.null(dataiml$data) || is.null(modiml$mod)){
+    shinyjs::show("imlDataInfo", anim = TRUE)
+  }
+  else{
+    shinyjs::hide("imlDataInfo", animType = "fade")
+  }
 })
 
 observeEvent(input$tabs, {
@@ -26,6 +32,17 @@ observeEvent(input$tabs, {
     shinyjs::hide("imlPlotType", animType = "fade")
     shinyjs::hide("iml.set", animType = "fade")
     shinyjs::hide("imlDownload", animType = "fade")
+  }
+})
+
+observe({
+  if(input$imlPlotType == "Not Selected"){
+    shinyjs::hide("iml_plotted", animType = "fade")
+    shinyjs::show("imlStartInfo", anim = TRUE)
+  }
+  else{
+    shinyjs::show("iml_plotted", anim = TRUE)
+    shinyjs::hide("imlStartInfo", animType = "fade")
   }
 })
 
@@ -201,8 +218,12 @@ data_instance_shapley <- reactive({
 
 iml_plot_obj <- reactive({
   set.seed(input$iml_seed)
+  #Not Selected
+  if(input$imlPlotType == "Not Selected"){
+    NULL
+  }
   #Feature Importance
-  if(input$imlPlotType == "Feature Importance"){
+  else if(input$imlPlotType == "Feature Importance"){
     if(modiml$type == "classif"){
       loss <- input$impLossClassif
     }
@@ -330,12 +351,24 @@ observeEvent(input$iml_sets, {
     #   eff_zoom() * session$clientData$output_iml_plotted_width
     # }
   )
-})
+}, ignoreNULL = T, ignoreInit = T)
 
 
 #####################################################################################################################
 # Info Text
 #####################################################################################################################
+
+# Dat Info
+output$imlDataInfo <- renderText({
+  "But first of all you have to select the Data and the belonging Model you want to analyze.
+  Therefore go to 'IML Import Data' and 'IML Import Model' and make your selections.
+  "
+})
+
+# Start Info
+output$imlStartInfo <- renderText({
+  "Here you can now choose the IML Method you want to use for making your Blackbox interpretabel."
+})
 
 # Feature Importance
 output$impCompInfo <- renderText({
@@ -363,7 +396,7 @@ output$impLossInfo <- renderText({
 output$effMethodInfo <- renderText({
   "'pdp' for partial dependence plot, 'ice' for individual conditional expectation curves, 'pdp+ice' for partial dependence plot
   and ice curves within the same plot, 'ale' for accumulated local effects (the default). You can get more information
-  about the different methods for measuring the feature effect by switching the 'Information-Button'"
+  about the different methods for measuring the feature effect by switching the 'Information-Button'."
 })
 
 output$effFeatureInfo <- renderText({
@@ -384,7 +417,7 @@ output$intFeatureInfo <- renderText({
 output$intGridInfo <- renderText({
   "The number of values per feature that should be used to estimate the interaction strength. A larger grid.size means more
   accurate the results but longer the computation time. For each of the grid points, the partial dependence functions have to
-  be computed, which involves marginalizing over all data points"
+  be computed, which involves marginalizing over all data points."
 })
 
 

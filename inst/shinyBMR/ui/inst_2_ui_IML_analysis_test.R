@@ -27,6 +27,16 @@ tabpanel.iml.test = dashboardPage(
       ),
       
       tabItem(tabName = "iml_plots",
+        
+        textOutput("imlStartInfo"),
+        br(),
+        textOutput("imlDataInfo"),
+        
+        # Not Selected
+        conditionalPanel("input.imlPlotType == 'Not Selected'",
+          NULL
+          ),
+        
         # Feature Importance
         conditionalPanel("input.imlPlotType == 'Feature Importance'",
           dropdownButton(
@@ -240,7 +250,7 @@ tabpanel.iml.test = dashboardPage(
           ),
         
         br(),
-        fluidRow(fillPage(withSpinner(plotOutput("iml_plotted"))))
+        fluidRow(fillPage(addSpinner(plotOutput("iml_plotted")))) #or withSpinner()
       )
     )
   )
