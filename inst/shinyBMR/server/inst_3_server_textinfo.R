@@ -329,4 +329,4 @@ output$surrogate_info <- renderUI({
       "Image Source: https://wallpapersafari.com/w/q8koJO"
     )
   )
-}) 
+})
