@@ -1,9 +1,17 @@
 Package: shinyBMR
-Title: A graphical user interface to explore benchmark results.
+Title: A graphical user interface to explore benchmark results and make blackbox methods interpretable.
 Description:
-  shinyBMR wraps the benchmark functionalities of the R-package mlr
-  into a graphical user-interface built with shiny.
-  This enables the user to conduct all steps of the machine learning workflow from his browser.
+  shinyBMR provides an user-interface for exploring the huge output from a benchmark study based on the
+  benchmark() function out of the mlr-package. Due to practical experience these analyses mainly focus 
+  on classification tasks, where non-smoting and smoting (for imbalance correction) techniques in 
+  combination with non-tuning and tuning is used for the learners competing in the benchmark study. 
+  Of course one can also use this interface for analyzing regression tasks. But it has to be mentioned, 
+  that functionalities not go much further 
+  As complexe machine learning methods - refered to as blackbox methods - tend to win these kind of 
+  competitions the app also provides a framework for accecssing interpretability of these methods. This
+  implementation is based on the additional mlr-package called 'iml'. 
+  Benchmark analyses and the use of tools for interpretation of blackbox methods are not 
+  therefore could be used independently of each other.
 Authors@R: c(
   person("Theresa", "Stueber", email = "teessii@gmx.de",
     role = c("aut", "cre")))
