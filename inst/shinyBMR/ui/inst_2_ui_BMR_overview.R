@@ -76,6 +76,7 @@ tabpanel.overview =  dashboardPage(
           
           tabPanel("Cross Tables",
             textOutput("help_tables"),
+            br(),
             fluidRow(column(3, htmlOutput("selectionTable1")),
               column(3,htmlOutput("selectionTable2")),
               column(3,htmlOutput("selectionTable3"))),

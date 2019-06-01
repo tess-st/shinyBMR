@@ -126,7 +126,7 @@ tabpanel.bmr = dashboardPage(
       
       tabItem(tabName = "pcp",
         h2("Parallel Coordinates Plot"),
-        conditionalPanel(condition = "output$disable_pcp",
+        conditionalPanel(condition = "output.disable_pcp",
           plotOutput("ggplot_pcp")
           )
         ),

@@ -223,7 +223,7 @@ outputOptions(output, "disable_pcp", suspendWhenHidden = FALSE)
 
 output$ggplot_pcp <- renderPlot({
   ggparcoord(perfAggDf(getBMRAggrPerformances(data$bmr, as.df = T)), columns = c(3,4), 
-    groupColumn = "learner.id", showPoints = T)
+    groupColumn = "learner.id", showPoints = TRUE)
 })
 
 

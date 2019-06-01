@@ -199,7 +199,7 @@ output$ice_info <- renderUI({
 output$ale_info <- renderUI({
   widgetUserBox(
     title = "IML",
-    subtitle = "Information about Feature Effect: ICE",
+    subtitle = "Information about Feature Effect: ALE",
     type = NULL,
     width = 12,
     background = TRUE,
@@ -227,6 +227,47 @@ output$ale_info <- renderUI({
     )
   )
 })
+
+
+########### Feature Interaction
+output$interaction_info <- renderUI({
+  widgetUserBox(
+    title = "IML",
+    subtitle = "Information about Feature Interaction",
+    type = NULL,
+    width = 12,
+    background = TRUE,
+    backgroundUrl = "https://raw.githubusercontent.com/tess-st/shinyBMR/master/www/BlueGalaxy.jpg",
+    closable = FALSE,   
+    p("If a machine learning model makes a prediction based on two features, we can decompose the prediction into four 
+      terms: a constant term, a term for the first feature, a term for the second feature and a term for the interaction 
+      between the two features.The interaction between two features is the change in the prediction that occurs by varying 
+      the features after considering the individual feature effects."),
+    p("Interactions between features are measured via the decomposition of the prediction function: If a feature j has no 
+      interaction with any other feature, the prediction function can be expressed as the sum of the partial function that 
+      depends only on j and the partial function that only depends on features other than j. If the variance of the full 
+      function is completely explained by the sum of the partial functions, there is no interaction between feature j and 
+      the other features. Any variance that is not explained can be attributed to the interaction and is used as a measure 
+      of interaction strength."),
+    p("The interaction strength between two features is the proportion of the variance of the 2-dimensional partial 
+      dependence function that is not explained by the sum of the two 1-dimensional partial dependence functions. The 
+      interaction is measured by Friedman's H-statistic (square root of the H-squared test statistic) and takes on values 
+      between 0 (no interaction) to 1."),
+    footer = tags$div(
+      tagList(a("CRAN: IML Package - Feature Interactions", href="https://rdrr.io/cran/iml/man/Interaction.html")),
+      tags$br(),
+      tagList(a("Book IML: Model-agnostic Methods - Feature Interaction", 
+        href="https://christophm.github.io/interpretable-ml-book/interaction.html")),
+      tags$br(),
+      p("provided by Molnar C., Bischl B., Casalicchio G. (2018). 'iml: An R package 
+        for Interpretable Machine Learning.' JOSS, 3(26), 786. doi: 10.21105/joss.00786, 
+        http://joss.theoj.org/papers/10.21105/joss.00786."),
+      tags$hr(),
+      "Image Source: https://wallpapersafari.com/w/q8koJO"
+      )
+    )
+})
+
 
 
 ########### LIME
