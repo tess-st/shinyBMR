@@ -250,7 +250,15 @@ tabpanel.iml = dashboardPage(
           ),
         
         br(),
-        fluidRow(fillPage(addSpinner(plotOutput("iml_plotted")))), #or withSpinner()
+        tabsetPanel(
+          tabPanel("IML Plot",
+            fluidRow(fillPage(addSpinner(plotOutput("iml_plotted")))) #or withSpinner()
+            ),
+          tabPanel("IML Results",
+            verbatimTextOutput("iml_results")
+            )
+        ),
+        
         br(),
         prettySwitch(inputId = 'imlInfo', "Show Information", value = FALSE),
         conditionalPanel(condition = "input.imlInfo == true && input.imlPlotType == 'Feature Importance'",

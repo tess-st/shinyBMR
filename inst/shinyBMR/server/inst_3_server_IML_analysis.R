@@ -111,7 +111,7 @@ eff_zoom <- reactive({
 # Feature Interaction
 output$interactionFeature <- renderUI({
   selectizeInput("intFeature", "Select Feature",
-    choices = c('Not Selected', 'All', as.list(getLearnerModel(modiml$mod)$features)), #"All"
+    choices = c('Not Selected', 'All', as.list(getLearnerModel(modiml$mod)$features)),
     selected = NULL, multiple = FALSE)
 })
 
@@ -235,122 +235,121 @@ iml_plot_obj <- reactive({
     #registerDoParallel(cl)
     importance <- FeatureImp$new(predictor(), loss = loss, compare = input$impComp, n.repetitions = input$impRep)#,
     #   parallel = TRUE)
-     #stopCluster(cl)
+    #stopCluster(cl)
     
-    plot(importance)
+    importance
   }
   
   # Feature Effects
   else if(input$imlPlotType == "Feature Effect"){
     feature <- c(eff_feature1(), eff_feature2())
-    if(input$effMeth == "PDP"){
-      if(!is.null(feature)){
+    if(!is.null(feature)){ 
+      if(input$effMeth == "PDP"){
+        
         # cl = makePSOCKcluster(detectCores() - 1)
         # registerDoParallel(cl)
-        effect.pdp <- FeatureEffect$new(predictor(), feature = feature, grid.size = input$effGrid, #center.at = center,
-          method = "pdp") 
+        # effect.pdp <- FeatureEffect$new(predictor(), feature = feature, grid.size = input$effGrid, #center.at = center,
+        #   method = "pdp") 
         # parallel = TRUE)
         # stopCluster(cl)
         # 
-        plot(effect.pdp)
+        # effect.pdp
+        method <- "pdp"
+      }
+      else if(input$effMeth == "ICE"){
+        # cl = makePSOCKcluster(detectCores() - 1)
+        # registerDoParallel(cl)
+        # effect.ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = input$effGrid, #center.at = center,
+        #   method = "ice") 
+        # parallel = TRUE)
+        # stopCluster(cl)
+        
+        # effect.ice
+        method <- "ice"
+      }
+      else if(input$effMeth == "PDP + ICE"){
+        # cl = makePSOCKcluster(detectCores() - 1)
+        # registerDoParallel(cl)
+        # effect.pdp_ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = input$effGrid, #center.at = center,
+        #   method = "pdp+ice") 
+        # parallel = TRUE)
+        # stopCluster(cl)
+        
+        # effect.pdp_ice
+        method <- "pdp+ice"
+      }
+      else if(input$effMeth == "ALE"){
+        # cl = makePSOCKcluster(detectCores() - 1)
+        # registerDoParallel(cl)
+        # effect.ale <- FeatureEffect$new(predictor(), feature = feature, grid.size = input$effGrid, #center.at = center,
+        #   method = "ale", parallel = TRUE)
+        # stopCluster(cl)
+        # 
+        # effect.ale
+        method <- "ale"
       }
     }
-    else if(input$effMeth == "ICE"){
-      # cl = makePSOCKcluster(detectCores() - 1)
-      # registerDoParallel(cl)
-      effect.ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = input$effGrid, #center.at = center,
-        method = "ice") 
-      # parallel = TRUE)
-      # stopCluster(cl)
-      
-      plot(effect.ice)
-    }
-    else if(input$effMeth == "PDP + ICE"){
-      # cl = makePSOCKcluster(detectCores() - 1)
-      # registerDoParallel(cl)
-      effect.pdp_ice <- FeatureEffect$new(predictor(), feature = feature, grid.size = input$effGrid, #center.at = center,
-        method = "pdp+ice") 
-      # parallel = TRUE)
-      # stopCluster(cl)
-      
-      plot(effect.pdp_ice)
-    }
-    else if(input$effMeth == "ALE"){
-      cl = makePSOCKcluster(detectCores() - 1)
-      registerDoParallel(cl)
-      effect.ale <- FeatureEffect$new(predictor(), feature = feature, grid.size = input$effGrid, #center.at = center,
-        method = "ale", parallel = TRUE)
-      stopCluster(cl)
-      
-      plot(effect.ale)
-    }
+    effect <- FeatureEffect$new(predictor(), feature = feature, grid.size = input$effGrid, #center.at = center,
+      method = method) 
+    effect
   }
   
   # Feature Interaction
   else if(input$imlPlotType == "Feature Interaction"){
-    # feature <- int_feature()
-   # if(!is.null(feature)){
-    if(!is.null(int_feature())){
-      # if(int_feature() == "All"){
-      #   feature_int <- NULL
+    feature_int <- int_feature()
+    # if(!is.null(feature)){
+    if(!is.null(feature_int)){
+      if(feature_int == "All"){
+        feature <- NULL
+      }
+      else{
+        feature <- feature_int
+      }
       # }
-      # else{
-        feature_int <- int_feature()
-        if(feature_int == "All"){
-          interaction <- Interaction$new(predictor(), feature = NULL, grid.size = input$interactionGrid)
-        }
-        else{
-          interaction <- Interaction$new(predictor(), feature = feature_int, grid.size = input$interactionGrid)
-        }
-     # }
-        # cl = makePSOCKcluster(detectCores() - 1)
-        # registerDoParallel(cl)
-      #interaction <- Interaction$new(predictor(), feature = feature_int, grid.size = input$interactionGrid)
-
+      # cl = makePSOCKcluster(detectCores() - 1)
+      # registerDoParallel(cl)
+      interaction <- Interaction$new(predictor(), feature = feature, grid.size = input$interactionGrid)
       #   parallel = TRUE)
       # stopCluster(cl)
-      
-      plot(interaction)
     }
+    interaction
   }
   
   # LIME
   else if(input$imlPlotType == "Local Model (LIME)"){
-    if(lime_dist() == "gower"){
-      lime <- LocalModel$new(predictor(), x.interest = data_instance_lime(), k = input$limeK,
-        dist.fun = "gower")
+    if(input$limeDist == "gower"){
+      dist <- "gower"
+      kernel <- NULL
     }else{
-      lime <- LocalModel$new(predictor(), x.interest = data_instance_lime(), k = input$limeK,
-        dist.fun = lime_dist(), kernel.width = kernel_width())
+      dist <- input$limeDist
+      kernel <- kernel_width()
     }
-    
-    plot(lime)
+    lime <- LocalModel$new(predictor(), x.interest = data_instance_lime(), k = input$limeK,
+      dist.fun = dist, kernel.width = kernel)
+    lime
   }
   
   # Shapley
   else if(input$imlPlotType == "Shapley Values"){
     shapley <- Shapley$new(predictor(), x.interest = data_instance_shapley(), sample.size = input$shapleySample)
-    
-    plot(shapley)
+    shapley
   }
   
   # Tree Surrogate
   else if(input$imlPlotType == "Tree Surrogate"){
     surrogate <- TreeSurrogate$new(predictor(), maxdepth = input$surrogateMaxDepth)
-    
-    plot(surrogate)
+    surrogate
   }
-  
 })
 
-
 observeEvent(input$iml_sets, {
-  output$iml_plotted <- renderPlot({isolate(iml_plot_obj())}
+  output$iml_plotted <- renderPlot({isolate(plot(iml_plot_obj()))}
     # ,
     # height = function() {
     #   eff_zoom() * session$clientData$output_iml_plotted_width
     # }
   )
+  output$iml_results <- renderPrint({isolate(iml_plot_obj())$results})
 }, ignoreNULL = T, ignoreInit = T)
 
 
