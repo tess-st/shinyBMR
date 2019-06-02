@@ -79,9 +79,16 @@ output$learnerModel <- renderPrint({
 })
 
 
-output$overviewTask <- renderPrint({
+# output$overviewTask <- renderPrint({
+#   validate(need(!is.null(modiml$mod), "Choose the (final) Model for your IML Analysis"))
+#   if(!is.null(modiml$mod)){
+#     (modiml$mod)$task.desc 
+#   }
+# })
+
+output$listTask <-renderJsonedit({
   validate(need(!is.null(modiml$mod), "Choose the (final) Model for your IML Analysis"))
   if(!is.null(modiml$mod)){
-    (modiml$mod)$task.desc 
+  jsonedit(getTaskDesc(modiml$mod), mode = "view")
   }
 })

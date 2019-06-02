@@ -59,7 +59,8 @@ Imports:
   mlrHyperopt,
   iml,
   gower,
-  mmpf
+  mmpf,
+  listviewer
 Suggests:
   testthat,
   roxygen2,
