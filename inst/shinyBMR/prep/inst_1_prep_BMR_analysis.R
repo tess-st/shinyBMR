@@ -1,4 +1,6 @@
-################################################## Create Subset ####################################################
+#####################################################################################################################
+# Create Subset
+#####################################################################################################################
 
 subsetAnalysis = function(data, measure){
   pos <- findValue(data, measure)
@@ -25,7 +27,10 @@ getRange = function(measure){
   range
 }
 
-##################################################### Boxplot #######################################################
+
+#####################################################################################################################
+# Boxplots
+#####################################################################################################################
 
 PerfBoxplot = function(dat, size_text, col_palette, range_yaxis, size_symbols, label_symbol, jitter_symbols,
   label_xaxis, label_yaxis, add_lines){
@@ -59,7 +64,9 @@ PerfBoxplot = function(dat, size_text, col_palette, range_yaxis, size_symbols, l
 }
 
 
-##################################################### Heatmap #######################################################
+#####################################################################################################################
+# Heatmap
+#####################################################################################################################
 
 PerfHeatmap_Def = function(dat, col_min, col_max, col_text, range_value, size_text, label_value, label_xaxis, 
   label_yaxis, aggregate){
@@ -113,7 +120,57 @@ PerfHeatmap_Def = function(dat, col_min, col_max, col_text, range_value, size_te
 }
 
 
-################################################### Plots in mlr ####################################################
+#####################################################################################################################
+# Parallel Coordinates Plot
+#####################################################################################################################
+
+PCP = function(dat_agg, dat_unagg, label_xaxis, label_yaxis, col_palette, size_text, aggregate){
+  
+  measures <- names(dat_unagg)[unlist(lapply(dat_unagg, is.numeric))]
+  measures <- measures[!measures %in% "iter"]
+  
+  for(i in 1:ncol(dat_agg)){
+    pos <- grep(measures[i], names(dat_agg))
+    names(dat_agg)[pos] <- measures[i]
+  }
+  
+  long_agg <- melt(dat_agg, id.vars = "learner.id", measure.vars = measures)
+  long_unagg <- melt(dat_unagg, id.vars = c("learner.id", "iter"), measure.vars = measures)
+  long_unagg$learner <- long_unagg$learner.id
+  long_unagg$learner.id <- with(long_unagg, paste0(learner.id, iter))
+  names(long_agg)[names(long_agg)=="variable"] <- "measure"
+  names(long_unagg)[names(long_unagg)=="variable"] <- "measure"
+  
+  if(size_text == -1){
+    t <- theme()
+  }else{
+    t <- theme(text = element_text(size = rel(size_text+2)), 
+      legend.text = element_text(size = 0.6*rel(size_text+3)), 
+      legend.key.height = unit(0.25*rel(size_text+3), "cm"))
+  }
+  
+  pcp <- ggplot(NULL, aes(x=measure, y = value, group = learner.id)) +
+    geom_path(data = long_agg, aes(color = learner.id), size = 2, lineend = "round") +
+    geom_point(data = long_agg, aes(color = learner.id)) +
+    xlab(label_xaxis) + 
+    ylab(label_yaxis) + 
+    t +
+    scale_colour_manual(values = col_palette)
+  
+  if(aggregate == "Off"){
+    pcp <- pcp +
+      geom_path(data = long_unagg, aes(color = learner), alpha = 0.3, show.legend = F) +
+      geom_point(data = long_unagg, aes(color = learner), alpha = 0.3) 
+  }
+  
+  pcp
+}
+
+
+
+#####################################################################################################################
+# Plots in mlr
+#####################################################################################################################
 
 MlrBoxplot = function(dat, style, size_text, col_palette){# , size_symbols, label_symbol, label_xaxis, label_yaxis){
   # if(size_text == -1){

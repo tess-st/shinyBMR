@@ -126,8 +126,47 @@ tabpanel.bmr = dashboardPage(
       
       tabItem(tabName = "pcp",
         h2("Parallel Coordinates Plot"),
+        dropdownButton(
+          fluidRow(
+            column(4,
+              h4("Change Plotting Options"),
+              br(),
+              selectInput("colPalettePcp", "Color Palette", 
+                choices = c("Default", "Pastel1", "Dark2", "Dark3", "Set2", "Set3",
+                  "Warm", "Cold", "Harmonic", "Dynamic", 
+                  "Coolwarm", "Parula", "Viridis", "Tol.Rainbow"), 
+                #https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html
+                selected = "Default")
+              # numericInput("sizeSymbolsB", "Change Size of Symbols", value = 5, min = 1, max = 10, step = 1),
+              # selectInput("jitterSymbols", "Add random Variation (Points)",
+              #   choices = c("Off", "On"), selected = "Off"),
+              # selectInput("addLines", "Add Line per Group of Learner Information",
+              #   choices = c("On", "Off"), selected = "On"),
+              # uiOutput("sliderBoxplot")
+            ),
+            column(4,
+             h4("Change Labels"), 
+             br(),
+             textInput("labelXlabPcp", "Label of x-Axis", value = "Measure"),
+             textInput("labelYlabPcp", "Label of y-Axis", value = "Value")
+            #   textInput("labelSymbolB", "Label of Symbol Legend", value = "Value")
+           ), 
+            column(4, 
+             h4("Change Size (not for interactive Plot)"),
+             numericInput("sizeTextPcp", "Change Size of Text", value = 2, min = 1, max = 5, step = 0.5),
+             numericInput("zoomPcp", "Change Height of Plot", value = 0.4, 
+               min = 0.05, max = 1, step = 0.05)
+            )
+            
+          ),
+          circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
+          tooltip = tooltipOptions(title = "Click for Plot Settings")
+        ),
+        
+        br(),
+        
         conditionalPanel(condition = "output.disable_pcp",
-          plotOutput("ggplot_pcp")
+          fluidRow(fillPage(plotOutput("ggplot_pcp")))
           )
         ),
       

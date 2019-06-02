@@ -22,6 +22,7 @@ require(mlrHyperopt)
 require(iml)
 require(gower)
 require(doParallel)
+require(reshape2)
 
 
 #Connection to prep.files

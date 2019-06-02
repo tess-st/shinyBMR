@@ -212,7 +212,7 @@ output$plotly_heatmap <- renderPlotly({
 
 
 #####################################################################################################################
-# PCP: Parallel Coordinate Plot
+# Parallel Coordinates Plot
 #####################################################################################################################
 
 output$disable_pcp <- reactive({
@@ -221,9 +221,67 @@ output$disable_pcp <- reactive({
 })
 outputOptions(output, "disable_pcp", suspendWhenHidden = FALSE)
 
+size_text_Pcp <- reactive({
+  size <- req(input$sizeTextPcp)
+  if(input$type){
+    size <- -1
+  }
+  return(size)
+})
+
+col_Palette_Pcp <- reactive({
+  req(input$colPalettePcp)
+  n <- nrow(perfAggDf(getBMRAggrPerformances(data$bmr, as.df = T)))
+  if(input$colPalettePcp == "Default"){
+    pal <- qualitative_hcl(n) 
+  }
+  if(input$colPalettePcp == "Dark2"){
+    pal <- qualitative_hcl(n, "Dark 2") 
+  }
+  if(input$colPalettePcp == "Dark3"){
+    pal <- qualitative_hcl(n, "Dark 3") 
+  }
+  if(input$colPalettePcp == "Set2"){
+    pal <- qualitative_hcl(n, "Set 2") 
+  }
+  if(input$colPalettePcp == "Set3"){
+    pal <- qualitative_hcl(n, "Set 3") 
+  }
+  if(input$colPalettePcp == "Warm"){
+    pal <- qualitative_hcl(n, "Warm") 
+  }
+  if(input$colPalettePcp == "Cold"){
+    pal <- qualitative_hcl(n, "Cold") 
+  }
+  if(input$colPalettePcp == "Harmonic"){
+    pal <- qualitative_hcl(n, "Harmonic") 
+  }
+  if(input$colPalettePcp == "Dynamic"){
+    pal <- qualitative_hcl(n, "Dynamic") 
+  }
+  if(input$colPalettePcp == "Coolwarm"){
+    pal <- coolwarm(n) 
+  }
+  if(input$colPalettePcp == "Parula"){
+    pal <- parula(n) 
+  }
+  if(input$colPalettePcp == "Viridis"){
+    pal <- viridis(n) 
+  }
+  if(input$colPalettePcp == "Tol.Rainbow"){
+    pal <- tol.rainbow(n) 
+  }
+  return(pal)
+})
+
 output$ggplot_pcp <- renderPlot({
-  ggparcoord(perfAggDf(getBMRAggrPerformances(data$bmr, as.df = T)), columns = c(3,4), 
-    groupColumn = "learner.id", showPoints = TRUE)
+  # ggparcoord(perfAggDf(getBMRAggrPerformances(data$bmr, as.df = T)), columns = c(3,4), 
+  #   groupColumn = "learner.id", showPoints = TRUE)
+  PCP(dat_agg = getBMRAggrPerformances(data$bmr, as.df = T), dat_unagg = getBMRPerformances(data$bmr, as.df = T), 
+    col_palette = col_Palette_Pcp(), label_xaxis = input$labelXlabPcp, label_yaxis = input$labelYlabPcp, 
+    size_text = size_text_Pcp(), aggregate = input$aggregate)
+}, height = function() {
+  input$zoomPcp * session$clientData$output_ggplot_pcp_width
 })
 
 
