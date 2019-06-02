@@ -349,7 +349,16 @@ observeEvent(input$iml_sets, {
     #   eff_zoom() * session$clientData$output_iml_plotted_width
     # }
   )
-  output$iml_results <- renderPrint({isolate(iml_plot_obj())$results})
+  # output$iml_results <- renderPrint({isolate(iml_plot_obj())$results})
+  output$iml_results <- DT::renderDataTable({
+    results <- isolate(iml_plot_obj())$results
+    tab <- data.frame(results)
+    if(input$iml_round == TRUE){
+      tab <- round_df_num(tab, 3)
+    }
+    tab
+  }, options = list(scrollX = TRUE), selection = "none",
+    caption = "Results of your choosen IML Method")
 }, ignoreNULL = T, ignoreInit = T)
 
 

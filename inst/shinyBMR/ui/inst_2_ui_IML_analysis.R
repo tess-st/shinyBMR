@@ -251,11 +251,13 @@ tabpanel.iml = dashboardPage(
         
         br(),
         tabsetPanel(
-          tabPanel("IML Plot",
+          tabPanel("IML Plot", 
             fluidRow(fillPage(addSpinner(plotOutput("iml_plotted")))) #or withSpinner()
             ),
           tabPanel("IML Results",
-            verbatimTextOutput("iml_results")
+            checkboxInput("iml_round", label = "Round shown numeric values", value = TRUE),
+            #verbatimTextOutput("iml_results")
+            box(width = 12, DT::dataTableOutput("iml_results"))
             )
         ),
         

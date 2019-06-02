@@ -10,6 +10,7 @@ tabpanel.imlimportdat = dashboardPage(
       
       tabPanel("Summary Data Set",
         #verbatimTextOutput("summaryDataSet"))
+        #checkboxInput("iml_dat_round", label = "Round shown numeric values", value = TRUE),
         uiOutput("summary.dat"),
         fluidRow(
           column(12,
