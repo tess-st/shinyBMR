@@ -123,9 +123,7 @@ PerfHeatmap_Def = function(dat, col_min, col_max, col_text, range_value, size_te
 #####################################################################################################################
 # Parallel Coordinates Plot
 #####################################################################################################################
-
-PCP = function(dat_agg, dat_unagg, label_xaxis, label_yaxis, col_palette, size_text, aggregate){
-  
+getLongAgg = function(dat_agg, dat_unagg){
   measures <- names(dat_unagg)[unlist(lapply(dat_unagg, is.numeric))]
   measures <- measures[!measures %in% "iter"]
   
@@ -135,11 +133,41 @@ PCP = function(dat_agg, dat_unagg, label_xaxis, label_yaxis, col_palette, size_t
   }
   
   long_agg <- melt(dat_agg, id.vars = "learner.id", measure.vars = measures)
+  names(long_agg)[names(long_agg)=="variable"] <- "measure"
+  long_agg
+}
+
+getLongUnagg = function(dat_agg, dat_unagg){
+  measures <- names(dat_unagg)[unlist(lapply(dat_unagg, is.numeric))]
+  measures <- measures[!measures %in% "iter"]
+  
   long_unagg <- melt(dat_unagg, id.vars = c("learner.id", "iter"), measure.vars = measures)
   long_unagg$learner <- long_unagg$learner.id
   long_unagg$learner.id <- with(long_unagg, paste0(learner.id, iter))
-  names(long_agg)[names(long_agg)=="variable"] <- "measure"
   names(long_unagg)[names(long_unagg)=="variable"] <- "measure"
+  
+  long_unagg
+}
+
+
+
+PCP = function(dat_agg, dat_unagg, label_xaxis, label_yaxis, range_yaxis, col_palette, size_text, aggregate){
+  long_agg <- getLongAgg(dat_agg = dat_agg, dat_unagg = dat_unagg)
+  long_unagg <- getLongUnagg(dat_agg = dat_agg, dat_unagg = dat_unagg)
+  # measures <- names(dat_unagg)[unlist(lapply(dat_unagg, is.numeric))]
+  # measures <- measures[!measures %in% "iter"]
+  # 
+  # for(i in 1:ncol(dat_agg)){
+  #   pos <- grep(measures[i], names(dat_agg))
+  #   names(dat_agg)[pos] <- measures[i]
+  # }
+  # 
+  # long_agg <- melt(dat_agg, id.vars = "learner.id", measure.vars = measures)
+  # long_unagg <- melt(dat_unagg, id.vars = c("learner.id", "iter"), measure.vars = measures)
+  # long_unagg$learner <- long_unagg$learner.id
+  # long_unagg$learner.id <- with(long_unagg, paste0(learner.id, iter))
+  # names(long_agg)[names(long_agg)=="variable"] <- "measure"
+  # names(long_unagg)[names(long_unagg)=="variable"] <- "measure"
   
   if(size_text == -1){
     t <- theme()
@@ -154,6 +182,7 @@ PCP = function(dat_agg, dat_unagg, label_xaxis, label_yaxis, col_palette, size_t
     geom_point(data = long_agg, aes(color = learner.id)) +
     xlab(label_xaxis) + 
     ylab(label_yaxis) + 
+    ylim(range_yaxis) +
     t +
     scale_colour_manual(values = col_palette)
   

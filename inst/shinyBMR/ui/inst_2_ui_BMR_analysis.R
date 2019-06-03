@@ -136,13 +136,13 @@ tabpanel.bmr = dashboardPage(
                   "Warm", "Cold", "Harmonic", "Dynamic", 
                   "Coolwarm", "Parula", "Viridis", "Tol.Rainbow"), 
                 #https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html
-                selected = "Default")
+                selected = "Default"),
               # numericInput("sizeSymbolsB", "Change Size of Symbols", value = 5, min = 1, max = 10, step = 1),
               # selectInput("jitterSymbols", "Add random Variation (Points)",
               #   choices = c("Off", "On"), selected = "Off"),
               # selectInput("addLines", "Add Line per Group of Learner Information",
               #   choices = c("On", "Off"), selected = "On"),
-              # uiOutput("sliderBoxplot")
+              uiOutput("sliderPcp")
             ),
             column(4,
              h4("Change Labels"), 

@@ -81,7 +81,7 @@ output$sliderBoxplot <- renderUI({
 # solve problem of sliderInput, as the values are returned as list
 rangeB <- reactive({
   reqAndAssign(input$rangeYaxisB, "range")
-  vec <- c(input$rangeYaxisB[1], input$rangeYaxisB[2])
+  vec <- c(range[1], range[2])
   vec
 })
 
@@ -229,6 +229,42 @@ size_text_Pcp <- reactive({
   return(size)
 })
 
+output$sliderPcp <- renderUI({
+  #req(input$select.measure.ana)
+  if(!is.null(data$bmr)){
+    long_unagg <- getLongUnagg(dat_agg = getBMRAggrPerformances(data$bmr, as.df = T), 
+      dat_unagg = getBMRPerformances(data$bmr, as.df = T))
+    levs <- levels(long_unagg$measure)
+    range_list <- list()
+    for(i in 1:length(levs)){
+      m <- getFromNamespace(levs[i], "mlr")
+      range_list[[i]] <- c(m$best, m$worst)
+    }
+    min <- min(unlist(range_list))
+    max <- max(unlist(range_list))
+    minimum <- min(long_unagg$value)
+    maximum <- max(long_unagg$value)
+    if(any(unlist(range_list) == Inf)){
+      max <- mround(maximum + 0.1* maximum, 0.05) 
+    }
+    if(round(minimum - 0.05* maximum, 2) < min){
+      value <- c(min, mround(maximum + 0.05* maximum, 0.05))
+    }
+    else{
+      value <- c(mround((minimum - 0.05* maximum), 0.05), mround(maximum + 0.05* maximum, 0.05))
+    }
+    sliderInput("rangeYaxisPcp", "Range y-Axis", value = value, 
+      min = min, max = max, step = 0.05)
+  }
+})
+
+# solve problem of sliderInput, as the values are returned as list
+rangePcp <- reactive({
+  reqAndAssign(input$rangeYaxisPcp, "range")
+  vec <- c(range[1], range[2])
+  vec
+})
+
 col_Palette_Pcp <- reactive({
   req(input$colPalettePcp)
   n <- nrow(perfAggDf(getBMRAggrPerformances(data$bmr, as.df = T)))
@@ -279,6 +315,7 @@ output$ggplot_pcp <- renderPlot({
   #   groupColumn = "learner.id", showPoints = TRUE)
   PCP(dat_agg = getBMRAggrPerformances(data$bmr, as.df = T), dat_unagg = getBMRPerformances(data$bmr, as.df = T), 
     col_palette = col_Palette_Pcp(), label_xaxis = input$labelXlabPcp, label_yaxis = input$labelYlabPcp, 
+    range_yaxis = rangePcp(),
     size_text = size_text_Pcp(), aggregate = input$aggregate)
 }, height = function() {
   input$zoomPcp * session$clientData$output_ggplot_pcp_width
