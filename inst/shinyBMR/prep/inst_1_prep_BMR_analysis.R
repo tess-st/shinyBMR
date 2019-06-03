@@ -132,6 +132,14 @@ getLongAgg = function(dat_agg, dat_unagg){
     names(dat_agg)[pos] <- measures[i]
   }
   
+  # change names of learners (without task-info)
+  dat_agg$learner.id <- as.character(dat_agg$learner.id)
+  locate_task <- gregexpr("\\.", as.character(dat_agg$learner.id[i]))[[1]][1]
+  for(i in 1:nrow(dat_agg)){
+    dat_agg$learner.id[i] <- substr(dat_agg$learner.id[i], locate_task+1, 
+      nchar(dat_agg$learner.id[i]))
+  }
+  
   long_agg <- melt(dat_agg, id.vars = "learner.id", measure.vars = measures)
   names(long_agg)[names(long_agg)=="variable"] <- "measure"
   long_agg
@@ -140,6 +148,14 @@ getLongAgg = function(dat_agg, dat_unagg){
 getLongUnagg = function(dat_agg, dat_unagg){
   measures <- names(dat_unagg)[unlist(lapply(dat_unagg, is.numeric))]
   measures <- measures[!measures %in% "iter"]
+  
+  # change names of learners (without task-info)
+  dat_unagg$learner.id <- as.character(dat_unagg$learner.id)
+  locate_task <- gregexpr("\\.", as.character(dat_unagg$learner.id[i]))[[1]][1]
+  for(i in 1:nrow(dat_unagg)){
+    dat_unagg$learner.id[i] <- substr(dat_unagg$learner.id[i], locate_task+1, 
+      nchar(dat_unagg$learner.id[i]))
+  }
   
   long_unagg <- melt(dat_unagg, id.vars = c("learner.id", "iter"), measure.vars = measures)
   long_unagg$learner <- long_unagg$learner.id
@@ -151,23 +167,10 @@ getLongUnagg = function(dat_agg, dat_unagg){
 
 
 
-PCP = function(dat_agg, dat_unagg, label_xaxis, label_yaxis, range_yaxis, col_palette, size_text, aggregate){
+PCP = function(dat_agg, dat_unagg, label_xaxis, label_yaxis, range_yaxis, label_lines, col_palette, 
+  size_text, size_symbols, aggregate){
   long_agg <- getLongAgg(dat_agg = dat_agg, dat_unagg = dat_unagg)
   long_unagg <- getLongUnagg(dat_agg = dat_agg, dat_unagg = dat_unagg)
-  # measures <- names(dat_unagg)[unlist(lapply(dat_unagg, is.numeric))]
-  # measures <- measures[!measures %in% "iter"]
-  # 
-  # for(i in 1:ncol(dat_agg)){
-  #   pos <- grep(measures[i], names(dat_agg))
-  #   names(dat_agg)[pos] <- measures[i]
-  # }
-  # 
-  # long_agg <- melt(dat_agg, id.vars = "learner.id", measure.vars = measures)
-  # long_unagg <- melt(dat_unagg, id.vars = c("learner.id", "iter"), measure.vars = measures)
-  # long_unagg$learner <- long_unagg$learner.id
-  # long_unagg$learner.id <- with(long_unagg, paste0(learner.id, iter))
-  # names(long_agg)[names(long_agg)=="variable"] <- "measure"
-  # names(long_unagg)[names(long_unagg)=="variable"] <- "measure"
   
   if(size_text == -1){
     t <- theme()
@@ -178,18 +181,18 @@ PCP = function(dat_agg, dat_unagg, label_xaxis, label_yaxis, range_yaxis, col_pa
   }
   
   pcp <- ggplot(NULL, aes(x=measure, y = value, group = learner.id)) +
-    geom_path(data = long_agg, aes(color = learner.id), size = 2, lineend = "round") +
-    geom_point(data = long_agg, aes(color = learner.id)) +
+    geom_path(data = long_agg, aes(color = learner.id), size = size_symbols, lineend = "round") +
+    geom_point(data = long_agg, aes(color = learner.id), size = size_symbols+1, shape = 1) +
     xlab(label_xaxis) + 
     ylab(label_yaxis) + 
     ylim(range_yaxis) +
     t +
-    scale_colour_manual(values = col_palette)
+    scale_colour_manual(name = label_lines, values = col_palette)
   
   if(aggregate == "Off"){
     pcp <- pcp +
-      geom_path(data = long_unagg, aes(color = learner), alpha = 0.3, show.legend = F) +
-      geom_point(data = long_unagg, aes(color = learner), alpha = 0.3) 
+      geom_path(data = long_unagg, aes(color = learner), alpha = 0.3, size = size_symbols-1,show.legend = F) +
+      geom_point(data = long_unagg, aes(color = learner), alpha = 0.3, size = size_symbols-0.5) 
   }
   
   pcp
@@ -201,7 +204,7 @@ PCP = function(dat_agg, dat_unagg, label_xaxis, label_yaxis, range_yaxis, col_pa
 # Plots in mlr
 #####################################################################################################################
 
-MlrBoxplot = function(dat, style, size_text, col_palette){# , size_symbols, label_symbol, label_xaxis, label_yaxis){
+MlrBoxplot = function(dat, measure, style, size_text, col_palette){# , size_symbols, label_symbol, label_xaxis, label_yaxis){
   # if(size_text == -1){
   #   # g <- geom_text(color = col_text, size = 4)
   #   t <- theme()
@@ -223,7 +226,7 @@ MlrBoxplot = function(dat, style, size_text, col_palette){# , size_symbols, labe
   #   t +
   #   scale_colour_manual(values = col_palette)
   # 
-  boxplot_mlr <- plotBMRBoxplots(dat, style = style) +
+  boxplot_mlr <- plotBMRBoxplots(dat, measure, style = style) +
     aes(color = learner.id) +
     theme(text = element_text(size = rel(size_text+1.5)), 
       legend.text = element_text(size = 0.6*rel(size_text+2)), 

@@ -1,6 +1,6 @@
 tabpanel.bmr = dashboardPage(
   dashboardHeader(),
-  dashboardSidebar(sidebarMenu(id = "sidebarmenu",
+  dashboardSidebar(sidebarMenu(id = "tabs_bmr",
     menuItem("Settings", tabName = "bmr_settings", icon = icon("pencil-alt")),
     
     hr(),
@@ -8,12 +8,7 @@ tabpanel.bmr = dashboardPage(
     menuItem("Boxplot", tabName = "boxplot", icon = icon("mortar-board")),
     menuItem("Heatmap", tabName = "heatmap", icon = icon("thermometer-2")),
     menuItem("PCP", tabName = "pcp", icon = icon("connectdevelop")),
-    tags$div(title = "Use aggregated Data of the BMR",
-      selectInput("aggregate", "Aggregated BMR",
-        choices = c("On", "Off"), selected = "On", multiple=F, selectize=TRUE,
-        width = '98%')),
-    prettySwitch(inputId = 'type', "Interactive (use Plotly)", value = FALSE),
-    
+      
     hr(),
     
     menuItem("mlr: Implemented Plots", tabName = "plotMLR"),
@@ -22,10 +17,15 @@ tabpanel.bmr = dashboardPage(
     
     tags$div(title = "Select one of the Measures you performed the Benchmark-Study on",
       htmlOutput("selected.measure.ana")),
+    tags$div(title = "Use aggregated Data of the BMR",
+      selectInput("aggregate", "Aggregated BMR",
+        choices = c("On", "Off"), selected = "On", multiple=F, selectize=TRUE,
+        width = '98%')),
     tags$div(title = "Order Means of Value for grouping by Learner and Learner.Info",
       selectInput("ordering", "Ordering",
         choices = c("Off", "On"), selected = "Off", multiple=F, selectize=TRUE,
         width = '98%')),
+    prettySwitch(inputId = 'type', "Interactive (use Plotly)", value = FALSE),
     #h6("~ not for plots implemented in 'mlr' ~"),
     hr(),
     
@@ -137,25 +137,21 @@ tabpanel.bmr = dashboardPage(
                   "Coolwarm", "Parula", "Viridis", "Tol.Rainbow"), 
                 #https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html
                 selected = "Default"),
-              # numericInput("sizeSymbolsB", "Change Size of Symbols", value = 5, min = 1, max = 10, step = 1),
-              # selectInput("jitterSymbols", "Add random Variation (Points)",
-              #   choices = c("Off", "On"), selected = "Off"),
-              # selectInput("addLines", "Add Line per Group of Learner Information",
-              #   choices = c("On", "Off"), selected = "On"),
+              numericInput("sizeSymbolsPcp", "Change Size of Points/Lines", value = 2, min = 1, max = 5, step = 0.5),
               uiOutput("sliderPcp")
             ),
             column(4,
-             h4("Change Labels"), 
-             br(),
-             textInput("labelXlabPcp", "Label of x-Axis", value = "Measure"),
-             textInput("labelYlabPcp", "Label of y-Axis", value = "Value")
-            #   textInput("labelSymbolB", "Label of Symbol Legend", value = "Value")
-           ), 
+              h4("Change Labels"), 
+              br(),
+              textInput("labelXlabPcp", "Label of x-Axis", value = "Measure"),
+              textInput("labelYlabPcp", "Label of y-Axis", value = "Value"),
+              textInput("labelLinesPcp", "Label of Legend", value = "Learner/Method")
+            ), 
             column(4, 
-             h4("Change Size (not for interactive Plot)"),
-             numericInput("sizeTextPcp", "Change Size of Text", value = 2, min = 1, max = 5, step = 0.5),
-             numericInput("zoomPcp", "Change Height of Plot", value = 0.4, 
-               min = 0.05, max = 1, step = 0.05)
+              h4("Change Size (not for interactive Plot)"),
+              numericInput("sizeTextPcp", "Change Size of Text", value = 2, min = 1, max = 5, step = 0.5),
+              numericInput("zoomPcp", "Change Height of Plot", value = 0.4, 
+                min = 0.05, max = 1, step = 0.05)
             )
             
           ),
@@ -166,9 +162,13 @@ tabpanel.bmr = dashboardPage(
         br(),
         
         conditionalPanel(condition = "output.disable_pcp",
-          fluidRow(fillPage(plotOutput("ggplot_pcp")))
-          )
-        ),
+          conditionalPanel(condition = "input.type == false",
+            fluidRow(fillPage(plotOutput("ggplot_pcp")))),
+          conditionalPanel(condition = "input.type == true",
+            fluidRow(fillPage(plotlyOutput("plotly_pcp"))))
+          
+        )
+      ),
       
       tabItem(tabName = "plotMLR",
         h2("Boxplots: Distribution of Performance Values across Resampling Iterations (unagg. data)"),

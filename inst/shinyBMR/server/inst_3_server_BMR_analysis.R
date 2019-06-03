@@ -2,10 +2,31 @@
 # Settings
 #####################################################################################################################
 
+observeEvent(input$tabs_bmr, {
+  shinyjs::show("selected.measure.ana", anim = TRUE)
+  if(input$tabs_bmr == "plotMLR"){
+    shinyjs::hide("ordering", animType = "fade")
+    shinyjs::hide("aggregate", animType = "fade")
+    shinyjs::hide("type", animType = "fade")
+  }
+  else if(input$tabs_bmr == "pcp"){
+    shinyjs::hide("selected.measure.ana", animType = "fade")
+    shinyjs::hide("ordering", animType = "fade")
+    shinyjs::show("aggregate", anim = TRUE)
+    shinyjs::show("type", anim = TRUE)
+  }
+  else{
+    shinyjs::show("selected.measure.ana", anim = TRUE)
+    shinyjs::show("ordering", anim = TRUE)
+    shinyjs::show("aggregate", anim = TRUE)
+    shinyjs::show("type", anim = TRUE)
+  }
+})
+
 output$selected.measure.ana <- renderUI({
   selectizeInput("select.measure.ana", "Choose Measure to be focused", 
     choices = as.list(measure()),
-    multiple = FALSE)#, selected = NULL)
+    multiple = FALSE)
 })
 
 aggregation <- reactive({
@@ -314,11 +335,18 @@ output$ggplot_pcp <- renderPlot({
   # ggparcoord(perfAggDf(getBMRAggrPerformances(data$bmr, as.df = T)), columns = c(3,4), 
   #   groupColumn = "learner.id", showPoints = TRUE)
   PCP(dat_agg = getBMRAggrPerformances(data$bmr, as.df = T), dat_unagg = getBMRPerformances(data$bmr, as.df = T), 
-    col_palette = col_Palette_Pcp(), label_xaxis = input$labelXlabPcp, label_yaxis = input$labelYlabPcp, 
-    range_yaxis = rangePcp(),
-    size_text = size_text_Pcp(), aggregate = input$aggregate)
+    label_xaxis = input$labelXlabPcp, label_yaxis = input$labelYlabPcp, label_lines = input$labelLinesPcp,
+    col_palette = col_Palette_Pcp(), range_yaxis = rangePcp(),
+    size_text = size_text_Pcp(), size_symbols = input$sizeSymbolsPcp, aggregate = input$aggregate)
 }, height = function() {
   input$zoomPcp * session$clientData$output_ggplot_pcp_width
+})
+
+output$plotly_pcp <- renderPlotly({
+  PCP(dat_agg = getBMRAggrPerformances(data$bmr, as.df = T), dat_unagg = getBMRPerformances(data$bmr, as.df = T), 
+    label_xaxis = input$labelXlabPcp, label_yaxis = input$labelYlabPcp, label_lines = input$labelLinesPcp,
+    col_palette = col_Palette_Pcp(), range_yaxis = rangePcp(),
+    size_text = size_text_Pcp(), size_symbols = input$sizeSymbolsPcp, aggregate = input$aggregate)
 })
 
 
@@ -373,7 +401,8 @@ col_Palette_mlr <- reactive({
 
 
 output$mlr_boxplot <- renderPlot({
-  MlrBoxplot(dat = data$bmr, style = input$stylePlot, size_text = input$sizeTextMlr, col_palette = col_Palette_mlr())
+  MlrBoxplot(dat = data$bmr, measure = getFromNamespace(input$select.measure.ana, "mlr"), style = input$stylePlot, 
+    size_text = input$sizeTextMlr, col_palette = col_Palette_mlr())
 }, height = function() {
   input$zoomMlr * session$clientData$output_mlr_boxplot_width
 })

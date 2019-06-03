@@ -202,7 +202,7 @@ output$SMOTEs <- renderInfoBox({
 })
 
 output$Values <- renderInfoBox({
-  infoBox("Value of selected Measure", measureName(), icon = icon ("battery-three-quarters"),
+  infoBox("Values of selected Measure (min-max)", measureName(), icon = icon ("battery-three-quarters"),
     color = "navy")
 })
 
@@ -245,7 +245,7 @@ output$SMOTEs_Lev <- renderValueBox({
 })
 
 output$Values_Lev <- renderValueBox({
-  valueBox(tags$p("Value of selected Measure", style = "font-size: 55%;"),
+  valueBox(tags$p("Values of selected Measure (min-max)", style = "font-size: 55%;"),
     tags$p(valuesOfMeasure(), 
       style = "font-size: 150%;"),
     icon = icon ("battery-three-quarters"), color = "navy")
