@@ -4,14 +4,13 @@ tabpanel.bmr = dashboardPage(
     menuItem("Settings", tabName = "bmr_settings", icon = icon("pencil-alt")),
     
     hr(),
-    
+    div(align = "center", h6(" Analysis BMR: One Measure")),
     menuItem("Boxplot", tabName = "boxplot", icon = icon("mortar-board")),
     menuItem("Heatmap", tabName = "heatmap", icon = icon("thermometer-2")),
+    div(align = "center", h6(" Analysis BMR: Multiple Measures")),
     menuItem("PCP", tabName = "pcp", icon = icon("connectdevelop")),
-      
-    hr(),
-    
-    menuItem("mlr: Implemented Plots", tabName = "plotMLR"),
+    div(align = "center", h6(" Analysis BMR: Plots from 'mlr'")),
+    menuItem("Distribution", tabName = "plotMLR", icon = icon("poll")),
     
     hr(),
     

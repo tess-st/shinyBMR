@@ -18,7 +18,7 @@ makeIMLImportModSideBar = function(mod.type) {
     examples = list(
       imptype.sel.iml.mod.input,
       sidebarMenu(
-        menuItem("Choose example model"),
+        menuItem("Choose Example Model"),
         selectInput("import.iml.example", "", choices = c("BreastCancer: gbm, notuning_nosmote", 
           "BreastCancer: rpart, notuning_nosmote", "BreastCancer: rpart, notuning_smote",
           "LongleysEconomic: glmnet, untuned", "LongleysEconomic: rpart tuned"))
