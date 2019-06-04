@@ -17,7 +17,7 @@ tabpanel.overview =  dashboardPage(
     
     tags$div(title="Choose 'On' for only showing 4 decimal places", 
       selectInput("roundOverview", "Round Values",
-        choices = c("Off", "On"), selected = "Off", multiple=F, selectize=TRUE,
+        choices = c("Off", "On"), selected = "On", multiple=F, selectize=TRUE,
         width = '98%'))
   )
   ),

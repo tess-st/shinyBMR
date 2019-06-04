@@ -23,6 +23,8 @@ require(iml)
 require(gower)
 require(doParallel)
 require(reshape2)
+require(latticeExtra)
+require(Hmisc)
 
 
 #Connection to prep.files

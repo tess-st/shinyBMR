@@ -125,8 +125,8 @@ valuesOfMeasure <- reactive({
       max <- max(perfAggDf(data$data)[,pos])
     }
     else{
-      min <- format(min(perfAggDf(data$data)[,pos]), digits = 3, nsmall = 3)
-      max <- format(max(perfAggDf(data$data)[,pos]), digits = 3, nsmall = 3)
+      min <- format(round(min(perfAggDf(data$data)[,pos]), digits = 3), nsmall = 3)
+      max <- format(round(max(perfAggDf(data$data)[,pos]), digits = 3), nsmall = 3)
     }
     return(paste(min, max, sep = " - "))
   }
@@ -152,7 +152,7 @@ bestValueOfMeasure <- reactive({
       return(value)
     }
     else{
-      return(format(value, digits = 3, nsmall = 3))
+      return(format(round(value, digits = 3), nsmall = 3))
     }
   }
 })

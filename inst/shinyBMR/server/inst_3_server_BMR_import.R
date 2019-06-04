@@ -92,8 +92,9 @@ output$import.analysis <- DT::renderDataTable({
     if(input$round == "Off"){
       tabImport(perfAggDf(data_agg))
     }
-    else{
-      format(tabImport(perfAggDf(data_agg)), digits = 3, nsmall = 3)
+    else if(input$round == "On"){
+      roundDf(tabImport(perfAggDf(data_agg)), digits = 3, nsmall = 3)
+    #  format.data.frame(tabImport(perfAggDf(data_agg)), digits = 3)#, nsmall = 1)
     }
   }
   else{
@@ -101,7 +102,7 @@ output$import.analysis <- DT::renderDataTable({
       tabImportUnagg(perfAggDf(data_unagg))
     }
     else{
-      format(tabImportUnagg(perfAggDf(data_unagg)), digits = 3, nsmall = 3)
+      roundDf(tabImportUnagg(perfAggDf(data_unagg)), digits = 3, nsmall = 3)
     }
   }
 }, options = list(scrollX = TRUE),
