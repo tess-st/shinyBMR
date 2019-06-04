@@ -9,12 +9,9 @@ tabpanel.import = dashboardPage(
       selectInput("aggregated", "Aggregated BMR",
         choices = c("On", "Off"), selected = "On", multiple=F, selectize=TRUE,
         width = '98%')),
-    
-    hr(),
-    
     tags$div(title="Choose 'On' for only showing 4 decimal places", 
       selectInput("round", "Round Values",
-        choices = c("Off", "On"), selected = "Off", multiple = FALSE, selectize = TRUE,
+        choices = c("On", "Off"), selected = "On", multiple = FALSE, selectize = TRUE,
         width = '98%'))
   )
   ),

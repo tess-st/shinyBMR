@@ -77,14 +77,14 @@ perfAggDf = function(df){
   return(df)
 }
 
-
-perfAggOrderDf = function(df){
+perfAggOrderDf = function(df, value){
   df <- perfAggDf(df)
-  order_learner <- aggregate(df$value, list(df$learner),
-    mean)$Group.1[order(aggregate(df$value, list(df$learner), mean)$x)]
+  value <- findValue(df, value)
+  order_learner <- aggregate(df[,value], list(df$learner),
+    mean)$Group.1[order(aggregate(df[,value], list(df$learner), mean)$x)]
   
-  order_learner.info <- aggregate(df$value, list(df$learner.info),
-    mean)$Group.1[order(aggregate(df$value, list(df$learner.info), mean)$x)]
+  order_learner.info <- aggregate(df[,value], list(df$learner.info),
+    mean)$Group.1[order(aggregate(df[,value], list(df$learner.info), mean)$x)]
   
   df$learner <- factor(df$learner, levels(df$learner)[order_learner])
   df$learner.info <- factor(df$learner.info, levels(df$learner.info)[order_learner.info])

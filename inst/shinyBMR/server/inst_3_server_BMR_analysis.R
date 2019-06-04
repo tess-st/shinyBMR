@@ -35,6 +35,7 @@ aggregation <- reactive({
 
 dat_plot <- reactive({
   req(input$ordering)
+  req(input$select.measure.ana)
   if(input$aggregate == "On"){
     dataset <- isolate(data$data)
   }
@@ -45,8 +46,8 @@ dat_plot <- reactive({
   if(input$ordering == "Off"){
     dat <- (perfAggDf(dataset))
   }
-  else{
-    dat <- (perfAggOrderDf(dataset))
+  else if(input$ordering == "On"){
+    dat <- (perfAggOrderDf(dataset, value = input$select.measure.ana))
   }
   
   return(subsetAnalysis(dat, input$select.measure.ana))
