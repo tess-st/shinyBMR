@@ -63,7 +63,7 @@ tabpanel.bmr = dashboardPage(
               br(),
               textInput("labelXlabB", "Label of x-Axis", value = "Learner"),
               textInput("labelYlabB", "Label of y-Axis", value = "Value"),
-              textInput("labelSymbolB", "Label of Symbol Legend", value = "Value")
+              textInput("labelSymbolB", "Label of Symbol Legend", value = "Treatment")
             ),
             column(4, 
               h4("Change Size (not for interactive Plot)"),
@@ -101,7 +101,7 @@ tabpanel.bmr = dashboardPage(
               h4("Change Labels"), 
               br(),
               textInput("labelValueH", "Label of Value/Legend", value = "Value"),
-              textInput("labelXlabH", "Label of x-Axis", value = "Learner Info"),
+              textInput("labelXlabH", "Label of x-Axis", value = "Treatment"),
               textInput("labelYlabH", "Label of y-Axis", value = "Learner")
             ),
             column(4, 
