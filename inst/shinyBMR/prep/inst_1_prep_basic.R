@@ -12,15 +12,14 @@ reqAndAssign <- function(obj, name){
 # }
 
 # round to nearest .5 value
-mround <- function(x, base){ 
-  base*round(x/base) 
-} 
+mround <- function(x, base){
+  base*round(x/base)
+}
 
 # round data frame
 roundDf <- function(df, digits, nsmall){
-  
   double_cols <- sapply(df, is.double)
-  df[double_cols] <- format(round(df[double_cols], digits), nsmall = nsmall)
-  df[is.na(df)] <- ""
+  df[double_cols] <- apply(df[double_cols], 2, FUN = function(x) {ifelse(!is.na(x), format(round(x, digits), nsmall = nsmall), "")})
+  # df[is.na(df)] <- ""
   df
 }
