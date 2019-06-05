@@ -72,13 +72,13 @@ observeEvent(input$effMeth, {
 
 output$effectFeature1 <- renderUI({
   selectizeInput("effFeature1", "Select Feature 1 (necessary)",
-    choices = c('Not Selected', as.list(getLearnerModel(modiml$mod)$features)),
+    choices = c('Not Selected', as.list(modiml$mod$features)),
     selected = NULL, multiple = FALSE)
 })
 
 output$effectFeature2 <- renderUI({
   selectizeInput("effFeature2", "Select Feature 2 (optional)",
-    choices = c('Not Selected', as.list(getLearnerModel(modiml$mod)$features)),
+    choices = c('Not Selected', as.list(modiml$mod$features)),
     selected = NULL, multiple = FALSE)
 })
 
@@ -111,7 +111,7 @@ eff_zoom <- reactive({
 # Feature Interaction
 output$interactionFeature <- renderUI({
   selectizeInput("intFeature", "Select Feature",
-    choices = c('Not Selected', 'All', as.list(getLearnerModel(modiml$mod)$features)),
+    choices = c('Not Selected', 'All', as.list(modiml$mod$features)),
     selected = NULL, multiple = FALSE)
 })
 

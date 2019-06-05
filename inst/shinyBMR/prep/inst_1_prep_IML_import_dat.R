@@ -1,5 +1,5 @@
 #Import Data
-makeIMLImportSideBar = function(data.type, mod.type) {
+makeIMLImportSideBar = function(data.type) {#, mod.type) {
   imptype.sel.iml.input = sidebarMenu(
     menuItem("Type"),
     selectInput("imlimport.type", "", selected = data.type,

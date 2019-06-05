@@ -14,22 +14,22 @@ observe({
   if (is.null(imlimportmod.type)){
     modiml$mod = NULL
   } else if (imlimportmod.type == "examples"){
-    path_IML <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/IML_mod", sep = "/")
-    if(input$import.iml.example == "BreastCancer: gbm, notuning_nosmote"){
-      f <- paste(path_IML, "iml_example_classif_BreastCancer_gbm_notuning_nosmote.RDS", sep = "/")
+    path_mod <- paste(system.file("shinyBMR", package = "shinyBMR"), "examples/IML_mod", sep = "/")
+    if(input$imlimport.example == "BreastCancer: gbm, notuning_nosmote"){
+      f <- paste(path_mod, "iml_example_classif_BreastCancer_gbm_notuning_nosmote.RDS", sep = "/")
     }
-    if(input$import.iml.example == "BreastCancer: rpart, notuning_nosmote"){
-      f <- paste(path_IML, "iml_example_classif_BreastCancer_rpart_notuning_nosmote.RDS", sep = "/")
+    else if(input$imlimport.example == "BreastCancer: rpart, notuning_nosmote"){
+      f <- paste(path_mod, "iml_example_classif_BreastCancer_rpart_notuning_nosmote.RDS", sep = "/")
     }
-    if(input$import.iml.example == "BreastCancer: rpart, notuning_smote"){
-      f <- paste(path_IML, "iml_example_classif_BreastCancer_rpart_notuning_smote.RDS", sep = "/")
-    }
-    if(input$import.iml.example == "LongleysEconomic: glmnet, untuned"){
-      f <- paste(path_IML, "iml_example_regr_LongleysEconomic_glmnet_untuned.RDS", sep = "/")
-    }
-    if(input$import.iml.example == "LongleysEconomic: glmnet, untuned"){
-      f <- paste(path_IML, "iml_example_regr_LongleysEconomic_rpart_tuned.RDS", sep = "/")
-    }
+    # if(input$imlimport.example == "BreastCancer: rpart, notuning_smote"){
+    #   f <- paste(path_IML, "iml_example_classif_BreastCancer_rpart_notuning_smote.RDS", sep = "/")
+    # }
+    # if(input$imlimport.example == "LongleysEconomic: glmnet, untuned"){
+    #   f <- paste(path_IML, "iml_example_regr_LongleysEconomic_glmnet_untuned.RDS", sep = "/")
+    # }
+    # if(input$imlimport.example == "LongleysEconomic: glmnet, untuned"){
+    #   f <- paste(path_IML, "iml_example_regr_LongleysEconomic_rpart_tuned.RDS", sep = "/")
+    # }
     modiml$mod <- readRDS(f)
   } 
   
@@ -60,8 +60,8 @@ observe({
   }
   
   if(!is.null(modiml$mod)){
-    modiml$mod.name = getLearnerModel(modiml$mod)$learner$id
-    modiml$type = getLearnerModel(modiml$mod)$learner$type
+    modiml$mod.name = modiml$mod$learner$id#getLearnerModel(modiml$mod)$learner$id
+    modiml$type = modiml$mod$learner$type
   }
 })
 
