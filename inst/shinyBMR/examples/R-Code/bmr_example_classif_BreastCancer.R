@@ -66,10 +66,11 @@ levels(cancer$Mitoses) <- c(1,1,1,2,2,2,3,3,3)
 #"Bare.nuclei" combine levels (1,2), (3,4), (5,6), (7,8), (9,10)
 levels(cancer$Bare.nuclei) <- c(1,1,2,2,3,3,4,4,5,5)
 
+
 ################################################### Define Settings #####################################################
 
 task <- makeClassifTask(data = cancer, target = "Class", positive = "malignant")
-measure <- mlr::auc
+measure <- list(fpr, tpr, mlr::auc, mmce, brier)
 
 # Class Imbalance
 # plot(cancer$Class)
@@ -154,7 +155,8 @@ lrns_tuned_unsmoted_all = lapply(lrns_list_all, function(lrn_string) {
 })
 
 
-############################################ Without Tuning, without SMOTE ##############################################
+############################################### With Tuning, with SMOTE #################################################
+
 lrns_tuned_smoted_all = lapply(lrns_list_all, function(lrn_string) {
   lrn <- makeLearner(lrn_string, fix.factors.prediction = TRUE, predict.type = "prob")
   lrn_smote <- makeSMOTEWrapper(lrn)
@@ -172,12 +174,16 @@ lrns_tuned_smoted_all = lapply(lrns_list_all, function(lrn_string) {
                                  makeIntegerParam("sw.nn", lower = 2, upper = 10))
   lrn_smote_ps <- evaluateParamExpressions(lrn_smote_pars, dict = getTaskDictionary(task = task))
   
-  merged_pars <- list("pars" = do.call(c, list(lrn_ps$pars, lrn_smote_ps$pars)), "forbidden" = NULL)
+  merged_pars <- list("pars" = do.call("c", list(lrn_ps$pars, lrn_smote_ps$pars)), "forbidden" = NULL)
   class(merged_pars) <- "ParamSet"
   
   makeTuneWrapper(learner = lrn_smote, resampling = inner, par.set = merged_pars, control = ctrl, measures = measure)
 })
 
+
+#########################################################################################################################
+# Benchmark
+#########################################################################################################################
 
 bench_BreastCancer <- benchmark(tasks = task, learners = c(lrns_untuned_all, #group 1
                                                            lrns_untuned_smote_all,  #group 2
