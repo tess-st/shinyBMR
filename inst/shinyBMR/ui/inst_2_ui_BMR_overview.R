@@ -20,7 +20,8 @@ tabpanel.overview =  dashboardPage(
   dashboardBody(
     tabItems(
       tabItem(tabName = "summaryBMR",
-        h4("Summary of the Benchmark Analysis"),
+        h2("Summary of the Benchmark Analysis"),
+        br(),
         tabsetPanel(
           tabPanel("Categories/Levels",
             textOutput("help_summary"),
@@ -88,7 +89,8 @@ overflow-y:scroll; background: ghostwhite;}"))#
       ),
       
       tabItem(tabName = "bestMod",
-        h4("Best Modell/Learner in BMR Analysis"),
+        h2("Best Modell/Learner in BMR Analysis"),
+        br(),
         fluidRow(infoBoxOutput("Data_Name"),
           infoBoxOutput("Method"),
           infoBoxOutput("Task")),

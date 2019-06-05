@@ -35,6 +35,7 @@ tabpanel.bmr = dashboardPage(
     tabItems(
       tabItem(tabName = "boxplot",
         h2("Boxplots for Performance Comparison"),
+        br(),
         dropdownButton(
           fluidRow(
             column(4,
@@ -87,6 +88,7 @@ tabpanel.bmr = dashboardPage(
       
       tabItem(tabName = "heatmap",
         h2("Heatmap for Performance Comparison"),
+        br(), 
         dropdownButton(
           fluidRow(
             column(4, 
@@ -125,6 +127,7 @@ tabpanel.bmr = dashboardPage(
       
       tabItem(tabName = "pcp",
         h2("Parallel Coordinates Plot"),
+        br(),
         dropdownButton(
           fluidRow(
             column(4,
@@ -170,8 +173,8 @@ tabpanel.bmr = dashboardPage(
       ),
       
       tabItem(tabName = "plotMLR",
-        h2("Boxplots: Distribution of Performance Values across Resampling Iterations (unagg. data)"),
-        
+        h2("Boxplots: Distribution of Performance Values across Resampling Iterations (unagg. Data)"),
+        br(),
         dropdownButton(
           fluidRow(
             column(4,

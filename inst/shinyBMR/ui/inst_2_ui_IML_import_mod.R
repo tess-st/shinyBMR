@@ -3,6 +3,8 @@ tabpanel.imlimportmod = dashboardPage(
   dashboardSidebar(sidebarMenu(uiOutput("imlimportmod.ui"))),
   
   dashboardBody(
+    h2("Imported Model for IML Analysis"),
+    br(),
     tabsetPanel(id = "model",
       
       tabPanel("Imported (Tuned) Model",

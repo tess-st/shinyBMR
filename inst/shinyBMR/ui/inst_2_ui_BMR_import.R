@@ -9,7 +9,7 @@ tabpanel.import = dashboardPage(
       selectInput("aggregated", "Aggregated BMR",
         choices = c("On", "Off"), selected = "On", multiple=F, selectize=TRUE,
         width = '98%')),
-    tags$div(title="Choose 'On' for only showing 4 decimal places", 
+    tags$div(title="Choose 'On' for only showing 3 decimal places", 
       selectInput("round", "Round Values",
         choices = c("On", "Off"), selected = "On", multiple = FALSE, selectize = TRUE,
         width = '98%'))
@@ -17,6 +17,8 @@ tabpanel.import = dashboardPage(
   ),
   
   dashboardBody(
+    h2("Imported BMR Object"),
+    br(),
     box(width = 12, DT::dataTableOutput("import.analysis"))
   )
 )

@@ -11,6 +11,10 @@ output$iml.set = renderUI({
   )
 })
 
+iml_zoom <- reactive({
+  req(input$imlZoom)
+})
+
 observe({
   req(dataiml$data)
   req(modiml$mod)
@@ -26,11 +30,13 @@ observeEvent(input$tabs, {
   if(input$tabs == "iml_plots"){
     shinyjs::show("imlPlotType", anim = TRUE)
     shinyjs::show("iml.set", anim = TRUE)
+    shinyjs::show("imlZoom", anim = TRUE)
     shinyjs::show("imlDownload", anim = TRUE)
   }
   else{
     shinyjs::hide("imlPlotType", animType = "fade")
     shinyjs::hide("iml.set", animType = "fade")
+    shinyjs::hide("imlZoom", anim = "fade")
     shinyjs::hide("imlDownload", animType = "fade")
   }
 })
@@ -101,10 +107,6 @@ eff_feature2 <- reactive({
   else{
     req(input$effFeature2)
   }
-})
-
-eff_zoom <- reactive({
-  req(input$effZoom)
 })
 
 
@@ -343,11 +345,10 @@ iml_plot_obj <- reactive({
 })
 
 observeEvent(input$iml_sets, {
-  output$iml_plotted <- renderPlot({isolate(plot(iml_plot_obj()))}
-    # ,
-    # height = function() {
-    #   eff_zoom() * session$clientData$output_iml_plotted_width
-    # }
+  output$iml_plotted <- renderPlot({isolate(plot(iml_plot_obj()))},
+    height = function() {
+      iml_zoom() * session$clientData$output_iml_plotted_width
+    }
   )
   # output$iml_results <- renderPrint({isolate(iml_plot_obj())$results})
   output$iml_results <- DT::renderDataTable({

@@ -9,6 +9,24 @@ output$imlimportmod.ui <- renderUI({
 modiml <- reactiveValues(mod = NULL, mod.name = NA, type = NA)
 
 
+# #
+# output$imlimport.example <- renderUI({
+#   reqAndAssign(input$import.iml.example, "example")
+#   reqAndAssign(input$imlimport.type, "imlimport.type")
+#   if (imlimport.type == "examples"){
+#     if(example == "Classif: BreastCancer"){
+#     choices <- c("BreastCancer: gbm, notuning_nosmote", "BreastCancer: rpart, notuning_nosmote")
+#   }
+#   else if(example == "Regr: LongleysEconomic"){
+#     choices <- c("LongleysEconomic: glmnet, untuned", "LongleysEconomic: rpart tuned")
+#   }
+#   selectInput("imlimport.example", "", choices = choices)}
+#   #, "BreastCancer: rpart, notuning_smote",
+#   # "LongleysEconomic: glmnet, untuned", "LongleysEconomic: rpart tuned"))
+# }) 
+  
+
+
 observe({
   reqAndAssign(input$imlimportmod.type, "imlimportmod.type")
   if (is.null(imlimportmod.type)){
@@ -18,9 +36,35 @@ observe({
     if(input$imlimport.example == "BreastCancer: gbm, notuning_nosmote"){
       f <- paste(path_mod, "iml_example_classif_BreastCancer_gbm_notuning_nosmote.RDS", sep = "/")
     }
-    else if(input$imlimport.example == "BreastCancer: rpart, notuning_nosmote"){
-      f <- paste(path_mod, "iml_example_classif_BreastCancer_rpart_notuning_nosmote.RDS", sep = "/")
+    else if(input$imlimport.example == "BreastCancer: ada, untuned_nosmote"){
+      f <- paste(path_mod, "iml_example_classif_BreastCancer_ada_untuned.RDS", sep = "/")
     }
+    else if(input$imlimport.example == "BreastCancer: ranger, untuned_nosmote"){
+      f <- paste(path_mod, "iml_example_classif_BreastCancer_ranger_untuned.RDS", sep = "/")
+    }
+    else if(input$imlimport.example == "BreastCancer: ranger, tuned_nosmote"){
+      f <- paste(path_mod, "iml_example_classif_BreastCancer_ranger_tuned.RDS", sep = "/")
+    }
+    else if(input$imlimport.example == "BreastCancer: svm, untuned_nosmote"){
+      f <- paste(path_mod, "iml_example_classif_BreastCancer_svm_untuned.RDS", sep = "/")
+    }
+    else if(input$imlimport.example == "BreastCancer: svm, tuned_nosmote"){
+      f <- paste(path_mod, "iml_example_classif_BreastCancer_svm_tuned.RDS", sep = "/")
+    }
+    
+    else if(input$imlimport.example == "LongleysEconomic: ranger, untuned"){
+      f <- paste(path_mod, "iml_example_regr_LongleysEconomic_ranger_untuned.RDS", sep = "/")
+    }
+    else if(input$imlimport.example == "LongleysEconomic: ranger, tuned"){
+      f <- paste(path_mod, "iml_example_regr_LongleysEconomic_ranger_tuned.RDS", sep = "/")
+    }
+    else if(input$imlimport.example == "LongleysEconomic: svm, untuned"){
+      f <- paste(path_mod, "iml_example_regr_LongleysEconomic_svm_untuned.RDS", sep = "/")
+    }
+    else if(input$imlimport.example == "LongleysEconomic: svm, tuned"){
+      f <- paste(path_mod, "iml_example_regr_LongleysEconomic_svm_tuned.RDS", sep = "/")
+    }
+    ##
     # if(input$imlimport.example == "BreastCancer: rpart, notuning_smote"){
     #   f <- paste(path_IML, "iml_example_classif_BreastCancer_rpart_notuning_smote.RDS", sep = "/")
     # }

@@ -3,7 +3,7 @@ makeIMLImportModSideBar = function(mod.type) {
   imptype.sel.iml.mod.input = sidebarMenu(
     menuItem("Type of Model"),
     selectInput("imlimportmod.type", "", selected = mod.type,
-      choices = c("RDS", "examples", "Rdata"))
+      choices = c("examples", "Rdata", "RDS"))
   )
   switch(mod.type,
     RDS = list(
@@ -19,10 +19,15 @@ makeIMLImportModSideBar = function(mod.type) {
       imptype.sel.iml.mod.input,
       sidebarMenu(
         menuItem("Choose Example Model"),
-        selectInput("imlimport.example", "", choices = c("BreastCancer: gbm, notuning_nosmote", 
-          "BreastCancer: rpart, notuning_nosmote"))#, "BreastCancer: rpart, notuning_smote",
-         # "LongleysEconomic: glmnet, untuned", "LongleysEconomic: rpart tuned"))
-      )
+        # uiOutput("imlimport.example")
+          selectInput("imlimport.example", "", choices = c("BreastCancer: gbm, notuning_nosmote",###
+          "BreastCancer: ada, untuned_nosmote", 
+            "BreastCancer: ranger, untuned_nosmote", "BreastCancer: ranger, tuned_nosmote", 
+            "BreastCancer: svm, untuned_nosmote", "BreastCancer: svm, tuned_nosmote",  
+            "LongleysEconomic: ranger, untuned", "LongleysEconomic: ranger, tuned", 
+            "LongleysEconomic: svm, untuned", "LongleysEconomic: svm, tuned"))
+        )
+        
     ),
     
     Rdata = list(

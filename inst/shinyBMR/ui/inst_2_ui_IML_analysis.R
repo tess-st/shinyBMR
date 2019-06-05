@@ -13,14 +13,23 @@ tabpanel.iml = dashboardPage(
         "Feature Effect", "Feature Interaction", "Local Model (LIME)", "Shapley Values", "Tree Surrogate"))
         ),
       
-      tags$div(title= "Plotting the Method with your selected Options",
-        align = "center", uiOutput("iml.set")),
+      tags$div(title= "Plotting the Method with your selected Options", align = "center", 
+        uiOutput("iml.set")),
+      
+      #hr(), 
+      
+      tags$div(title= "Change the Height of your Plot", align = "center",
+        numericInput("imlZoom", "Change Height of Plot", value = 0.25, min = 0.05, max = 1, step = 0.05)),
+      
+      hr(), 
       
       tags$div(title= "Download the latest Plot",
         align = "center", downloadButton("imlDownload", "Download"))
     )
   ),
   dashboardBody(
+    h2("Performing the IML Analysis"),
+
     tabItems(
       tabItem(tabName = "basics",
         fluidRow(htmlOutput("iml_info"))
@@ -44,20 +53,19 @@ tabpanel.iml = dashboardPage(
               column(6,
                 h3("Further Settings"),
                 br(),
-                
-                conditionalPanel(condition = "output.modeltype == 'classif'",
-                  selectInput("impLossClassif", "Choose Loss",
-                    choices = c("ce", "f1", "logLoss"), 
-                    #"accuracy", "auc", "fbeta_score", "ll", "precision","recall"
-                    selected = "ce")
-                ),
-                conditionalPanel(condition = "output.modeltype == 'regr'",
-                  selectInput("impLossRegr", "Choose Loss",
-                    choices = c("mae", "mape", "mse", "msle", "percent_bias", 
-                      "rae", "rmse", "rmsle", "rse", "rrse", "smape"),
-                    #"ae", "ape", "se", "sle"
-                    selected = "mse")
-                ),
+                # conditionalPanel(condition = "output.modeltype == 'classif'",
+                #   selectInput("impLossClassif", "Choose Loss",
+                #     choices = c("ce", "f1", "logLoss"), 
+                #     #"accuracy", "auc", "fbeta_score", "ll", "precision","recall"
+                #     selected = "ce")
+                # ),
+                # conditionalPanel(condition = "output.modeltype == 'regr'",
+                #   selectInput("impLossRegr", "Choose Loss",
+                #     choices = c("mae", "mape", "mse", "msle", "percent_bias", 
+                #       "rae", "rmse", "rmsle", "rse", "rrse", "smape"),
+                #     #"ae", "ape", "se", "sle"
+                #     selected = "mse")
+                # ),
                 
                 selectInput("impComp", "Compare by", choices = c("ratio", "difference"), selected = "ratio"),
                 
@@ -83,7 +91,24 @@ tabpanel.iml = dashboardPage(
             ),
             circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
             tooltip = tooltipOptions(title = "Click for Settings")
-          )
+          ),
+          br(),
+          fluidRow(column(3,
+            conditionalPanel(condition = "output.modeltype == 'classif'",
+              selectInput("impLossClassif", "Choose Loss",
+                choices = c("ce", "f1", "logLoss"), 
+                #"accuracy", "auc", "fbeta_score", "ll", "precision","recall"
+                selected = "ce")
+            ),
+            conditionalPanel(condition = "output.modeltype == 'regr'",
+              selectInput("impLossRegr", "Choose Loss",
+                choices = c("mae", "mape", "mse", "msle", "percent_bias", 
+                  "rae", "rmse", "rmsle", "rse", "rrse", "smape"),
+                #"ae", "ape", "se", "sle"
+                selected = "mse")
+            )
+            )
+            )
           ),
         
         # Feature Effect
@@ -93,28 +118,27 @@ tabpanel.iml = dashboardPage(
               column(6,
                 h3("Further Settings"),
                 br(),
+                # htmlOutput("effectFeature1"),
+                # htmlOutput("effectFeature2"),
                 
-                htmlOutput("effectFeature1"),
-                htmlOutput("effectFeature2"),
-                
-                selectInput("effMeth", "Select Method", 
-                  choices = c("PDP", "ICE", "PDP + ICE", "ALE")),
+                # selectInput("effMeth", "Select Method", 
+                #   choices = c("PDP", "ICE", "PDP + ICE", "ALE")),
                 
                 numericInput("effGrid", "Size of Grid for evaluating Predictions", 
-                  value = 20, min = 1, max = Inf, step = 1),
+                  value = 20, min = 1, max = Inf, step = 1)
                 
-                numericInput("effZoom", "Change Height of Plot", value = 0.25, 
-                  min = 0.05, max = 1, step = 0.05)
+                # numericInput("effZoom", "Change Height of Plot", value = 0.25, 
+                #   min = 0.05, max = 1, step = 0.05)
                 #numericInput("effCenter", "Center at", value = NULL, min = -Inf, max = Inf, step = 1)
               ),
               column(6,
                 h3("Information"),
                 br(),
-                h4("Method"),
-                textOutput("effMethodInfo"),
-                br(),
                 h4("Features"),
                 textOutput("effFeatureInfo"),
+                br(),
+                h4("Method"),
+                textOutput("effMethodInfo"),
                 br(),
                 h4("Grid Size"),
                 textOutput("effGridInfo")
@@ -122,7 +146,14 @@ tabpanel.iml = dashboardPage(
             ),
             circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
             tooltip = tooltipOptions(title = "Click for Settings")
-          )
+          ),
+          br(),
+          fluidRow(
+            column(3, htmlOutput("effectFeature1")),
+            column(3, htmlOutput("effectFeature2")),
+            column(3, selectInput("effMeth", "Select Method", choices = c("PDP", "ICE", "PDP + ICE", "ALE"))
+              )
+          ) 
           ),
         
         # Feature Interaction
@@ -132,9 +163,7 @@ tabpanel.iml = dashboardPage(
               column(6,
                 h3("Further Settings"),
                 br(),
-                
-                htmlOutput("interactionFeature"),
-                
+                #htmlOutput("interactionFeature"),
                 numericInput("interactionGrid", "Grid Size: NO. of Values per Feature", 
                   value = 20, min = 1, max = Inf, step = 1)
               ),
@@ -151,7 +180,11 @@ tabpanel.iml = dashboardPage(
             ),
             circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
             tooltip = tooltipOptions(title = "Click for Settings")
-          )
+          ),
+          br(),
+          fluidRow(
+            column(3, htmlOutput("interactionFeature"))
+          ) 
           ),
         
         # LIME
@@ -160,13 +193,10 @@ tabpanel.iml = dashboardPage(
             fluidRow(
               column(6,
                 h3("Further Settings"),
-                br(),
-                
-                htmlOutput("limeInterest"),
-                
-                htmlOutput("limeMaxFeatures"),
-                
-                htmlOutput("limeDistance")
+                br()
+                # htmlOutput("limeInterest"),
+                #htmlOutput("limeMaxFeatures")
+                # htmlOutput("limeDistance")
               ),
               
               column(6,
@@ -187,7 +217,13 @@ tabpanel.iml = dashboardPage(
             ),
             circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
             tooltip = tooltipOptions(title = "Click for Settings")
-          )
+          ),
+          br(),
+          fluidRow(
+            column(3, htmlOutput("limeInterest")),
+            column(3, htmlOutput("limeDistance")),
+            column(3, htmlOutput("limeMaxFeatures"))
+          ) 
           ),
         
         
@@ -199,7 +235,7 @@ tabpanel.iml = dashboardPage(
                 h3("Further Settings"),
                 br(),
 
-                htmlOutput("shapleyInterest"),
+                # htmlOutput("shapleyInterest"),
 
                 numericInput("shapleySample", "No. Monte Carlo Samples",
                   value = 100, min = 1, max = Inf, step = 1)
@@ -217,7 +253,11 @@ tabpanel.iml = dashboardPage(
             ),
             circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
             tooltip = tooltipOptions(title = "Click for Settings")
-          )
+          ),
+          br(),
+          fluidRow(
+            column(3, htmlOutput("shapleyInterest"))
+          ) 
           ),
         
         # Tree Surrogate

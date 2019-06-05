@@ -115,12 +115,14 @@ observe({
 output$imlimport.preview <- DT::renderDataTable({
   reqAndAssign(dataiml$data, "df_imp")
   colnames(df_imp) <- make.names(colnames(df_imp))
-  if(input$round == "Off"){
+  if(input$iml.round == "Off"){
     df_imp
   }
-  else{
-    format(df_imp, digits = 3, nsmall = 3)
+  else if(input$round == "On"){
+    roundDf(df_imp, digits = 2, nsmall = 2)
   }
+  #   format(df_imp, digits = 3, nsmall = 3)
+  # }
 }, options = list(scrollX = TRUE),#, scrollY = '300px'),
   caption = "The following Data Set was imported")
 
@@ -144,9 +146,16 @@ summarize.data <- reactive({
     validate(need(class(d) == "data.frame", "You didn't import any Data."))
     colnames(d) <- make.names(colnames(d))
     pos.x <- colnames(Filter(function(x) "POSIXt" %in% class(x) , d))
-    d <- dropNamed(d, drop = pos.x)    
-    summarizeColumns(d)
-  }
+    d <- dropNamed(d, drop = pos.x)  
+    if(input$iml.round == "Off"){
+      df <- summarizeColumns(d)
+    }
+    else if(input$round == "On"){
+      df <- roundDf(summarizeColumns(d), digits = 3, nsmall = 3)
+      #df[is.na(df)] <- ""
+    }
+    df
+    }
 })
 
 output$summary.dat <- renderUI({

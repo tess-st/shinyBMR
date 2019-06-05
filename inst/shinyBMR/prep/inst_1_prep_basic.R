@@ -21,5 +21,6 @@ roundDf <- function(df, digits, nsmall){
   
   double_cols <- sapply(df, is.double)
   df[double_cols] <- format(round(df[double_cols], digits), nsmall = nsmall)
+  df[is.na(df)] <- ""
   df
 }

@@ -151,7 +151,7 @@ bestValueOfMeasure <- reactive({
     if(input$roundOverview == "Off"){
       return(value)
     }
-    else{
+    else if(input$roundOverview == "On"){
       return(format(round(value, digits = 3), nsmall = 3))
     }
   }
@@ -272,7 +272,14 @@ summarize.tune = reactive({
     colnames(d) = make.names(colnames(d))
     pos.x = colnames(Filter(function(x) "POSIXt" %in% class(x) , d))
     d = dropNamed(d, drop = pos.x)    
-    d
+    if(input$roundOverview == "Off"){
+      tuning <- d
+    }
+    else{
+      tuning <- roundDf(d, digits = 3, nsmall = 3)
+    }
+    
+    tuning
   }
 })
 
