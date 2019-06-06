@@ -62,7 +62,8 @@ Imports:
   gower,
   mmpf,
   listviewer,
-  reshape2
+  reshape2,
+  bst
 Suggests:
   testthat,
   roxygen2,
