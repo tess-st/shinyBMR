@@ -53,6 +53,38 @@ dat_plot <- reactive({
   return(subsetAnalysis(dat, input$select.measure.ana))
 })
 
+dat_plot_agg <- reactive({
+  req(input$ordering)
+  req(input$select.measure.ana)
+
+    dataset <- isolate(data$data)
+
+    if(input$ordering == "Off"){
+      dat <- (perfAggDf(dataset))
+    }
+    else if(input$ordering == "On"){
+      dat <- (perfAggOrderDf(dataset, value = input$select.measure.ana))
+    }
+    
+    return(subsetAnalysis(dat, input$select.measure.ana))
+})
+
+dat_plot_unagg <- reactive({
+  req(input$ordering)
+  req(input$select.measure.ana)
+
+  dataset <- isolate(data$data.notagg)
+  
+  if(input$ordering == "Off"){
+    dat <- (perfAggDf(dataset))
+  }
+  else if(input$ordering == "On"){
+    dat <- (perfAggOrderDf(dataset, value = input$select.measure.ana))
+  }
+  
+  return(subsetAnalysis(dat, input$select.measure.ana))
+})
+
 
 #####################################################################################################################
 # Boxplots
@@ -154,7 +186,14 @@ col_Palette_B <- reactive({
 
 
 output$ggplot <- renderPlot({
-  boxplot <- PerfBoxplot(dat_plot(), size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = input$addLines,
+  if(input$aggregate == "On"){
+    data_unagg <- NULL
+  }
+  else{
+    data_unagg <- dat_plot_unagg()
+  }
+  boxplot <- PerfBoxplot(dat = dat_plot_agg(), dat_unagg = data_unagg,  
+    size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = input$addLines,
     range_yaxis = rangeB(),#input$rangeYaxisB, 
     size_symbols = input$sizeSymbolsB, jitter_symbols = jitter_symbols(),
     label_xaxis = input$labelXlabB, label_yaxis = input$labelYlabB, label_symbol = input$labelSymbolB)
@@ -194,13 +233,13 @@ output$rangeHeatmap <- renderUI({
     minimum <- min(perfAggDf(data$data.notagg)[pos])
     maximum <- max(perfAggDf(data$data.notagg)[pos])
     if(any(range == Inf)){
-      max <- mround(maximum + 0.1* maximum, 0.05) 
+      max <- mround(maximum + 0.1* maximum, 0.001) 
     }
-    if(round(minimum - 0.05* maximum, 2) < min){
-      value <- c(min, mround(maximum + 0.05* maximum, 0.05))
+    if(round(minimum - 0.1* maximum, 2) < min){
+      value <- c(min, mround(maximum + 0.05* maximum, 0.001))
     }
     else{
-      value <- c(mround((minimum - 0.05* maximum), 0.05), mround(maximum + 0.05* maximum, 0.05))
+      value <- c(mround((minimum - 0.1* maximum), 0.001), mround(maximum + 0.1* maximum, 0.001))
     }
     sliderInput("rangeValueH", "Range Value", value = value, 
       min = min, max = max, step = 0.05)

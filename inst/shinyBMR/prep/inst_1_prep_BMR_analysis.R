@@ -32,7 +32,7 @@ getRange = function(measure){
 # Boxplots
 #####################################################################################################################
 
-PerfBoxplot = function(dat, size_text, col_palette, range_yaxis, size_symbols, label_symbol, jitter_symbols,
+PerfBoxplot = function(dat, dat_unagg, size_text, col_palette, range_yaxis, size_symbols, label_symbol, jitter_symbols,
   label_xaxis, label_yaxis, add_lines){
   if(size_text == -1){
     t <- theme()
@@ -43,7 +43,6 @@ PerfBoxplot = function(dat, size_text, col_palette, range_yaxis, size_symbols, l
   }
   
   boxplot <- ggplot(dat, aes(x = learner, y = value)) +
-    geom_point(mapping = aes(color = learner, shape = learner.info), size = size_symbols, position = jitter_symbols) +
     ylim(range_yaxis) +
     xlab(label_xaxis) + 
     ylab(label_yaxis) +
@@ -58,6 +57,17 @@ PerfBoxplot = function(dat, size_text, col_palette, range_yaxis, size_symbols, l
   if(add_lines == "On"){
     boxplot <- boxplot + stat_summary(aes(group = learner.info, linetype = learner.info), 
       fun.y = mean, geom = "line")
+  }
+  
+  if(!is.null(dat_unagg)){
+    boxplot <- boxplot + 
+      geom_boxplot(data = dat_unagg, mapping = aes(color = learner, shape = learner.info), alpha = .25) +
+      geom_point(data = dat_unagg, mapping = aes(color = learner, shape = learner.info, group = learner.info),
+        position = position_dodge(width = 0.75), size = size_symbols, alpha = .7)
+  }
+  else{
+    boxplot <- boxplot + geom_point(mapping = aes(color = learner, shape = learner.info), size = size_symbols, 
+      position = jitter_symbols) 
   }
   
   return(boxplot)
