@@ -57,7 +57,6 @@ Imports:
   party,
   partykit,
   devtools,
-  mlrHyperopt,
   iml,
   gower,
   mmpf,
