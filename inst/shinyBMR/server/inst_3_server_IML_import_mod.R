@@ -39,6 +39,9 @@ observe({
     else if(input$imlimport.example == "BreastCancer: ada, untuned_nosmote"){
       f <- paste(path_mod, "iml_example_classif_BreastCancer_ada_untuned.RDS", sep = "/")
     }
+    else if(input$imlimport.example == "BreastCancer: ada, tuned_nosmote"){
+      f <- paste(path_mod, "iml_example_classif_BreastCancer_ada_tuned.RDS", sep = "/")
+    }
     else if(input$imlimport.example == "BreastCancer: ranger, untuned_nosmote"){
       f <- paste(path_mod, "iml_example_classif_BreastCancer_ranger_untuned.RDS", sep = "/")
     }

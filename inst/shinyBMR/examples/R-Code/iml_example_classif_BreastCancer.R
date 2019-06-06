@@ -115,9 +115,9 @@ mod_ranger_tuned <- train(learner_ranger_tuned, task)
 
 
 # save Models
-#saveRDS(mod_ada, "iml_example_regr_BreastCancer_ada_untuned.RDS")
-saveRDS(mod_ada_tuned, "new_examples/iml_example_regr_BreastCancer_ada_tuned.RDS")
-#saveRDS(mod_svm, "iml_example_regr_BreastCancer_svm_untuned.RDS")
-#saveRDS(mod_svm_tuned, "iml_example_regr_BreastCancer_svm_tuned.RDS")
-#saveRDS(mod_ranger, "iml_example_regr_BreastCancer_ranger_untuned.RDS")
-#saveRDS(mod_ranger_tuned, "iml_example_regr_BreastCancer_ranger_tuned.RDS")
+#saveRDS(mod_ada, "iml_example_classif_BreastCancer_ada_untuned.RDS")
+#saveRDS(mod_ada_tuned, "iml_example_classif_BreastCancer_ada_tuned.RDS")
+#saveRDS(mod_svm, "iml_example_classif_BreastCancer_svm_untuned.RDS")
+#saveRDS(mod_svm_tuned, "iml_example_classif_BreastCancer_svm_tuned.RDS")
+#saveRDS(mod_ranger, "iml_example_classif_BreastCancer_ranger_untuned.RDS")
+#saveRDS(mod_ranger_tuned, "iml_example_classif_BreastCancer_ranger_tuned.RDS")

@@ -21,7 +21,7 @@ makeIMLImportModSideBar = function(mod.type) {
         menuItem("Choose Example Model"),
         # uiOutput("imlimport.example")
           selectInput("imlimport.example", "", choices = c("BreastCancer: gbm, notuning_nosmote",###
-          "BreastCancer: ada, untuned_nosmote", 
+          "BreastCancer: ada, untuned_nosmote", "BreastCancer: ada, tuned_unsmoted",
             "BreastCancer: ranger, untuned_nosmote", "BreastCancer: ranger, tuned_nosmote", 
             "BreastCancer: svm, untuned_nosmote", "BreastCancer: svm, tuned_nosmote",  
             "LongleysEconomic: ranger, untuned", "LongleysEconomic: ranger, tuned", 
