@@ -2,6 +2,15 @@
 # General Settings
 #####################################################################################################################
 
+# output$iml.menu <- renderMenu({
+#   sidebarMenu(
+#     menuItem("Basics", tabName = "basics", icon = icon("pencil-alt"), selected = T),
+#     menuItem("IML Methods", tabName = "iml_plots", icon = icon("map-marked-alt"))
+#   )
+# })
+# 
+# isolate({updateTabItems(session, "tabs", "basics")})
+
 # Global 
 output$iml.set = renderUI({
   list(

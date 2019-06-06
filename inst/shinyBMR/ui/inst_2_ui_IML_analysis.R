@@ -3,7 +3,8 @@ tabpanel.iml = dashboardPage(
   
   dashboardSidebar(
     sidebarMenu(id = "tabs",
-      menuItem("Basics", tabName = "basics", icon = icon("pencil-alt")),
+      #sidebarMenuOutput("iml.menu"),
+      menuItem("Basics", tabName = "basics", icon = icon("pencil-alt"), selected = TRUE),
       menuItem("IML Methods", tabName = "iml_plots", icon = icon("map-marked-alt")),
       
       hr(),
@@ -292,7 +293,8 @@ tabpanel.iml = dashboardPage(
         br(),
         tabsetPanel(
           tabPanel("IML Plot", 
-            fluidRow(fillPage(addSpinner(plotOutput("iml_plotted")))) #or withSpinner()
+            #fluidRow(fillPage(addSpinner(plotOutput("iml_plotted")))) #or withSpinner()
+            fluidRow(fillPage(plotOutput("iml_plotted")))
             ),
           tabPanel("IML Results",
             checkboxInput("iml_round", label = "Round shown numeric values", value = TRUE),
