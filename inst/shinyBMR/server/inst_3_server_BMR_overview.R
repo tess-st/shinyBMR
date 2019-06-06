@@ -1,24 +1,8 @@
 #####################################################################################################################
-#################################################### BMR Models #####################################################
-#####################################################################################################################
-
-#####################################################################################################################
 # Preparation Overview
 #####################################################################################################################
 
 # Show/hide elements with Info Text
-output$help_summary <- renderText({
-  "You first need to import a BMR Object. Go to 'BMR Import' and upload your Data."
-})
-
-output$help_tuning <- renderText({
-  "You didn't import any Data yet."
-})
-
-output$help_tables <- renderText({
-  "You didn't import any Data yet."
-})
-
 observe({
   if(!is.null(data$data)){
     shinyjs::hide("help_summary", animType = "fade")

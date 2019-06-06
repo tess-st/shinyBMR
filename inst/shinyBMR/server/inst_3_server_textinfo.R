@@ -1,4 +1,7 @@
-########### Landing Page
+#####################################################################################################################
+# Landing Page
+#####################################################################################################################
+
 observeEvent(once = TRUE,ignoreNULL = FALSE, ignoreInit = FALSE, eventExpr = data, { 
   # event will be called when histdata changes, which only happens once, when it is initially calculated
   showModal(modalDialog(
@@ -12,6 +15,63 @@ observeEvent(once = TRUE,ignoreNULL = FALSE, ignoreInit = FALSE, eventExpr = dat
   ))
 })
 
+
+#####################################################################################################################
+# BMR Overview
+#####################################################################################################################
+
+output$help_summary <- renderText({
+  "You first need to import a BMR Object. Go to 'BMR Import' and upload your Data."
+})
+
+output$help_tuning <- renderText({
+  "You didn't import any Data yet."
+})
+
+output$help_tables <- renderText({
+  "You didn't import any Data yet."
+})
+
+
+#####################################################################################################################
+# BMR Analysis
+#####################################################################################################################
+
+output$help_bmrBoxplot <- renderText({
+  "You first need to import a BMR Object. Go to 'BMR Import' and upload your Data."
+})
+
+output$help_bmrHeatmap <- renderText({
+  "You didn't import any Data yet."
+})
+
+output$help_bmrPcp <- renderText({
+  "You didn't import any Data yet."
+})
+
+output$help_bmrMlr <- renderText({
+  "You didn't import any Data yet."
+})
+
+output$bmrBoxplotInfo <- renderText({
+  "Get the Boxplots (for one Measure) showing the Performance of the competing Methods in your BMR Object 
+  via confirming the Plotting Options by clicking the Dropdown Button shown below."
+})
+
+output$bmrHeatmapInfo <- renderText({
+  "Get the Heatmap (for one Measure) showing the Performance of the competing Methods in your BMR Object 
+  via confirming the Plotting Options by clicking the Dropdown Button shown below."
+})
+
+output$bmrPcpInfo <- renderText({
+  "Get the PCP (including all Measures) showing the Performance of the competing Methods in your 
+  BMR Object via confirming the Plotting Options by clicking the Dropdown Button shown below."
+})
+
+
+#####################################################################################################################
+# IML Analysis
+#####################################################################################################################
 
 ########### Summary Import IML Data
 output$summary_info <- renderUI({

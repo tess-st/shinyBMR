@@ -2,6 +2,56 @@
 # Settings
 #####################################################################################################################
 
+# Show/hide elements with Info Text
+observe({
+  if(!is.null(data$data)){
+    shinyjs::hide("help_bmrBoxplot", animType = "fade")
+    shinyjs::hide("help_bmrHeatmap", animType = "fade")
+    shinyjs::hide("help_bmrPcp", animType = "fade")
+    shinyjs::hide("help_bmrMlr", animType = "fade")
+  }
+  else{
+    shinyjs::show("help_bmrBoxplot", anim = TRUE)
+    shinyjs::show("help_bmrHeatmap", anim = TRUE)
+    shinyjs::show("help_bmrPcp", anim = TRUE)
+    shinyjs::show("help_bmrMlr", anim = TRUE)
+  }
+})
+
+observeEvent(input$rangeYaxisB, {
+  if(is.null(input$rangeYaxisB)){
+    shinyjs::show("bmrBoxplotInfo", anim = TRUE)
+  }
+  else{
+    shinyjs::hide("bmrBoxplotInfo", animType = "fade")
+  }
+})
+
+observeEvent(input$rangeValueH, {
+  if(is.null(input$rangeValueH)){
+    shinyjs::show("bmrHeatmapInfo", anim = TRUE)
+  }
+  else{
+    shinyjs::hide("bmrHeatmapInfo", animType = "fade")
+  }
+})
+
+observeEvent(input$rangeYaxisPcp, {
+  if(is.null(input$rangeYaxisPcp)){
+    shinyjs::show("bmrPcpInfo", anim = TRUE)
+  }
+  else{
+    shinyjs::hide("bmrPcpInfo", animType = "fade")
+  }
+})
+
+output$selected.measure.ana <- renderUI({
+  selectizeInput("select.measure.ana", "Choose Measure to be focused", 
+    choices = as.list(measure()),
+    multiple = FALSE)
+})
+
+# Global Settings for BMR Analysis
 observeEvent(input$tabs_bmr, {
   shinyjs::show("selected.measure.ana", anim = TRUE)
   if(input$tabs_bmr == "plotMLR"){
@@ -21,12 +71,6 @@ observeEvent(input$tabs_bmr, {
     shinyjs::show("aggregate", anim = TRUE)
     shinyjs::show("type", anim = TRUE)
   }
-})
-
-output$selected.measure.ana <- renderUI({
-  selectizeInput("select.measure.ana", "Choose Measure to be focused", 
-    choices = as.list(measure()),
-    multiple = FALSE)
 })
 
 aggregation <- reactive({
@@ -56,23 +100,23 @@ dat_plot <- reactive({
 dat_plot_agg <- reactive({
   req(input$ordering)
   req(input$select.measure.ana)
-
-    dataset <- isolate(data$data)
-
-    if(input$ordering == "Off"){
-      dat <- (perfAggDf(dataset))
-    }
-    else if(input$ordering == "On"){
-      dat <- (perfAggOrderDf(dataset, value = input$select.measure.ana))
-    }
-    
-    return(subsetAnalysis(dat, input$select.measure.ana))
+  
+  dataset <- isolate(data$data)
+  
+  if(input$ordering == "Off"){
+    dat <- (perfAggDf(dataset))
+  }
+  else if(input$ordering == "On"){
+    dat <- (perfAggOrderDf(dataset, value = input$select.measure.ana))
+  }
+  
+  return(subsetAnalysis(dat, input$select.measure.ana))
 })
 
 dat_plot_unagg <- reactive({
   req(input$ordering)
   req(input$select.measure.ana)
-
+  
   dataset <- isolate(data$data.notagg)
   
   if(input$ordering == "Off"){
@@ -183,7 +227,6 @@ col_Palette_B <- reactive({
   }
   return(pal)
 })
-
 
 output$ggplot <- renderPlot({
   if(input$aggregate == "On"){
@@ -441,6 +484,7 @@ col_Palette_mlr <- reactive({
 
 
 output$mlr_boxplot <- renderPlot({
+  req(data$data)
   MlrBoxplot(dat = data$bmr, measure = getFromNamespace(input$select.measure.ana, "mlr"), style = input$stylePlot, 
     size_text = input$sizeTextMlr, col_palette = col_Palette_mlr())
 }, height = function() {
