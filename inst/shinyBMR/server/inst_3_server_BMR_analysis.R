@@ -155,13 +155,27 @@ jitter_symbols <- reactive({
 output$sliderBoxplot <- renderUI({
   req(input$select.measure.ana)
   if(!is.null(data$data)){
-    m <- getFromNamespace(input$select.measure.ana, "mlr")
-    range <- c(m$best, m$worst)
     pos <- findValue(data = perfAggDf(data$data.notagg), measure = input$select.measure.ana)
-    min <- getRange(input$select.measure.ana)[1]
-    max <- getRange(input$select.measure.ana)[2]
+    
     minimum <- min(perfAggDf(data$data.notagg)[pos])
     maximum <- max(perfAggDf(data$data.notagg)[pos])
+    # if-loop necessary for in mlr undefined performance measures
+    if(!is.null(getRange(input$select.measure.ana))){
+          m <- getFromNamespace(input$select.measure.ana, "mlr")
+    range <- c(m$best, m$worst)
+    min <- getRange(input$select.measure.ana)[1]
+    max <- getRange(input$select.measure.ana)[2]
+    }
+    else{
+      # minimum <- mround(min(perfAggDf(data$data.notagg)[pos]), 0.05)
+      # maximum <- mround(max(perfAggDf(data$data.notagg)[pos]), 0.05)
+      # 
+      min <- mround((minimum - 0.05* maximum), 0.05)
+      max <- mround((maximum + 0.05* maximum), 0.05)
+      
+      range <- c(mround(minimum, 0.05), mround(maximum, 0.05))
+    }
+    
     if(any(range == Inf)){
       max <- mround(maximum + 0.1* maximum, 0.05) 
     }
@@ -237,18 +251,23 @@ output$ggplot <- renderPlot({
   }
   boxplot <- PerfBoxplot(dat = dat_plot_agg(), dat_unagg = data_unagg,  
     size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = input$addLines,
-    range_yaxis = rangeB(),#input$rangeYaxisB, 
-    size_symbols = input$sizeSymbolsB, jitter_symbols = jitter_symbols(),
+    range_yaxis = rangeB(),size_symbols = input$sizeSymbolsB, jitter_symbols = jitter_symbols(),
     label_xaxis = input$labelXlabB, label_yaxis = input$labelYlabB, label_symbol = input$labelSymbolB)
   boxplot
 },height = function() {
   input$zoomB * session$clientData$output_ggplot_width
-})#,  height = 200, width = 300)
+})
 
 output$plotly <- renderPlotly({
-  ggplotly(PerfBoxplot(dat_plot(), size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = input$addLines,
-    range_yaxis = rangeB(),#input$rangeYaxisB, 
-    size_symbols = input$sizeSymbolsB, jitter_symbols = jitter_symbols(),
+  if(input$aggregate == "On"){
+    data_unagg <- NULL
+  }
+  else{
+    data_unagg <- dat_plot_unagg()
+  }
+  ggplotly(PerfBoxplot(dat = dat_plot_agg(), dat_unagg = data_unagg,  
+    size_text = size_text_B(), col_palette = col_Palette_B(), add_lines = input$addLines,
+    range_yaxis = rangeB(), size_symbols = input$sizeSymbolsB, jitter_symbols = jitter_symbols(),
     label_xaxis = input$labelXlabB, label_yaxis = input$labelYlabB, label_symbol = input$labelSymbolB))
 })
 
@@ -268,13 +287,26 @@ size_text_H <- reactive({
 output$rangeHeatmap <- renderUI({
   req(input$select.measure.ana)
   if(!is.null(data$data)){
+        pos <- findValue(data = perfAggDf(data$data.notagg), measure = input$select.measure.ana)
+         
+        minimum <- min(perfAggDf(data$data.notagg)[pos])
+    maximum <- max(perfAggDf(data$data.notagg)[pos])   
+    # if-loop necessary for in mlr undefined performance measures
+    if(!is.null(getRange(input$select.measure.ana))){
     m <- getFromNamespace(input$select.measure.ana, "mlr")
     range <- c(m$best, m$worst)
-    pos <- findValue(data = perfAggDf(data$data.notagg), measure = input$select.measure.ana)
+    
     min <- getRange(input$select.measure.ana)[1]
     max <- getRange(input$select.measure.ana)[2]
-    minimum <- min(perfAggDf(data$data.notagg)[pos])
-    maximum <- max(perfAggDf(data$data.notagg)[pos])
+    }
+    
+    else{
+      min <- mround((minimum - 0.05* maximum), 0.05)
+      max <- mround((maximum + 0.05* maximum), 0.05)
+      
+      range <- c(mround(minimum, 0.05), mround(maximum, 0.05))
+    }
+
     if(any(range == Inf)){
       max <- mround(maximum + 0.1* maximum, 0.001) 
     }
@@ -325,6 +357,16 @@ output$disable_pcp <- reactive({
 })
 outputOptions(output, "disable_pcp", suspendWhenHidden = FALSE)
 
+# output$disable_pcp_2 <- reactive({
+#   req(data$data)
+#   length(grep("value", names(perfAggDf(getBMRAggrPerformances(data$bmr, as.df = T))))) = 1
+# })
+# outputOptions(output, "disable_pcp_2", suspendWhenHidden = FALSE)
+# 
+# output$unable_PCP <- renderText({
+#   "PCP can not be displayed, when only one measure is used looking at the Performance of your BMR Object."
+# })
+
 size_text_Pcp <- reactive({
   size <- req(input$sizeTextPcp)
   if(input$type){
@@ -339,15 +381,25 @@ output$sliderPcp <- renderUI({
     long_unagg <- getLongUnagg(dat_agg = getBMRAggrPerformances(data$bmr, as.df = T), 
       dat_unagg = getBMRPerformances(data$bmr, as.df = T))
     levs <- levels(long_unagg$measure)
-    range_list <- list()
+    
+        minimum <- min(long_unagg$value)
+    maximum <- max(long_unagg$value)
+        range_list <- list()
+    # if-loop necessary for in mlr undefined performance measures
+    if(!is.null(getRange(input$select.measure.ana))){
     for(i in 1:length(levs)){
       m <- getFromNamespace(levs[i], "mlr")
       range_list[[i]] <- c(m$best, m$worst)
     }
     min <- min(unlist(range_list))
     max <- max(unlist(range_list))
-    minimum <- min(long_unagg$value)
-    maximum <- max(long_unagg$value)
+    }
+    else{
+      range_list[[1]] <- c(mround(minimum, 0.05), mround(maximum, 0.05))
+      min <- mround((minimum - 0.05* maximum), 0.05)
+      max <- mround((maximum + 0.05* maximum), 0.05)
+    }
+
     if(any(unlist(range_list) == Inf)){
       max <- mround(maximum + 0.1* maximum, 0.05) 
     }

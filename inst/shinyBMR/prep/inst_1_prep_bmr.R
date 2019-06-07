@@ -179,7 +179,7 @@ perfAggOrderDf = function(df, value){
     mean)$Group.1[order(aggregate(df[,value], list(df$learner.info), mean)$x)]
   
   df$learner <- factor(df$learner, levels(df$learner)[order_learner])
-  df$learner.info <- factor(df$learner.info, levels(df$learner.info)[order_learner.info])
+  #df$learner.info <- factor(df$learner.info, levels(df$learner.info)[order_learner.info])
   
   return(df)
 }

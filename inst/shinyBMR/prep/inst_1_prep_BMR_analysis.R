@@ -15,21 +15,41 @@ subsetAnalysis = function(data, measure){
   return(dataset)
 }
 
+# Find Values of specific selected Measure for self-created Data Set
+findValue = function(data, measure){
+  v <- data[1,] == measure
+  for(i in 1:length(v)){
+    if(v[1,i] == F){
+      NULL
+    }else{
+      pos <- i
+    }
+  }
+  counts <- length(grep("measure_", names(data)))
+  number <- pos - counts 
+  return(number)
+}
 
 getRange = function(measure){
-  m <- getFromNamespace(measure, "mlr")#, as.environment(system.file(package = "mlr")))
+  m <- try(getFromNamespace(measure, "mlr"))
+  if(!is(m, "try-error")){
   if(m$minimize == TRUE){
     range <- c(m$best, m$worst)
   }
   else{
     range <- c(m$worst, m$best) 
   }
+  }
+  else if(is(m, "try-error")){
+    range <- NULL
+  }
+
   range
 }
 
 
 #####################################################################################################################
-# Boxplots
+# Boxplot
 #####################################################################################################################
 
 PerfBoxplot = function(dat, dat_unagg, size_text, col_palette, range_yaxis, size_symbols, label_symbol, jitter_symbols,

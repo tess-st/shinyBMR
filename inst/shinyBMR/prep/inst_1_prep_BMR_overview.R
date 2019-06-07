@@ -1,18 +1,3 @@
-# Find Values of specific selected Measure for self-created Data Set
-findValue = function(data, measure){
-  v <- data[1,] == measure
-  for(i in 1:length(v)){
-    if(v[1,i] == F){
-      NULL
-    }else{
-      pos <- i
-    }
-  }
-  counts <- length(grep("measure_", names(data)))
-  number <- pos - counts 
-  return(number)
-}
-
 # Extraction of the model with the highest performance
 bestPerfMod = function(dat, measure){
   pos <- findValue(data = dat, measure = measure)

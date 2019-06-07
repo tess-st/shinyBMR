@@ -174,8 +174,10 @@ tabpanel.bmr = dashboardPage(
             fluidRow(fillPage(plotOutput("ggplot_pcp")))),
           conditionalPanel(condition = "input.type == true",
             fluidRow(fillPage(plotlyOutput("plotly_pcp"))))
-          
         )
+        # conditionalPanel(condition = "output.disable_pcp_2",
+        #   htmlOutput("unable_PCP")
+        # )
       ),
       
       tabItem(tabName = "plotMLR",
