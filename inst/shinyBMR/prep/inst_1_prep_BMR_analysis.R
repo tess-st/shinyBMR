@@ -79,11 +79,17 @@ PerfBoxplot = function(dat, dat_unagg, size_text, col_palette, range_yaxis, size
       fun.y = mean, geom = "line")
   }
   
+  greys <- NA
+  for(i in 1:nlevels(nrow(dat))){
+    greys[i] <- "dimgrey"
+  }
+  
   if(!is.null(dat_unagg)){
     boxplot <- boxplot + 
       geom_boxplot(data = dat_unagg, mapping = aes(color = learner, shape = learner.info), alpha = .25) +
       geom_point(data = dat_unagg, mapping = aes(color = learner, shape = learner.info, group = learner.info),
-        position = position_dodge(width = 0.75), size = size_symbols, alpha = .7)
+        position = position_dodge(width = 0.75), size = size_symbols, alpha = .7)+ 
+      geom_point(color = greys, mapping = aes(shape = learner.info), size = size_symbols + 1, alpha = .8) 
   }
   else{
     boxplot <- boxplot + geom_point(mapping = aes(color = learner, shape = learner.info), size = size_symbols, 
