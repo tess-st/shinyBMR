@@ -12,7 +12,7 @@ Another point coming up when performing such analyses is the question about expl
 This ShinyApp **shinyBMR** focuses on the before mentioned aspects and its usage is explained in the latter documentation, that can be structiured as follows:  
 
 I. Analysis of Benchmark Results (BMR)
-  1. Import of the Benchmark Results (from [**mlr**](https://github.com/mlr-org/mlr#-machine-learning-in-r)
+  1. Import of the Benchmark Results (from [**mlr**](https://github.com/mlr-org/mlr#-machine-learning-in-r))
   2. Overview of the Information contained in the Benchmark Object
   3. Graphical Analysis of the competing Methods included in the Benachmark Study
 
