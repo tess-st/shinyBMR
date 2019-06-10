@@ -92,8 +92,8 @@ PerfBoxplot = function(dat, dat_unagg, size_text, col_palette, range_yaxis, size
       geom_point(color = greys, mapping = aes(shape = learner.info), size = size_symbols + 1, alpha = .8) 
   }
   else{
-    boxplot <- boxplot + geom_point(mapping = aes(color = learner, shape = learner.info), size = size_symbols, 
-      position = jitter_symbols) 
+    boxplot <- boxplot + geom_point(mapping = aes(color = learner, shape = learner.info), size = size_symbols + 1, 
+      position = jitter_symbols, alpha = .8) 
   }
   
   return(boxplot)

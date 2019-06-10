@@ -44,7 +44,7 @@ tabpanel.bmr = dashboardPage(
               h4("Change Plotting Options"),
               br(),
               selectInput("colPaletteB", "Color Palette", 
-                choices = c("Default", "Pastel1", "Dark2", "Dark3", "Set2", "Set3",
+                choices = c("Default", "Dark2", "Dark3", "Set2", "Set3",
                   "Warm", "Cold", "Harmonic", "Dynamic", 
                   "Coolwarm", "Parula", "Viridis", "Tol.Rainbow"), 
                 #https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html
@@ -140,7 +140,7 @@ tabpanel.bmr = dashboardPage(
               h4("Change Plotting Options"),
               br(),
               selectInput("colPalettePcp", "Color Palette", 
-                choices = c("Default", "Pastel1", "Dark2", "Dark3", "Set2", "Set3",
+                choices = c("Default", "Dark2", "Dark3", "Set2", "Set3",
                   "Warm", "Cold", "Harmonic", "Dynamic", 
                   "Coolwarm", "Parula", "Viridis", "Tol.Rainbow"), 
                 #https://cran.r-project.org/web/packages/pals/vignettes/pals_examples.html
@@ -190,7 +190,7 @@ tabpanel.bmr = dashboardPage(
               h4("Change Plotting Options"),
               br(),
               selectInput("colPaletteMlr", "Color Palette",
-                choices = c("Default", "Pastel1", "Dark2", "Dark3", "Set2", "Set3",
+                choices = c("Default", "Dark2", "Dark3", "Set2", "Set3",
                   "Warm", "Cold", "Harmonic", "Dynamic",
                   "Coolwarm", "Parula", "Viridis", "Tol.Rainbow"),
                 selected = "Default"),
