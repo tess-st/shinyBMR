@@ -39,8 +39,32 @@ If `rJava` fails to load, [**this link**](https://stackoverflow.com/questions/30
 ## Welcome Page 
 When starting the app a starting page *Welcome* is popping up. Beside some introductional text there are also some helpful links provide, which are useful in case of benchmark studies especially when accomplished with the **mlr** package. 
 
-Having a closer look at the interface one should recognize the construction of the app organized in the tabs selectable right under the headine. The following descriptions contain informations abput the actual usage of these tabs or rather their functionalities.
+Having a closer look at the interface one should recognize the construction of the app organized in the tabs selectable right under the headine. The following descriptions contain informations about the actual usage of these tabs or rather their functionalities.
 
 ## I. Analysis of Benchmark Results (BMR)
-### 1. Import BMR
-The Analysis
+### 1. Import of the Benchmark Results
+As now the concrete analysis of benchmark studies is focused you first need to upload your benchmark object. When clicking on the ***BMR Import*** tab the preface shows a exemplary data frame. There are two example data sets provided, which can be used to obtain the functionalities of **shinyBMR** supplied for the analysis of benchmark studies. One can choose between a classfication and a regression example. Former one is carried out on [**Breast Cancer**](https://www.rdocumentation.org/packages/mlbench/versions/2.1-1/topics/BreastCancer) data set of the [**mlbench**](https://www.rdocumentation.org/packages/mlbench/versions/2.1-1) package. The regression example based on the [**Longley's Economic**](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/longley.html) data set is available in the [**datasets**](https://stat.ethz.ch/R-manual/R-devel/RHOME/library/datasets/html/00Index.html) package. The conducted benchmark experiments based on the two example data sets can be found in the downloaded package when navigating to *"...\shinyBMR\inst\shinyBMR\examples\R-Code"*.
+
+It is now your turn to upload a BMR object you saved as .RDS file by clicking on the *Type* selection button in the sidebar and choosing *RDS*. When doing so a new sidebar tab is coming up telling you to *Choose RDS File* containing your benchmark experiment. This BMR object has to be set up via the **mlr** package or - being more accurate - via the follwoing function:
+```r
+benchmark(learners, tasks, resamplings, measures, keep.pred = TRUE,
+  models = TRUE, show.info = getMlrOption("show.info"))
+```
+With help of this function different learning methods can be applied to one or several data sets with the aim to compare and rank the algorithms with respect to one or more performance measures. At the moment **shinyBMR** is only set up for the analysis of benchmark experiments performed on a single data set as this is the main focus of most clinical studies involving machine learning methods. Since the actual usage of the benchmark function requires a few more steps, that need to be done on basis of **mlr**, it might be useful to fo through the [**mlr help page**](https://mlr.mlr-org.com/index.html).
+
+![alt text](pics/I_1_BMR_Import.PNG "BMR Import")
+
+Finally having uploaded your BMR object **shinyBMR** is shwoing a data table containing all relevant informations about your study: the first row contains *Name and Art of Task*. The following row(s) holds the *Value of Measure* the analysis is based on. Of course all of the measures you have used in your study will be displayed with their corresponding values for the specific learner in the table. Each *Learner* taking part in the competition is listed and the next row contains information about the *Tuning* status and - in case of a classification task - is followed by a row showing the *SMOTE* status. Other extentitions of the learners then tuning and SMOTE have not been implemented in **shinyBMR** yet, as these wrappers seem to be on the main focus when it comes to clinical studies using methods of machine learning. 
+
+By default you only see the aggregated performance of each learner. Clicking *Aggregated BMR* offers the opportunity to also show the unaggregated performance containing the values of each learner per iteration. Additionally the values of the measure(s) are rounded by default for a better overview. This could be undone by making the corresponding selection at *Round Values*. 
+
+### 2.Overview of the Information contained in the Benchmark Object
+
+### 3. Graphical Analysis of the competing Methods included in the Benachmark Study
+
+## II. Access to the Interpretation of Blackbox ML-Methods (IML)
+### 1. Import and Overview of the focused Data Set 
+### 2. Import and Overview of the (Blackbox) Model
+### 3. Acess to Interpretability provided by different tools of the **iml** package
+
+[**iml**](https://github.com/christophM/iml) package
