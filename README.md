@@ -7,7 +7,7 @@ This package should provide an interactive framework for the analysis of benchma
 
 As these Benchmark Studies tend to come up with a huge bandwidth of information **shinyBMR** should mainly offer a opportunity for users to get easy accessible, but highly informative overview of their enforced benchmark study based on **mlr**. This is basically done by the use of interactive, graphical tools as well as stctured and detailed summaries. 
 
-Another point coming up when performing such analyses is the question about explainability and interperatbility. Many of the ML methods are so called blackbox methods, meaning there is not such an easy way - like for example in logistic regression - for calculating the output when the input/data and the focused model are provided. In this sense most of the ML methods return your results without eyplaining you the way the were ablt to come up with this output. But there is a way out of this situation: one can make use of so called model-agnostic methods provided in the [**iml**](https://github.com/christophM/iml) package package to offer the user a basis for understanding the causes of decision made by the machine. 
+Another point coming up when performing such analyses is the question about explainability and interperatbility. Many of the machine learning (ML) methods are so called blackbox methods, meaning there is not such an easy way - like for example in logistic regression - for calculating the output when the input/data and the focused model are provided. In this sense most of the ML methods return your results without eyplaining you the way the were ablt to come up with this output. But there is a way out of this situation: one can make use of so called model-agnostic methods provided in the [**iml**](https://github.com/christophM/iml) package package to offer the user a basis for understanding the causes of decision made by the machine. 
 
 This ShinyApp **shinyBMR** focuses on the before mentioned aspects and its usage is explained in the latter documentation, that can be structiured as follows:  
 
@@ -75,7 +75,7 @@ plotHyperParsEffect(hyperpars.effect.data, x = NULL, y = NULL,
   facet = NULL, global.only = TRUE, interpolate = NULL,
   show.experiments = FALSE, show.interpolated = FALSE,
   nested.agg = mean, partial.dep.learn = NULL)
-```r
+```
 
 As the before listed function may already implements the first two input selection options let the user spezify what should be plotted on the x- and the y-axis for visualizing the hyperparameter validation path. The third selection tab is optional for plotting an extra axis for a particular geom. This could be for the fill on a heatmap or color aesthetic for a line. 
 
@@ -87,8 +87,15 @@ In case there are still some question left concerning the structure of the BMR o
 
 
 ## II. Access to the Interpretation of Blackbox ML-Methods (IML)
-Having 
+Having figured out, which ML method to use for your analysis of a specific data set and fitting the final model you may end up using a blackbox method with high complexe or even not tangible interpretation approaches. For such cases the [iml](https://github.com/christophM/iml) package offers a opportunity to explain predictions of these ML methods. **shinyBMR** now also provides the option to use the functionalities of this package in an interactive framework. The necessary steps for receiving the model-agnostic interpretability methods of your focused model are described in the following sections. As a side note should be mentioned, that one can fit the final model easily with help of the implemented in **mlr**.
+
 ### 1. Import and Overview of the focused Data Set 
+For ending up with a interpretation approach for your model, you first of all have to provide the data set your model has been trained on. Therefore navigate to the *IML Import Data* tab in the **shinyBMR** app. As starting window the [**Breast Cancer**](https://www.rdocumentation.org/packages/mlbench/versions/2.1-1/topics/BreastCancer) data is displayed as example for a classification task in the sub-tab *Imported Data Set*. As further example one can select a regression task, which is in this case established via the [**Longley's Economic**](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/longley.html) data and will be provided when the specific alternative is called at *Choose Example Data* on the sidebar. One can upload a data set by choosing the correct *Type* - in this case CSV, Rdata or RDS - of the file and navigating to the corresponding file with help of the *Browse* input tab. As soon as the upload is completed the data table will be displayed. Again one can spezify *Round Values* on the sidebar for rounding options. 
+
+
+
+Having uploaded the data set you can now navigate to the sub-tab *Summary Data Set* for getting a summary of all included variables again in form of a data table. For each of the *name* of the variables you earn information about the *type* and the sum of missing values *na*. Depending on the type of the variable additionally the *mean*, measure of dispersion *disp*, *median*, *mad*, minimum *min*, maximum *max* and sum of levels *nlevels* is provided. When needing more help for understanding the summary one can switch the input *Show Information about the Summary Table* below the data table to get additional information. 
+
 ### 2. Import and Overview of the (Blackbox) Model
 ### 3. Acess to Interpretability provided by different tools of the **iml** package
 
