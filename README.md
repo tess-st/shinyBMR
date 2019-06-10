@@ -54,13 +54,22 @@ With help of this function different learning methods can be applied to one or s
 
 ![alt text](pics/I_1_BMR_Import.PNG "BMR Import")
 
-Finally having uploaded your BMR object **shinyBMR** is shwoing a data table containing all relevant informations about your study: the first row contains *Name and Art of Task*. The following row(s) holds the *Value of Measure* the analysis is based on. Of course all of the measures you have used in your study will be displayed with their corresponding values for the specific learner in the table. Each *Learner* taking part in the competition is listed and the next row contains information about the *Tuning* status and - in case of a classification task - is followed by a row showing the *SMOTE* status. Other extentitions of the learners then tuning and SMOTE have not been implemented in **shinyBMR** yet, as these wrappers seem to be on the main focus when it comes to clinical studies using methods of machine learning. 
+Finally having uploaded your BMR object **shinyBMR** is shwoing a data table containing all relevant informations about your study: the first row contains *Name and Art of Task*. The following row(s) holds the *Value of Measure* the analysis is based on. Of course all of the measures you have used in your study will be displayed with their corresponding values for the specific learner in the table. Each *Learner* taking part in the competition is listed and the next row contains information about the *Tuning* status and - in case of a classification task - is followed by a row showing the *SMOTE* status. Other extentitions of the learners then tuning and SMOTE have not been implemented in **shinyBMR** yet, as these [wrappers](https://mlr.mlr-org.com/articles/tutorial/wrapper.html) seem to be on the main focus when it comes to clinical studies using methods of machine learning. 
 
 By default you only see the aggregated performance of each learner. Clicking *Aggregated BMR* offers the opportunity to also show the unaggregated performance containing the values of each learner per iteration. Additionally the values of the measure(s) are rounded by default for a better overview. This could be undone by making the corresponding selection at *Round Values*. 
 
 ### 2.Overview of the Information contained in the Benchmark Object
+As the BMRs tend to get quite huge objects this tab ***BMR Overview*** is made up to summarize the results in a clear and structured way. First of all summarizing the results of the whole benchmark study, you have to navigate to the ***Summary BMR*** tab on the sidebar. Doing so there is now the sub-tab ***Categories/Levels*** displayed, which basically breaks down the infomation of the imported BMR object to only the most relevant, included informations.
+![alt_text](pics/I_2_1_BMR_Overview_Summary.PNG "BMR Overview - Summary")
+
+This is done by revealing the levels of the binary and factor variables of the data table shown in the tab ***BMR Import*** before. In this way the user gets instructed aboute the Name of the *DATA SET(S)*, the competing learners or to say it differently the *METHOD(S)*, the art of the *TASK(S)*, the *MEASURE(S)* for evaluating the performance, the *TUNING LEVELS* (untuned, tuned), as well as - in case of classification - the *SMOTE LEVELS* (unsmoted, smoted). Each of these informations is provided in one box, that contains the name of the levels and a second box right under the first telling the user the number of categories. Additionally one can ask for the range of the *VALUES OF SELECTED MEASURE (MIN-MAX)*. If the benchmark analysis was performed on more then one measure you can specifically *Choose Measure to be focused* via the selection tab on the sidebar. Again rounded values are set per default, but this can be changed via the tab *Round Values* also placed on the sidebar.
+
+In case the ML methods competing in the benchmark study have furthermore wrapped [hyperparameter tuning](https://mlr.mlr-org.com/articles/tutorial/tune.html) implemented, one  can have a closer look at the *Tuning Results* by clicking the corresponding sub-tab.
+![alt_text](pics/I_2_2_BMR_Overview_Tuning.PNG "BMR Overview - Tuning")
+![alt_text](pics/I_2_3_BMR_Overview_CrossTables.PNG "BMR Overview - Cross Tables")
 
 ### 3. Graphical Analysis of the competing Methods included in the Benachmark Study
+
 
 ## II. Access to the Interpretation of Blackbox ML-Methods (IML)
 ### 1. Import and Overview of the focused Data Set 
