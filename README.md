@@ -64,14 +64,30 @@ As the BMRs tend to get quite huge objects this tab ***BMR Overview*** is made u
 
 This is done by revealing the levels of the binary and factor variables of the data table shown in the tab ***BMR Import*** before. In this way the user gets instructed aboute the Name of the *DATA SET(S)*, the competing learners or to say it differently the *METHOD(S)*, the art of the *TASK(S)*, the *MEASURE(S)* for evaluating the performance, the *TUNING LEVELS* (untuned, tuned), as well as - in case of classification - the *SMOTE LEVELS* (unsmoted, smoted). Each of these informations is provided in one box, that contains the name of the levels and a second box right under the first telling the user the number of categories. Additionally one can ask for the range of the *VALUES OF SELECTED MEASURE (MIN-MAX)*. If the benchmark analysis was performed on more then one measure you can specifically *Choose Measure to be focused* via the selection tab on the sidebar. Again rounded values are set per default, but this can be changed via the tab *Round Values* also placed on the sidebar.
 
-In case the ML methods competing in the benchmark study have furthermore wrapped [hyperparameter tuning](https://mlr.mlr-org.com/articles/tutorial/tune.html) implemented, one  can have a closer look at the *Tuning Results* by clicking the corresponding sub-tab.
+In case the ML methods competing in the benchmark study have furthermore wrapped [hyperparameter tuning](https://mlr.mlr-org.com/articles/tutorial/tune.html) implemented, one can have a closer look at the *Tuning Results* by clicking the corresponding sub-tab. Doing so a data table will be provided, that shows the tuning results/parameters of all - in some way tuned - learners per iteration or in other words of the unaggregated data set. Beside the performance measure(s) you can easily examine the somehow optimal fitted parameters for a specific learner for the corresponding iteration. Also for this data table the shown values of the performance measures are rounded by default, whereby this setting can be changed with help of the input selection on the sidebar.
+
 ![alt_text](pics/I_2_2_BMR_Overview_Tuning.PNG "BMR Overview - Tuning")
+
+But this data table can be used in an even more interactive way: choose one row respectively a method within a focused iteration to get three selection tabs in return. These can be used to create a plot for visualizing the hyperparameter validation path. This can be quite useful for determining the importance or effect of a particular hyperparameter on some performance measure and/or optimizer. This functionality is based on a [function](https://mlr.mlr-org.com/reference/plotHyperParsEffect.html) provided in the **mlr** package:
+```r
+plotHyperParsEffect(hyperpars.effect.data, x = NULL, y = NULL,
+  z = NULL, plot.type = "scatter", loess.smooth = FALSE,
+  facet = NULL, global.only = TRUE, interpolate = NULL,
+  show.experiments = FALSE, show.interpolated = FALSE,
+  nested.agg = mean, partial.dep.learn = NULL)
+```r
+
+As the before listed function may already implements the first two input selection options let the user spezify what should be plotted on the x- and the y-axis for visualizing the hyperparameter validation path. The third selection tab is optional for plotting an extra axis for a particular geom. This could be for the fill on a heatmap or color aesthetic for a line. 
+
+In case there are still some question left concerning the structure of the BMR object one can make use of the sub-tab *Cross Tables*. As this should be self explanatory the subject won't be deepen here. 
+
 ![alt_text](pics/I_2_3_BMR_Overview_CrossTables.PNG "BMR Overview - Cross Tables")
 
 ### 3. Graphical Analysis of the competing Methods included in the Benachmark Study
 
 
 ## II. Access to the Interpretation of Blackbox ML-Methods (IML)
+Having 
 ### 1. Import and Overview of the focused Data Set 
 ### 2. Import and Overview of the (Blackbox) Model
 ### 3. Acess to Interpretability provided by different tools of the **iml** package
