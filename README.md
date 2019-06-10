@@ -7,7 +7,7 @@ This package should provide an interactive framework for the analysis of benchma
 
 As these Benchmark Studies tend to come up with a huge bandwidth of information **shinyBMR** should mainly offer a opportunity for users to get easy accessible, but highly informative overview of their enforced benchmark study based on **mlr**. This is basically done by the use of interactive, graphical tools as well as stctured and detailed summaries. 
 
-Another point coming up when performing such analyses is the question about explainability and interperatbility. Many of the ML methods are so called blackbox methods, meaning there is not such an easy way - like for example in logistic regression - for calculating the output when the input/data and the focused model are provided. In this sense most of the ML methods return your results without eyplaining you the way the were ablt to come up with this output. But there is a way out of this situation: one can make use of so called model-agnostic methods provided in the **iml** package to offer the user a basis for understanding the causes of decision made by the machine. 
+Another point coming up when performing such analyses is the question about explainability and interperatbility. Many of the ML methods are so called blackbox methods, meaning there is not such an easy way - like for example in logistic regression - for calculating the output when the input/data and the focused model are provided. In this sense most of the ML methods return your results without eyplaining you the way the were ablt to come up with this output. But there is a way out of this situation: one can make use of so called model-agnostic methods provided in the [**iml**](https://github.com/christophM/iml) package package to offer the user a basis for understanding the causes of decision made by the machine. 
 
 This ShinyApp **shinyBMR** focuses on the before mentioned aspects and its usage is explained in the latter documentation, that can be structiured as follows:  
 
@@ -34,6 +34,13 @@ Starting the ShinyApp:
 runShinyBMR()
 ```
 
-If `rJava` fails to load, [**this link**](https://stackoverflow.com/questions/30738974/rjava-load-error-in-rstudio-r-after-upgrading-to-osx-yosemite) might be helpful!
+If `rJava` fails to load, [**this link**](https://stackoverflow.com/questions/30738974/rjava-load-error-in-rstudio-r-after-upgrading-to-osx-yosemite) might be helpful.
+
+## Welcome Page 
+When starting the app a starting page *Welcome* is popping up. Beside some introductional text there are also some helpful links provide, which are useful in case of benchmark studies especially when accomplished with the **mlr** package. 
+
+Having a closer look at the interface one should recognize the construction of the app organized in the tabs selectable right under the headine. The following descriptions contain informations abput the actual usage of these tabs or rather their functionalities.
 
 ## I. Analysis of Benchmark Results (BMR)
+### 1. Import BMR
+The Analysis
