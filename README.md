@@ -86,8 +86,42 @@ In case there are still some question left concerning the structure of the BMR o
 
 ### 3. Graphical Analysis of the competing Methods included in the Benachmark Study
 
-Having done the analyses so far it is now meaningful to display the results of the benchmark study in form of plots. Doing so you can go to the *BMR Analysis* tab 
+Having done the analyses so far it is now meaningful to display the results of the benchmark study in form of plots. Doing so you can go to the *BMR Analysis* tab. 
+As side note it should be mentioned, that the settings under the second horizontal line on the sidebar are shown/hidden dependent on the selected type of plot. 
 
+#### Boxplot
+For graphical analyses concerning one specific performance measure included in your BMR object you can make use of the *Boxplot* and *Heatmap* tab on the sidebar. The *Boxplot* tab provides - as the name is already indicating - boxplots for a selected measure depending on the user's input *Choose Measure to be focused*. For getting the specific plot in return one has to accept the choosen selections by clicking on the tooltip button - as the settings are highly reactive and have to be computed based on the selections. In case you have four different treatments (tuning, SMOTE) of one aggregated learner there will be boxplots displayed for the performance of each aggregated ML method. Elsewise the performance per group of learner is only marked by a point on the specific scale of the selected measure. Notice that each group of learner receives a own color as well as each treatment group (tuning - no tuning, SMOTE - no SMOTE) is labeled with a characteristic symbol. 
+
+![alt text](pics/I_3_1_BMR_Analysis_Boxplot.PNG "BMR Analysis - Boxplot")
+
+One can go deeper into detail by selecting *Aggregated BMR* as "Off" and thereby adding the boxplots containing the values per iteration per treatment group of the respective learning method to the plot. The aggregated results remain in the plot as grey marked points connected by the specific lines marking the treatment group. These lines can be turned of with helop of the tooltip. There can be set up way more selections as part of the tooltip, basically concerning the plotting - especially changing the colors and zooming in/out of the plot - and label options as well as the regularization of the size.
+
+![alt text](pics/I_3_1_BMR_Analysis_Boxplot_2.PNG "BMR Analysis - Boxplot 2")
+
+Furthermore the boxplots can be forced to appear according to their performance rank by *Ordering* the methods going from worst to best respectively left to right of the x-axis. The switch button *Interactive (use Plotly)* provides the created graphic as interactive plot meaning the plot returns available information by mouse click on the specific part/point of the plot. These functionality is gained by use of the [Plotly](https://plot.ly/r/) package. Having set up your final boxplot selctions the plot can now be downloaded via the *Download* button.
+
+#### Heatmap
+Another way of analyzing the BMR object on basis of one performance measure is provided by the *Heatmap* tab displaying a heatmap with color range of the ML methods marking low and high performance values depending on *Choose Method to be focused*. Therefor the single learners are grouped on the y-axis and plotted against the respective treatment on the x-axis, such that each cell created in this way contains the performance value of this combination of method vs. treatment group. When selecting *Aggregated BMR* as "Off" the treatment group and consequently the x-axis gets additionally splitted up in the single iterations or - to say it in other words - the unaggregated results are shown. In turn *Ordering* rearranges the plot based on the means of aggregated performance per used ML method. Again also a interactive plot is available through turning the button *Interactive (use Plotly)* on. in the end the user defined plot can be downloaded with help of the *Download* button.
+
+![alt text](pics/I_3_2_BMR_Analysis_Heatmap.PNG "BMR Analysis - Heatmap")
+![alt text](pics/I_3_2_BMR_Analysis_Heatmap_2.PNG "BMR Analysis - Heatmap 2")
+
+As before the heatmap is only plotted when the tooltip is clicked for confirming the settings. The tooltip provides options that particularly can be used for changing colors, labels and size of the heatmap.
+
+#### PCP
+In case you are basically interested in the learners performance compared over all measures included in your BMR object one can rely on the Partial Coordinates Plot *PCP* for further analyses. This type of visualisation is especially useful for plotting of multivariate, numerical data - in this case multiple performance measures. In this way the user gets offered a overview of the relationship between the performance measures achieved by the single ML methods. As logical consequence the PCP can only be used for analysis when at least 2 comparable measures are contained in the BMR object.
+
+![alt text](pics/I_3_2_BMR_Analysis_PCP.PNG "BMR Analysis - PCP")
+![alt text](pics/I_3_2_BMR_Analysis_PCP_2.PNG "BMR Analysis - PCP 2")
+
+As for the plots before the options should be set by clicking on the tooltip button. Here some of the plotting options as well as the labels and the size can be controlled. Furthermore the input of *Aggregated BMR* can be switched to "Off" resulting in additional, shadowed lines marking the connection the performance values of the single measures grouped by learner per iteration. Also the PCP can be plotted *Interactive (use Plotly)* as well as downloaded via the *Download* button.  
+
+#### Distribution
+Beside the so far presented one can also make use of the plots integrated in the **mlr** package. Since most of these plots concentrate on the analysis of benchmark studies performed on multiple data sets - what has not been implemented in **shinyBMR** (yet) - and therefore focus on ranks, there is actually only one provided plot, that can be used in case of benchmark studies designed as expected for analyses with **shinyBMR**. 
+
+![alt text](pics/I_3_4_BMR_Analysis_Distribution.PNG "BMR Analysis - Distribution")
+
+The described graphic of **mlr** plots the distribution of performance values across the resampling iterations and therefore of the unaggregated BMR object. The user can  choose between box- or violin-plots (see tooltip) for the selection of *Choose Method to be focused* input on the sidebar.
 
 ## II. Access to the Interpretation of Blackbox ML-Methods (IML)
 Having figured out, which ML method to use for your analysis of a specific data set and fitting the final model you may end up using a blackbox method with high complexe or even not tangible interpretation approaches. For such cases the [iml](https://github.com/christophM/iml) package offers a opportunity to explain predictions of these ML methods. **shinyBMR** now also provides the option to use the functionalities of this package in an interactive framework. The necessary steps for receiving the model-agnostic interpretability methods of your focused model are described in the following sections. As a side note should be mentioned, that one can fit the final model easily with help of the implemented in **mlr**.
@@ -95,26 +129,30 @@ Having figured out, which ML method to use for your analysis of a specific data 
 ### 1. Import and Overview of the focused Data Set 
 For ending up with a interpretation approach for your model, you first of all have to provide the data set your model has been trained on. Therefore navigate to the *IML Import Data* tab in the **shinyBMR** app. As starting window the [**Breast Cancer**](https://www.rdocumentation.org/packages/mlbench/versions/2.1-1/topics/BreastCancer) data is displayed as example for a classification task in the sub-tab *Imported Data Set*. As further example one can select a regression task, which is in this case established via the [**Longley's Economic**](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/longley.html) data and will be provided when the specific alternative is called at *Choose Example Data* on the sidebar. One can upload a data set by choosing the correct *Type* - in this case CSV, Rdata or RDS - of the file and navigating to the corresponding file with help of the *Browse* input tab. As soon as the upload is completed the data table will be displayed. Again one can spezify *Round Values* on the sidebar for rounding options. 
 
-
+![alt text](pics/II_1_IML_ImportData.PNG "IML Import Data")
 
 Having uploaded the data set you can now navigate to the sub-tab *Summary Data Set* for getting a summary of all included variables in form of a data table. For each of the variables *name* you earn information about the *type* and the sum of missing values *na*. Depending on the type of the variable additionally the *mean*, measure of dispersion *disp*, *median*, *mad*, minimum *min*, maximum *max* and sum of levels *nlevels* is provided. When needing more help for understanding the summary one can switch the input *Show Information about the Summary Table* below the data table to get additional information. 
+
+![alt text](pics/II_1_IML_ImportData_Summary.PNG "IML Import Data - Summary")
+![alt text](pics/II_1_IML_ImportData_Summary_Eco.PNG "IML Import Data - Summary 2")
 
 The *Summary Data Set* tab contains even more opportunities for visualizing information of your uploaded data. By selecting one or multiple rows of the summary plots are provided right under the data table. The diagnostics show a plot for each variable by itself and of their relationship to each other, where the actual plot depends on the type of variable respectively the combination of types when more then one row ois selected. By default two different ways of comparison of each variable can be choosen with the result, that either the *Density* or count of the respective variable *Histogram* along the diagonal is displayed. The plotting options are provided as part of the [GGally](https://cran.r-project.org/web/packages/GGally/GGally.pdf) package extending the [ggplot2](https://cran.r-project.org/web/packages/ggplot2/ggplot2.pdf) package. Note that - as the Breast Cancer data does only contain factor variables - the picture above shows the plotting results, when choosing some of the variables comprised in Longley's Economic example data.
 
 ### 2. Import and Overview of the (Blackbox) Model
 After your data is transfered to **shinyBMR** one can now upload the model of interest trained on the specific data set. Therefor go to the *IML Import Model* tab. As before you can either select an example model trained on one of the example data sets - whereby the corresponding data set has to be selected in tab *IML Import Data* - or upload your own model by choosing the available format of the specific model - in this case as RDS or Rdata file - and navigating to this model with help of the *Browse* tab. 
 
-
+![alt text](pics/II_2_IML_ImportModel.PNG "IML Import Model")
 
 In the sub-tab *Imported (Tuned) Model* some information about your uploaded model gets displayed. As default a model trained on the Breast Cancer data is selected as starting window here. As soon as you have switch between the example models or have choosen your own model the corresponding information will be supplied. 
 
-
+![alt text](pics/II_2_IML_ImportModel_2.PNG "IML Import Model 2")
 
 Since the models trained with help of the **mlr** package always contain the task they have been trained on, one can have a detailed look on this by navigating to the sub-tab *Overview Task*, where a list with the retrievable information about the task is shwon.
 
 ### 3. Acess to Interpretability provided by different tools of the **iml** package
 Having completed the before mentioned two steps of *IML Import Data* and *IML Import Model* one can now go to the concrete analysis of the ML method with helo of the [**iml**](https://github.com/christophM/iml) package. In advance it might be helpful to go through the [iml book](https://christophm.github.io/book/) for details concering the in this app provided model-agnostic interpretability methods. A short overview of the implemented iml methods as well as some helpful links are provided as starting interface when selecting the according tab *IML Analysis* in the header of **shinyBMR**.
 
+![alt text](pics/II_3_IML_Analysis_Basics.PNG "IML Analysis - Basics")
 
 The concrete iml methods are provided when navigating to the *IML Methods* tab located at the sidebar. Selecting this tab will lead to a new window with additional options in the sidebar. First of all you have to *Select IML-Method* you are interested in. One of the following once can be choosen:
 * Feature Importance
@@ -131,6 +169,6 @@ As these iml methods are kind of depending on coincidence it is recommended to *
 
 While calculation is performed a spinner shwos up in the plotting window and will be replaced by the corrsponding plot as soon as computations have been finished. There is one sub-tab in the plotting frame selectable for showing the actual *IML Plot*. Beside this one can navigate towards the sub-tab *IML Results* to display the calculation results the plot is based on. 
 
-
+![alt text](pics/II_3_IML_Analysis_imlMethods.PNG "IML Analysis - Methods")
 
 The sidebar of *IML Methods* also provides a selection panel for setting the height of the iml plots. Additionally one can download the latest plot by clicking the *Download* button and choosing the directory as well as the file name for the plot to be saved. Furthermore there is a slider in the plotting window to *Show Information* about the selected iml method. Here you can also use the provided links to navigate towards the corresponding chapters in the [iml book](https://christophm.github.io/book/) such as to the according CRAN side holding the specific R function.
