@@ -211,11 +211,11 @@ tabpanel.bmr = dashboardPage(
         ),
         
         br(),
-        tabsetPanel(
-          tabPanel("Boxplot mlr", 
+        #tabsetPanel(
+         # tabPanel("Boxplot mlr", 
             fluidRow(fillPage(plotOutput("mlr_boxplot")))
-          )
-        )
+        #  )
+        #)
       )
     )
   )

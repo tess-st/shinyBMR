@@ -293,8 +293,8 @@ tabpanel.iml = dashboardPage(
         br(),
         tabsetPanel(
           tabPanel("IML Plot", 
-            #fluidRow(fillPage(addSpinner(plotOutput("iml_plotted")))) #or withSpinner()
-            fluidRow(fillPage(plotOutput("iml_plotted")))
+            fluidRow(fillPage(addSpinner(plotOutput("iml_plotted")))) #or withSpinner()
+            #fluidRow(fillPage(plotOutput("iml_plotted")))
             ),
           tabPanel("IML Results",
             checkboxInput("iml_round", label = "Round shown numeric values", value = TRUE),
