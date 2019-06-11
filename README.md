@@ -83,7 +83,10 @@ In case there are still some question left concerning the structure of the BMR o
 
 ![alt_text](pics/I_2_3_BMR_Overview_CrossTables.PNG "BMR Overview - Cross Tables")
 
+
 ### 3. Graphical Analysis of the competing Methods included in the Benachmark Study
+
+Having done the analyses so far it is now meaningful to display the results of the benchmark study in form of plots. Doing so you can go to the *BMR Analysis* tab 
 
 
 ## II. Access to the Interpretation of Blackbox ML-Methods (IML)
@@ -113,7 +116,7 @@ Since the models trained with help of the **mlr** package always contain the tas
 Having completed the before mentioned two steps of *IML Import Data* and *IML Import Model* one can now go to the concrete analysis of the ML method with helo of the [**iml**](https://github.com/christophM/iml) package. In advance it might be helpful to go through the [iml book](https://christophm.github.io/book/) for details concering the in this app provided model-agnostic interpretability methods. A short overview of the implemented iml methods as well as some helpful links are provided as starting interface when selecting the according tab *IML Analysis* in the header of **shinyBMR**.
 
 
-The concrete iml methods are provided when navigating to the *IML Methods* tab located at the sidebar. Selecting this tab will lead to a new window with additional options in the sidebar. First of all you have to *Select IML-Method* you are interested in, following oncecan be choosen:
+The concrete iml methods are provided when navigating to the *IML Methods* tab located at the sidebar. Selecting this tab will lead to a new window with additional options in the sidebar. First of all you have to *Select IML-Method* you are interested in. One of the following once can be choosen:
 * Feature Importance
 * Feature Effects
   - Partial dependence plots (PDP)
@@ -123,3 +126,11 @@ The concrete iml methods are provided when navigating to the *IML Methods* tab l
 * Local Model: Local Interpretable Model-agnostic Explanations (LIME)
 * Shapley Values (for explaining single predictions)
 * Tree Surrogate
+
+As these iml methods are kind of depending on coincidence it is recommended to *Set Seed* at the sidebar tab for getting reproducible results. Per default this seed is set to *123*. Some of the iml methods require necessary selections like the instance or variable of interest. In this case the demanded input is directly shown in the plotting window under the tooltip depending on the selection in the *Select IML-Method* tab. The tooletip is also individually reacting to your choosen iml method and contains additional options for the corresponding iml analysis tools as well as information about the selectable settings. For confirming your settings and finally plotting the iml methods you have to click on the *Set Selections* button. 
+
+While calculation is performed a spinner shwos up in the plotting window and will be replaced by the corrsponding plot as soon as computations have been finished. There is one sub-tab in the plotting frame selectable for showing the actual *IML Plot*. Beside this one can navigate towards the sub-tab *IML Results* to display the calculation results the plot is based on. 
+
+
+
+The sidebar of *IML Methods* also provides a selection panel for setting the height of the iml plots. Additionally one can download the latest plot by clicking the *Download* button and choosing the directory as well as the file name for the plot to be saved. Furthermore there is a slider in the plotting window to *Show Information* about the selected iml method. Here you can also use the provided links to navigate towards the corresponding chapters in the [iml book](https://christophm.github.io/book/) such as to the according CRAN side holding the specific R function.
