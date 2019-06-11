@@ -94,9 +94,32 @@ For ending up with a interpretation approach for your model, you first of all ha
 
 
 
-Having uploaded the data set you can now navigate to the sub-tab *Summary Data Set* for getting a summary of all included variables again in form of a data table. For each of the *name* of the variables you earn information about the *type* and the sum of missing values *na*. Depending on the type of the variable additionally the *mean*, measure of dispersion *disp*, *median*, *mad*, minimum *min*, maximum *max* and sum of levels *nlevels* is provided. When needing more help for understanding the summary one can switch the input *Show Information about the Summary Table* below the data table to get additional information. 
+Having uploaded the data set you can now navigate to the sub-tab *Summary Data Set* for getting a summary of all included variables in form of a data table. For each of the variables *name* you earn information about the *type* and the sum of missing values *na*. Depending on the type of the variable additionally the *mean*, measure of dispersion *disp*, *median*, *mad*, minimum *min*, maximum *max* and sum of levels *nlevels* is provided. When needing more help for understanding the summary one can switch the input *Show Information about the Summary Table* below the data table to get additional information. 
+
+The *Summary Data Set* tab contains even more opportunities for visualizing information of your uploaded data. By selecting one or multiple rows of the summary plots are provided right under the data table. The diagnostics show a plot for each variable by itself and of their relationship to each other, where the actual plot depends on the type of variable respectively the combination of types when more then one row ois selected. By default two different ways of comparison of each variable can be choosen with the result, that either the *Density* or count of the respective variable *Histogram* along the diagonal is displayed. The plotting options are provided as part of the [GGally](https://cran.r-project.org/web/packages/GGally/GGally.pdf) package extending the [ggplot2](https://cran.r-project.org/web/packages/ggplot2/ggplot2.pdf) package. Note that - as the Breast Cancer data does only contain factor variables - the picture above shows the plotting results, when choosing some of the variables comprised in Longley's Economic example data.
 
 ### 2. Import and Overview of the (Blackbox) Model
-### 3. Acess to Interpretability provided by different tools of the **iml** package
+After your data is transfered to **shinyBMR** one can now upload the model of interest trained on the specific data set. Therefor go to the *IML Import Model* tab. As before you can either select an example model trained on one of the example data sets - whereby the corresponding data set has to be selected in tab *IML Import Data* - or upload your own model by choosing the available format of the specific model - in this case as RDS or Rdata file - and navigating to this model with help of the *Browse* tab. 
 
-[**iml**](https://github.com/christophM/iml) package
+
+
+In the sub-tab *Imported (Tuned) Model* some information about your uploaded model gets displayed. As default a model trained on the Breast Cancer data is selected as starting window here. As soon as you have switch between the example models or have choosen your own model the corresponding information will be supplied. 
+
+
+
+Since the models trained with help of the **mlr** package always contain the task they have been trained on, one can have a detailed look on this by navigating to the sub-tab *Overview Task*, where a list with the retrievable information about the task is shwon.
+
+### 3. Acess to Interpretability provided by different tools of the **iml** package
+Having completed the before mentioned two steps of *IML Import Data* and *IML Import Model* one can now go to the concrete analysis of the ML method with helo of the [**iml**](https://github.com/christophM/iml) package. In advance it might be helpful to go through the [iml book](https://christophm.github.io/book/) for details concering the in this app provided model-agnostic interpretability methods. A short overview of the implemented iml methods as well as some helpful links are provided as starting interface when selecting the according tab *IML Analysis* in the header of **shinyBMR**.
+
+
+The concrete iml methods are provided when navigating to the *IML Methods* tab located at the sidebar. Selecting this tab will lead to a new window with additional options in the sidebar. First of all you have to *Select IML-Method* you are interested in, following oncecan be choosen:
+* Feature Importance
+* Feature Effects
+  - Partial dependence plots (PDP)
+  - Individual conditional expectation plots (ICE)
+  - Accumulated local effects (ALE)
+* Feature Interaction
+* Local Model: Local Interpretable Model-agnostic Explanations (LIME)
+* Shapley Values (for explaining single predictions)
+* Tree Surrogate
