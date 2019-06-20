@@ -31,7 +31,7 @@ devtools::install_github("tess-st/shinyBMR")
 Starting the ShinyApp:
 
 ```r
-runShinyBMR()
+runshinyBMR()
 ```
 
 If `rJava` fails to load, [**this link**](https://stackoverflow.com/questions/30738974/rjava-load-error-in-rstudio-r-after-upgrading-to-osx-yosemite) might be helpful.
