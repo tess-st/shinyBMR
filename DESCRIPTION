@@ -36,6 +36,7 @@ Imports:
   stringi,
   tibble,
   ggplot2,
+  dbplyr,
   plotly,
   GGally,
   Rcpp,
@@ -45,6 +46,7 @@ Imports:
   RColorBrewer,
   httr,
   plyr,
+  dplyr,
   stringi,
   readr,
   BBmisc,
@@ -62,7 +64,10 @@ Imports:
   mmpf,
   listviewer,
   reshape2,
-  bst
+  bst,
+  BiocManager,
+  lazyeval,
+  rPref
 Suggests:
   testthat,
   roxygen2,

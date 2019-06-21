@@ -73,6 +73,8 @@ measure <- reactive({
   return(names)
 })
 
+
+
 output$selected.measure <- renderUI({
   selectizeInput("select.measure", "Choose Measure to be focused", 
     choices = as.list(measure()),
@@ -506,4 +508,41 @@ output$Value <- renderValueBox({
   valueBox(tags$p("Value of selected Measure", style = "font-size: 55%;"), 
     tags$p(bestValueOfMeasure(), style = "font-size: 150%;"), 
     icon = icon("battery-three-quarters"), color = "navy") #light-blue
+})
+
+
+
+#####################################################################################################################
+#################################################### Pareto #####################################################
+#####################################################################################################################
+output$paretoMeasure1 <- renderUI({
+  selectizeInput("pareto.measure1", "Choose Measure to be focused", 
+    choices = measure(),
+    multiple = FALSE)#, selected = NULL)
+})
+
+output$paretoMeasure2 <- renderUI({
+  selectizeInput("pareto.measure2", "Choose Measure to be focused", 
+    choices = measure(),#as.list(measure()),#[-c(as.list(measure()))== input$pareto.measure1],
+    multiple = FALSE)#, selected = NULL)
+})
+
+# observeEvent(input$pareto.measure1,{
+#   req(input$pareto.measure1)
+#   updateSelectInput(session,'pareto.measure2',
+#     choices=measure()[-c(input$pareto.measure1)]#[-c(as.list(measure())== input$pareto.measure1)],
+#     )
+# })
+
+output$paretoTab <- DT::renderDataTable({
+  req(data$data)
+  tab <- tabImport(perfAggDf(data$data))
+  #paretoOpt(dat = tab, measure1 = "auc", measure2 = "fpr")
+  paretoOpt(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2)
+})
+
+output$ggplot_pareto <- renderPlot({
+  req(data$data)
+  tab <- tabImport(perfAggDf(data$data))
+  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2)
 })

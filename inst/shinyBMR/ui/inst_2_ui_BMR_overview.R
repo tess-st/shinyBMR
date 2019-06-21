@@ -5,6 +5,7 @@ tabpanel.overview =  dashboardPage(
   dashboardSidebar(sidebarMenu(id = "sidebarmenu",
     menuItem("Summary BMR", tabName = "summaryBMR", icon = icon("cubes")),
     menuItem("Best BMR-Modell", tabName = "bestMod", icon = icon("cube")),
+    menuItem("Pareto", tabName = "pareto"),
     
     hr(),
     
@@ -101,7 +102,19 @@ overflow-y:scroll; background: ghostwhite;}"))#
         #hr(),
         fluidRow(valueBoxOutput("Value")
         )
-      )
+      ),
+      
+      tabItem(tabName = "pareto",
+        h2("Pareto"),
+        htmlOutput("paretoMeasure1"), 
+        htmlOutput("paretoMeasure2"),
+        box(width = 12, DT::dataTableOutput("paretoTab")),
+        #conditionalPanel(condition = "input.type == false",
+          fluidRow(fillPage(plotOutput("ggplot_pareto")))
+        #),
+        #conditionalPanel(condition = "input.type == true",
+         # fluidRow(fillPage(plotlyOutput("plotly_heatmap"))))
+        )
     )
   )
 )

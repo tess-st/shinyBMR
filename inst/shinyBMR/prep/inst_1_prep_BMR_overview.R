@@ -105,3 +105,28 @@ crossTab <- function(dataset, vec, position){
     
   }
 }
+
+paretoPref <- function(measure){
+  measure_mlr <- getFromNamespace(measure, "mlr")
+  if(measure_mlr$minimize == FALSE){
+    pref <- high_(measure)
+  }
+  else if(measure_mlr$minimize == TRUE){
+    pref <- low_(measure)
+  }
+  pref
+}
+
+paretoOpt <- function(dat, measure1, measure2){
+  sel <- psel(dat, paretoPref(measure1) * paretoPref(measure2), top = nrow(dat))
+  sel
+}
+
+paretoFront <- function(dat, measure1, measure2){
+  sel <- paretoOpt(dat, measure1, measure2)
+  sky <- psel(dat, paretoPref(measure1) * paretoPref(measure1))
+  
+  s <- ggplot(sel, aes(x = get(measure1), y = get(measure2))) + geom_point(shape = 21) + 
+    geom_point(data = sky, size = 3) + geom_step(data = sky, direction = "vh") 
+  s
+}

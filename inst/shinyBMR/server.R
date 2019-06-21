@@ -12,6 +12,7 @@ require(DT)
 require(parallelMap)
 require(xtable)
 require(plyr)
+require(dplyr)
 require(ggplot2)
 require(GGally)
 require(plotly)
@@ -24,6 +25,20 @@ require(gower)
 require(doParallel)
 require(reshape2)
 require(bst)
+require(BiocManager)
+require(lazyeval)
+require(rPref)
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("Rgraphviz")
+
+# if ( require(rPref) ) {
+#   detach("package:dplyr", unload = TRUE)
+#   detach("package:rPref", unload = TRUE)
+#   require(dplyr)
+# }
 
 
 #Connection to prep.files
