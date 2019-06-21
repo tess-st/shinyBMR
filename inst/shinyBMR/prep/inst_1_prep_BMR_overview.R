@@ -120,7 +120,8 @@ paretoPref <- function(measure){
 paretoOpt <- function(dat, measure1, measure2){
   sel <- psel(dat, paretoPref(measure1) * paretoPref(measure2), top = nrow(dat))
   sel$.level <- as.factor(sel$.level)
-  sel
+  tab <- arrange(sel, sel$.level, sel[,measure1])
+  tab
 }
 
 paretoFront <- function(dat, measure1, measure2, type){

@@ -106,8 +106,10 @@ overflow-y:scroll; background: ghostwhite;}"))#
       
       tabItem(tabName = "pareto",
         h2("Pareto"),
-        htmlOutput("paretoMeasure1"), 
-        htmlOutput("paretoMeasure2"),
+        fluidRow(
+          column(3, htmlOutput("paretoMeasure1")),
+          column(3, htmlOutput("paretoMeasure2"))
+        ),
         htmlOutput("paretoType"),
         box(width = 12, DT::dataTableOutput("paretoTab")),
         #conditionalPanel(condition = "input.type == false",

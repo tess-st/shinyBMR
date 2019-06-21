@@ -73,6 +73,22 @@ measure <- reactive({
   return(names)
 })
 
+measure2 <- reactive({
+  req(data$data)
+  if(is.null(data$data)){
+    names <- NULL
+  }
+  else{
+    data <- perfAggDf(data$data)
+    pos <- grep("measure_*", names(data))
+    names <- NA
+    for(i in 1:length(pos)){
+      names[i] <- data[1,pos[i]]
+    }
+  }
+  return(names)
+})
+
 
 
 output$selected.measure <- renderUI({
@@ -537,11 +553,12 @@ output$paretoMeasure1 <- renderUI({
   selectizeInput("pareto.measure1", "Choose Measure to be focused", 
     choices = measure(),
     multiple = FALSE)#, selected = NULL)
+  
 })
 
 output$paretoMeasure2 <- renderUI({
   selectizeInput("pareto.measure2", "Choose Measure to be focused", 
-    choices = measure(),#as.list(measure()),#[-c(as.list(measure()))== input$pareto.measure1],
+    choices = measure2(),#as.list(measure()),#[-c(as.list(measure()))== input$pareto.measure1],
     multiple = FALSE)#, selected = NULL)
 })
 
@@ -551,16 +568,23 @@ output$paretoType <- renderUI({
     multiple = FALSE)
 })
 
+observeEvent(input$pareto.measure1,{
+  req(input$pareto.measure1)
+  updateSelectInput(session,'pareto.measure2',
+    choices=as.list(measure2())[-c(as.list(measure2())== input$pareto.measure1)]#[-c(input$pareto.measure1)]#[-c(as.list(measure())== input$pareto.measure1)],
+  )
+})
 # observeEvent(input$pareto.measure1,{
 #   req(input$pareto.measure1)
 #   updateSelectInput(session,'pareto.measure2',
-#     choices=measure()[-c(input$pareto.measure1)]#[-c(as.list(measure())== input$pareto.measure1)],
+#     choices=as.list(measure2())[-c(as.list(measure2())== input$pareto.measure1)]#[-c(input$pareto.measure1)]#[-c(as.list(measure())== input$pareto.measure1)],
 #     )
 # })
 
 output$paretoTab <- DT::renderDataTable({
   req(data$data)
-  tab <- tabImport(perfAggDf(data$data))
+  keep <- c("Name and Art of Task", input$pareto.measure1, input$pareto.measure2, "Learner", "Tuning", "SMOTE")
+  tab <- tabImport(perfAggDf(data$data))[,keep]
   #paretoOpt(dat = tab, measure1 = "auc", measure2 = "fpr")
   paretoOpt(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2)
 })
