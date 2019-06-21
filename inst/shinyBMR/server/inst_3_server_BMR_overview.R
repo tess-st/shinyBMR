@@ -515,6 +515,24 @@ output$Value <- renderValueBox({
 #####################################################################################################################
 #################################################### Pareto #####################################################
 #####################################################################################################################
+
+measure <- reactive({
+  req(data$data)
+  if(is.null(data$data)){
+    names <- NULL
+  }
+  else{
+    data <- perfAggDf(data$data)
+    pos <- grep("measure_*", names(data))
+    names <- NA
+    for(i in 1:length(pos)){
+      names[i] <- data[1,pos[i]]
+    }
+  }
+  return(names)
+})
+
+
 output$paretoMeasure1 <- renderUI({
   selectizeInput("pareto.measure1", "Choose Measure to be focused", 
     choices = measure(),
@@ -525,6 +543,12 @@ output$paretoMeasure2 <- renderUI({
   selectizeInput("pareto.measure2", "Choose Measure to be focused", 
     choices = measure(),#as.list(measure()),#[-c(as.list(measure()))== input$pareto.measure1],
     multiple = FALSE)#, selected = NULL)
+})
+
+output$paretoType <- renderUI({
+  selectizeInput("pareto.type", "Choose Type of Plot",
+    choices = c("Skyline Plot", "Skyline Level Plot (Dom. in 1 Dimension)", "Skyline Level Plot (Dom. in 2 Dimensions)"), 
+    multiple = FALSE)
 })
 
 # observeEvent(input$pareto.measure1,{
@@ -544,5 +568,5 @@ output$paretoTab <- DT::renderDataTable({
 output$ggplot_pareto <- renderPlot({
   req(data$data)
   tab <- tabImport(perfAggDf(data$data))
-  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2)
+  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, type = input$pareto.type)
 })

@@ -119,14 +119,28 @@ paretoPref <- function(measure){
 
 paretoOpt <- function(dat, measure1, measure2){
   sel <- psel(dat, paretoPref(measure1) * paretoPref(measure2), top = nrow(dat))
+  sel$.level <- as.factor(sel$.level)
   sel
 }
 
-paretoFront <- function(dat, measure1, measure2){
+paretoFront <- function(dat, measure1, measure2, type){
   sel <- paretoOpt(dat, measure1, measure2)
-  sky <- psel(dat, paretoPref(measure1) * paretoPref(measure1))
-  
-  s <- ggplot(sel, aes(x = get(measure1), y = get(measure2))) + geom_point(shape = 21) + 
+  sky <- psel(dat, paretoPref(measure1) * paretoPref(measure2))#, top_level = level)
+
+  if(type == "Skyline Plot"){
+      s <- ggplot(sel, aes(x = get(measure1), y = get(measure2))) + geom_point(shape = 21) + 
     geom_point(data = sky, size = 3) + geom_step(data = sky, direction = "vh") 
+  }
+  else if(type == "Skyline Level Plot (Dom. in 1 Dimension)"){
+    s <- ggplot(sel, aes(x = get(measure1), y = get(measure2), color = factor(sel$.level))) + 
+      geom_point(shape = 21) + 
+      geom_point(size = 3) + geom_step(direction = "vh") 
+  }
+  else if(type == "Skyline Level Plot (Dom. in 2 Dimensions)"){
+    sel2 <- dat %>% psel(paretoPref(measure1) | paretoPref(measure2), top = nrow(dat)) %>%
+      arrange(get(measure1), -get(measure2))
+    s <- ggplot(sel2, aes(x = get(measure1), y = get(measure2), color = factor(.level))) +
+      geom_point(size = 3) + geom_step(direction = "vh") 
+  }
   s
 }

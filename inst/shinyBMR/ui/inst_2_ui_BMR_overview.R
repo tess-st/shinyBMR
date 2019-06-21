@@ -108,6 +108,7 @@ overflow-y:scroll; background: ghostwhite;}"))#
         h2("Pareto"),
         htmlOutput("paretoMeasure1"), 
         htmlOutput("paretoMeasure2"),
+        htmlOutput("paretoType"),
         box(width = 12, DT::dataTableOutput("paretoTab")),
         #conditionalPanel(condition = "input.type == false",
           fluidRow(fillPage(plotOutput("ggplot_pareto")))
