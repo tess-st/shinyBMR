@@ -1,7 +1,35 @@
 # Extraction of the model with the highest performance
-bestPerfMod = function(dat, measure){
-  pos <- findValue(data = dat, measure = measure)
+# bestPerfMod = function(dat, measure){
+#   pos <- findValue(data = dat, measure = measure)
+#   measure <- getFromNamespace(measure, "mlr")
+#   
+#   if(measure$minimize == FALSE){
+#     min_max <- "Maximum"
+#   }
+#   else{
+#     min_max <- "Minimum"
+#   }
+#   
+#   if(min_max == "Minimum"){
+#     min <- min(dat[pos])
+#     row <- dat[dat[,pos] == min,]
+#   }
+#   if(min_max == "Maximum"){
+#     max <- max(dat[pos])
+#     row <- dat[dat[,pos] == max,]
+#   }
+#   
+#   return(row)
+# } 
+
+bestPerfMod = function(dat){#, measure
+  #pos <- findValue(data = dat, measure = measure)
+  #measure <- getFromNamespace(measure, "mlr")
+  
+  t <- grep("*._1", names(dat))
+  measure <- dat[1,names(dat)[t[2]]]
   measure <- getFromNamespace(measure, "mlr")
+  pos <- t[1]
   
   if(measure$minimize == FALSE){
     min_max <- "Maximum"
@@ -21,8 +49,6 @@ bestPerfMod = function(dat, measure){
   
   return(row)
 } 
-
-
 
 
 textInfobox = function(levels){
@@ -147,4 +173,25 @@ paretoFront <- function(dat, measure1, measure2, type){
       geom_point(size = 3) + geom_step(direction = "vh") 
   }
   s + xlab(measure1) + ylab(measure2)
+}
+
+
+bestModPlot <- function(dat, size_text, size_symbols){
+  if(size_text == -1){
+    t <- theme()
+  }else{
+    t <- theme(text = element_text(size = rel(size_text+2)), 
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      legend.text = element_text(size = 0.6*rel(size_text+3)), 
+      legend.key.height = unit(0.25*rel(size_text+3), "cm"))
+  }
+  
+  best <- bestPerfMod(dat)
+  
+  ggplot(dat, aes(x = complete, y = value_1)) +
+    geom_point(size = size_symbols) + 
+    geom_point(best, mapping = aes(x = complete, y = value_1), color = "cyan", shape = 9, size = size_symbols) +
+    xlab("Method/Learner with additional Information") +
+    ylab(dat$measure_1[1]) + 
+    t
 }

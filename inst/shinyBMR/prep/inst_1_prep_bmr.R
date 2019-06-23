@@ -22,6 +22,7 @@ perfAggDf = function(df){
   df$learner.info <- NA
   df$tuning <- NA
   df$smote <- NA
+  df$complete <- NA
   if(any(names(df) == "iter")){
     df$learner.info.iter <- NA
   }
@@ -85,6 +86,10 @@ perfAggDf = function(df){
   }
   else{
     df$learner.info <- droplevels(factor(df$learner.info, levels = c("untuned", "tuned")))
+  }
+  
+  for(i in 1: nrow(df)){
+    df$complete[i] <- paste(df$learner[i], df$learner.info[i], sep = ".")
   }
   
   return(df)

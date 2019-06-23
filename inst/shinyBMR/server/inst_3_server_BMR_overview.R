@@ -58,13 +58,13 @@ observe({
 
 # Global Settings for BMR Overview
 observeEvent(input$tabs_overview, {
-
   if(input$tabs_bmr == "summaryBMR"){  
     shinyjs::show("selected.measure", anim = TRUE)
     shinyjs::hide("paretoMeasure1", animType = "fade")
     shinyjs::hide("paretoMeasure2", animType = "fade")
     shinyjs::hide("allLevels", animType = "fade")
     shinyjs::hide("paretoPlotly", animType = "fade")
+    shinyjs::hide("orderBest", animType = "fade")
   }
   else if(input$tabs_bmr == "pareto"){
     shinyjs::hide("selected.measure", animType = "fade")
@@ -72,12 +72,7 @@ observeEvent(input$tabs_overview, {
     shinyjs::show("paretoMeasure2", anim = TRUE)
     shinyjs::show("allLevels", anim = TRUE)
     shinyjs::show("paretoPlotly", anim = TRUE)
-  }
-  else{
-    shinyjs::show("selected.measure.ana", anim = TRUE)
-    shinyjs::show("ordering", anim = TRUE)
-    shinyjs::show("aggregate", anim = TRUE)
-    shinyjs::show("type", anim = TRUE)
+    shinyjs::show("orderBest", anim = TRUE)
   }
 })
 
@@ -642,4 +637,38 @@ output$plotly_pareto <- renderPlotly({
   tab <- tabImport(perfAggDf(data$data))
   paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, type = input$pareto.type)
   
+})
+
+
+# Best Mod
+size_text_Best <- reactive({
+  size <- req(input$sizeTextBest)
+  if(input$paretoPlotly){
+    size <- -1
+  }
+  return(size)
+})
+
+dat_best <- reactive({
+  req(data$data)
+  req(input$orderBest)
+  if(input$orderBest == "On"){
+    data <- perfAggDf(data$data)[order(perfAggDf(data$data)$value_1), ]
+  }
+  else if(input$orderBest == "Off"){
+    data <- perfAggDf(data$data)
+  }
+  return(data)
+})
+
+output$ggplot_plot_bestMod <- renderPlot({
+  dat <- dat_best()
+  bestModPlot(dat, size_text = size_text_Best(), size_symbols = input$sizeSymbolsBest)
+},height = function() {
+  input$zoomBest * session$clientData$output_ggplot_plot_bestMod_width
+})
+
+output$plotly_plot_bestMod <- renderPlotly({
+  dat <- dat_best()
+  ggplotly(bestModPlot(dat, size_text = size_text_Best(), size_symbols = input$sizeSymbolsBest))
 })

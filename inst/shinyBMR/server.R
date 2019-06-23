@@ -28,11 +28,11 @@ require(bst)
 require(BiocManager)
 require(lazyeval)
 require(rPref)
-
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
-
-BiocManager::install("Rgraphviz")
+# 
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+# 
+# BiocManager::install("Rgraphviz")
 
 # if ( require(rPref) ) {
 #   detach("package:dplyr", unload = TRUE)
