@@ -127,8 +127,11 @@ paretoOpt <- function(dat, measure1, measure2){
 paretoFront <- function(dat, measure1, measure2, type){
   sel <- paretoOpt(dat, measure1, measure2)
   sky <- psel(dat, paretoPref(measure1) * paretoPref(measure2))#, top_level = level)
-
-  if(type == "Skyline Plot"){
+  sky <- sky[order(sky[,"fpr"]),]
+  
+  if(is.null(type)){NULL}
+  
+  else if(type == "Skyline Plot"){
       s <- ggplot(sel, aes(x = get(measure1), y = get(measure2))) + geom_point(shape = 21) + 
     geom_point(data = sky, size = 3) + geom_step(data = sky, direction = "vh") 
   }
@@ -143,5 +146,5 @@ paretoFront <- function(dat, measure1, measure2, type){
     s <- ggplot(sel2, aes(x = get(measure1), y = get(measure2), color = factor(.level))) +
       geom_point(size = 3) + geom_step(direction = "vh") 
   }
-  s
+  s + xlab(measure1) + ylab(measure2)
 }

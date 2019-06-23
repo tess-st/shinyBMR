@@ -2,19 +2,33 @@ tabpanel.overview =  dashboardPage(
   
   dashboardHeader(),
   
-  dashboardSidebar(sidebarMenu(id = "sidebarmenu",
+  dashboardSidebar(sidebarMenu(id = "tabs_overview",
     menuItem("Summary BMR", tabName = "summaryBMR", icon = icon("cubes")),
-    menuItem("Best BMR-Modell", tabName = "bestMod", icon = icon("cube")),
+    #  menuItem("Best BMR-Modell", tabName = "bestMod", icon = icon("cube")),
     menuItem("Pareto", tabName = "pareto"),
     
     hr(),
     
     tags$div(title = "Select one of the Measures you performed the Benchmark-Study on",
       htmlOutput("selected.measure")),
+    
+    conditionalPanel(condition = "output.disable_pareto == 1",
+      htmlOutput("paretoMeasure1"),
+      htmlOutput("paretoMeasure2"),
+      htmlOutput("paretoType"),
+      tags$div(title="Choose 'On' for showing all Pareto Levels, not only the first one", 
+        selectInput("allLevels", "Show all Pareto Levels", choices = c("Off", "On"), selected = "Off", 
+          multiple = FALSE, selectize = TRUE, width = '98%'))
+    ),
+    conditionalPanel(condition = "output.disable_pareto == 0",
+      prettySwitch(inputId = 'paretoPlotly', "Interactive (use Plotly)", value = FALSE)
+    ),
+    
+    hr(),
+    
     tags$div(title="Choose 'On' for only showing 4 decimal places", 
-      selectInput("roundOverview", "Round Values",
-        choices = c("Off", "On"), selected = "On", multiple=F, selectize=TRUE,
-        width = '98%'))
+      selectInput("roundOverview", "Round Values", choices = c("Off", "On"), selected = "On",
+        multiple = FALSE, selectize = TRUE, width = '98%'))
   )
   ),
   
@@ -89,35 +103,50 @@ overflow-y:scroll; background: ghostwhite;}"))#
         )
       ),
       
-      tabItem(tabName = "bestMod",
-        h2("Best Modell/Learner in BMR Analysis"),
-        br(),
-        fluidRow(infoBoxOutput("Data_Name"),
-          infoBoxOutput("Method"),
-          infoBoxOutput("Task")),
-        #hr(),
-        fluidRow(infoBoxOutput("Measure"),
-          infoBoxOutput("Tuning"),
-          infoBoxOutput("SMOTE")),
-        #hr(),
-        fluidRow(valueBoxOutput("Value")
-        )
-      ),
+      # tabItem(tabName = "bestMod",
+      # h2("Best Modell/Learner in BMR Analysis"),
+      # br(),
+      # fluidRow(infoBoxOutput("Data_Name"),
+      #   infoBoxOutput("Method"),
+      #   infoBoxOutput("Task")),
+      # #hr(),
+      # fluidRow(infoBoxOutput("Measure"),
+      #   infoBoxOutput("Tuning"),
+      #   infoBoxOutput("SMOTE")),
+      # #hr(),
+      # fluidRow(valueBoxOutput("Value")
+      # )
+      #   ),
       
       tabItem(tabName = "pareto",
         h2("Pareto"),
-        fluidRow(
-          column(3, htmlOutput("paretoMeasure1")),
-          column(3, htmlOutput("paretoMeasure2"))
+        conditionalPanel(condition = "output.disable_pareto == 1",
+          conditionalPanel(condition = "input.paretoPlotly == false",
+            fluidRow(fillPage(plotOutput("ggplot_pareto")))
+          ),
+          conditionalPanel(condition = "input.paretoPlotly == true",
+            fluidRow(fillPage(plotlyOutput("plotly_pareto")))
+          ),
+          br(),
+          fluidRow(fillPage(box(width = 12, DT::dataTableOutput("paretoTab"))))
         ),
-        htmlOutput("paretoType"),
-        box(width = 12, DT::dataTableOutput("paretoTab")),
-        #conditionalPanel(condition = "input.type == false",
-          fluidRow(fillPage(plotOutput("ggplot_pareto")))
-        #),
-        #conditionalPanel(condition = "input.type == true",
-         # fluidRow(fillPage(plotlyOutput("plotly_heatmap"))))
+        conditionalPanel(condition = "output.disable_pareto == 0",
+          
+          h2("Best Modell/Learner in BMR Analysis"),
+          br(),
+          fluidRow(infoBoxOutput("Data_Name"),
+            infoBoxOutput("Method"),
+            infoBoxOutput("Task")),
+          #hr(),
+          fluidRow(infoBoxOutput("Measure"),
+            infoBoxOutput("Tuning"),
+            infoBoxOutput("SMOTE")),
+          #hr(),
+          fluidRow(valueBoxOutput("Value")
+          )
+          
         )
+      )
     )
   )
 )

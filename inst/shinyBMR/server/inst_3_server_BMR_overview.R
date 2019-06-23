@@ -56,6 +56,32 @@ observe({
   }
 })
 
+# Global Settings for BMR Overview
+observeEvent(input$tabs_overview, {
+
+  if(input$tabs_bmr == "summaryBMR"){  
+    shinyjs::show("selected.measure", anim = TRUE)
+    shinyjs::hide("paretoMeasure1", animType = "fade")
+    shinyjs::hide("paretoMeasure2", animType = "fade")
+    shinyjs::hide("allLevels", animType = "fade")
+    shinyjs::hide("paretoPlotly", animType = "fade")
+  }
+  else if(input$tabs_bmr == "pareto"){
+    shinyjs::hide("selected.measure", animType = "fade")
+    shinyjs::show("paretoMeasure1", anim = TRUE)
+    shinyjs::show("paretoMeasure2", anim = TRUE)
+    shinyjs::show("allLevels", anim = TRUE)
+    shinyjs::show("paretoPlotly", anim = TRUE)
+  }
+  else{
+    shinyjs::show("selected.measure.ana", anim = TRUE)
+    shinyjs::show("ordering", anim = TRUE)
+    shinyjs::show("aggregate", anim = TRUE)
+    shinyjs::show("type", anim = TRUE)
+  }
+})
+
+
 # Initialize InfoBox and ValueBox
 measure <- reactive({
   req(data$data)
@@ -532,6 +558,12 @@ output$Value <- renderValueBox({
 #################################################### Pareto #####################################################
 #####################################################################################################################
 
+output$disable_pareto <- reactive({
+  req(data$data)
+  if(length(grep("value", names(perfAggDf(getBMRAggrPerformances(data$bmr, as.df = T))))) > 1) 1 else 0
+})
+outputOptions(output, "disable_pareto", suspendWhenHidden = FALSE)
+
 measure <- reactive({
   req(data$data)
   if(is.null(data$data)){
@@ -585,12 +617,29 @@ output$paretoTab <- DT::renderDataTable({
   req(data$data)
   keep <- c("Name and Art of Task", input$pareto.measure1, input$pareto.measure2, "Learner", "Tuning", "SMOTE")
   tab <- tabImport(perfAggDf(data$data))[,keep]
-  #paretoOpt(dat = tab, measure1 = "auc", measure2 = "fpr")
-  paretoOpt(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2)
+  if(input$roundOverview == "Off"){
+    opt <- paretoOpt(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2)
+  }
+  else if(input$roundOverview == "On"){
+    opt <- roundDf(paretoOpt(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2),
+      digits = 3, nsmall = 3)
+  }
+  if(input$allLevels == "Off"){
+    opt <- opt[opt$.level == 1,]
+  }
+  names(opt)[names(opt) == ".level"] <- "Pareto Level"
+  opt
 })
 
 output$ggplot_pareto <- renderPlot({
   req(data$data)
   tab <- tabImport(perfAggDf(data$data))
   paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, type = input$pareto.type)
+})
+
+output$plotly_pareto <- renderPlotly({
+  req(data$data)
+  tab <- tabImport(perfAggDf(data$data))
+  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, type = input$pareto.type)
+  
 })
