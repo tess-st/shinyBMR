@@ -211,7 +211,43 @@ output$summary_info <- renderUI({
 })
 
 
-########### Feature Importance
+########### Basics BMR Overview
+output$iml_info <- renderUI({
+  widgetUserBox(
+    title = "BMR Overview",
+    subtitle = "First Analysis Steps",
+    type = NULL,
+    width = 12,
+    background = TRUE,
+    backgroundUrl = "https://raw.githubusercontent.com/tess-st/shinyBMR/master/www/BlueGalaxy.jpg",
+    closable = FALSE,
+    p("Machine learning models usually perform really well for predictions, but are not interpretable. The 'iml' package 
+      provides tools for analysing any black box machine learning model:"),
+    p("* Feature Importance: Which were the most important features?"),
+    p("* Feature Effects: How does a feature influence the prediction? (Accumulated Local Effects, Partial Dependence Plots 
+      and Individual Conditional Expectation Curves)"),
+    p("* Explanations for single Predictions: How did the feature values of a single data point affect its prediction? (LIME 
+      and Shapley Value)"),
+    p("* Surrogate Trees: Can we approximate the underlying black box model with a short decision tree?"),
+    p("The 'iml' package works for any classification and regression machine learning model: random forests, linear models, 
+      neural networks, xgboost, etc."),
+    footer = tags$div(
+      tagList(a("CRAN: IML Package - FeatureImp", href="https://rdrr.io/cran/iml/man/FeatureImp.html#heading-7")),
+      tags$br(),
+      tagList(a("Book IML: Model-agnostic Methods - Feature Importance", 
+        href="https://christophm.github.io/interpretable-ml-book/feature-importance.html")),
+      tags$br(),
+      p("provided by Molnar C., Bischl B., Casalicchio G. (2018). 'iml: An R package 
+        for Interpretable Machine Learning.' JOSS, 3(26), 786. doi: 10.21105/joss.00786, 
+        http://joss.theoj.org/papers/10.21105/joss.00786."),
+      tags$hr(),
+      "Image Source: https://wallpapersafari.com/w/q8koJO"
+      )
+    )
+})
+
+
+########### Basics IML
 output$iml_info <- renderUI({
   widgetUserBox(
     title = "IML",

@@ -652,11 +652,15 @@ size_text_Best <- reactive({
 dat_best <- reactive({
   req(data$data)
   req(input$orderBest)
+  dat <- perfAggDf(data$data)
   if(input$orderBest == "On"){
-    data <- perfAggDf(data$data)[order(perfAggDf(data$data)$value_1), ]
+    data <- dat[order(dat$value_1, dat$complete), ]
+    data$complete <- as.factor(data$complete)
+    data$complete <- ordered(data$complete, levels = data$complete)
   }
   else if(input$orderBest == "Off"){
-    data <- perfAggDf(data$data)
+    data <- dat
+    data$complete <- as.factor(data$complete)
   }
   return(data)
 })

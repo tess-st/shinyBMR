@@ -3,6 +3,7 @@ tabpanel.overview =  dashboardPage(
   dashboardHeader(),
   
   dashboardSidebar(sidebarMenu(id = "tabs_overview",
+    menuItem("Basics", tabName = "basicsOverview", icon = icon("pencil-alt")),
     menuItem("Summary BMR", tabName = "summaryBMR", icon = icon("cubes")),
     #  menuItem("Best BMR-Modell", tabName = "bestMod", icon = icon("cube")),
     menuItem("Pareto", tabName = "pareto"),
@@ -38,6 +39,10 @@ tabpanel.overview =  dashboardPage(
   
   dashboardBody(
     tabItems(
+      tabItem(tabName = "basicsOverview",
+        fluidRow(htmlOutput("overview_info"))
+      ),
+      
       tabItem(tabName = "summaryBMR",
         h2("Summary of the Benchmark Analysis"),
         br(),
@@ -141,6 +146,8 @@ overflow-y:scroll; background: ghostwhite;}"))#
                 h4("Change Plotting Options"),
                 br(),
                 numericInput("sizeSymbolsBest", "Change Size of Symbols", value = 5, min = 1, max = 10, step = 1),
+                br(),
+                h4("Only when not interactive (Plotly):"),
                 numericInput("sizeTextBest", "Change Size of Text", value = 2, min = 1, max = 5, step = 0.5),
                 numericInput("zoomBest", "Change Height of Plot", value = 0.4, 
                   min = 0.05, max = 1, step = 0.05)
