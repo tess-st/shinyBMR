@@ -33,6 +33,88 @@ output$help_tables <- renderText({
 })
 
 
+########### Basics BMR Overview
+output$overview_info <- renderUI({
+  widgetUserBox(
+    title = "BMR Overview",
+    subtitle = "First Analysis Steps",
+    type = NULL,
+    width = 12,
+    background = TRUE,
+    backgroundUrl = "https://raw.githubusercontent.com/tess-st/shinyBMR/master/www/BlueGalaxy.jpg",
+    closable = FALSE,
+    p("As Benchmark Objects tend to be quite large it is helpful to first of all get an overview of the imported data 
+      set. Therefor one can have a look at the 'Summary BMR' tab. It provides - beside the summary containing information 
+      about the uploaded data set and it's structure - in case of implemented, wrapped hyperparameter tuning the possibility
+      to analyse the tuning results. As one sees the need to get more information on the data set the tab 'Cross Tables'
+      can be used."),
+    p("For getting a first impression of the 'best' performing method from the BMRs, the following tab can be used.
+      In case your study was performed based on only one performance measure a table will show up containing the 'best'
+      performing method as well as a scatter plot marking the corresponding performance value of all BMR models."),
+    p("Elsewise in case the BMR data set contains more then one performance measure, a different analysis page will be 
+      provided. Routines to select and visualize the maxima for a given strict partial order are shown. This especially 
+      includes the computation of the so called Pareto frontier, also known as (Top-k) Skyline operator."),
+    p("Definition of a Pareto Frontier: 'A set of nondominated solutions, being chosen as optimal, if no objective can be 
+      improved without sacrificing at least one other objective. On the other hand a solution x* is referred to as dominated 
+      by another solution x if, and only if, x is equally good or better than x* with respect to all objectives.'"),
+    p("In this sense Pareto optimal BMR methods are shown in the table and marked by 'Level = 1'. There are different ways 
+      for visualizing such Pareto optimal points."),
+    footer = tags$div(
+      tagList(a("Definition Pareto Frontier", href="https://www.igi-global.com/dictionary/pareto-front/21878")),
+      tags$br(),
+      p("provided by Mehdi Khosrow-Pour (2017). 'Encyclopedia of Information Science and Technology.' Information Resources 
+        Management Association, USA, Fourth Edition."),
+      tags$br(),
+      tagList(a("R-Package 'rPref", href="https://cran.r-project.org/web/packages/rPref/rPref.pdf")),
+      tags$br(),
+      tagList(a("Vignette 'rPref'", href="https://cran.r-project.org/web/packages/rPref/vignettes/visualization.html")),
+      tags$br(),
+      p("provided by Roocks P. (2019). 'Package rPref.' version 1.3, https://www.p-roocks.de/rpref"),
+      "Image Source: https://wallpapersafari.com/w/q8koJO"
+    )
+  )
+})
+
+output$pareto_info <- renderUI({
+  widgetUserBox(
+    title = "IML",
+    subtitle = "Information about Feature Importance",
+    type = NULL,
+    width = 12,
+    background = TRUE,
+    backgroundUrl = "https://raw.githubusercontent.com/tess-st/shinyBMR/master/www/BlueGalaxy.jpg",
+    closable = FALSE,
+    p("Definition of a Pareto Frontier: 'A set of nondominated solutions, being chosen as optimal, if no objective can be 
+      improved without sacrificing at least one other objective. On the other hand a solution x* is referred to as dominated 
+      by another solution x if, and only if, x is equally good or better than x* with respect to all objectives.'"),
+    p("In this sense Pareto optimal BMR methods are shown in the table and marked by 'Level = 1'. There are different ways 
+      for visualizing such Pareto optimal points."),
+    p("* Skyline Plot: Connects the points of a Pareto front (also known as Pareto frontier) and hence visualizes the 
+      dominance region of a Skyline."),
+    p("* Skyline Level Plot (non-strict, Dominance in 1 Dimension): Next we want to highlight all the levels (i.e., Skyline 
+      iterations to get a certain tuple) for the entire data set. To get the levels of all tuples from the data set we 
+      perform a top-k selection where k equals the number of tuples in the data set"),
+    p("* Skyline Level Plot (strict, Dominance in 2 Dimensions): Some segments of the Pareto front line overlap, as the Pareto 
+      order requires strict dominance in only one dimension. In the other dimensions non-strict dominance (better/equal) 
+      suffices. For now require strict dominance in both dimensions."),
+    footer = tags$div(
+      tagList(a("Definition Pareto Frontier", href="https://www.igi-global.com/dictionary/pareto-front/21878")),
+      tags$br(),
+      p("provided by Mehdi Khosrow-Pour (2017). 'Encyclopedia of Information Science and Technology.' Information Resources 
+        Management Association, USA, Fourth Edition."),
+      tags$br(),
+      tagList(a("R-Package 'rPref", href="https://cran.r-project.org/web/packages/rPref/rPref.pdf")),
+      tags$br(),
+      tagList(a("Vignette 'rPref'", href="https://cran.r-project.org/web/packages/rPref/vignettes/visualization.html")),
+      tags$br(),
+      p("provided by Roocks P. (2019). 'Package rPref.' version 1.3, https://www.p-roocks.de/rpref"),
+      tags$hr(),
+      "Image Source: https://wallpapersafari.com/w/q8koJO"
+    )
+  )
+})
+
+
 #####################################################################################################################
 # BMR Analysis
 #####################################################################################################################
@@ -208,42 +290,6 @@ output$summary_info <- renderUI({
       "Image Source: https://wallpapersafari.com/w/q8koJO"
     )
   )
-})
-
-
-########### Basics BMR Overview
-output$iml_info <- renderUI({
-  widgetUserBox(
-    title = "BMR Overview",
-    subtitle = "First Analysis Steps",
-    type = NULL,
-    width = 12,
-    background = TRUE,
-    backgroundUrl = "https://raw.githubusercontent.com/tess-st/shinyBMR/master/www/BlueGalaxy.jpg",
-    closable = FALSE,
-    p("Machine learning models usually perform really well for predictions, but are not interpretable. The 'iml' package 
-      provides tools for analysing any black box machine learning model:"),
-    p("* Feature Importance: Which were the most important features?"),
-    p("* Feature Effects: How does a feature influence the prediction? (Accumulated Local Effects, Partial Dependence Plots 
-      and Individual Conditional Expectation Curves)"),
-    p("* Explanations for single Predictions: How did the feature values of a single data point affect its prediction? (LIME 
-      and Shapley Value)"),
-    p("* Surrogate Trees: Can we approximate the underlying black box model with a short decision tree?"),
-    p("The 'iml' package works for any classification and regression machine learning model: random forests, linear models, 
-      neural networks, xgboost, etc."),
-    footer = tags$div(
-      tagList(a("CRAN: IML Package - FeatureImp", href="https://rdrr.io/cran/iml/man/FeatureImp.html#heading-7")),
-      tags$br(),
-      tagList(a("Book IML: Model-agnostic Methods - Feature Importance", 
-        href="https://christophm.github.io/interpretable-ml-book/feature-importance.html")),
-      tags$br(),
-      p("provided by Molnar C., Bischl B., Casalicchio G. (2018). 'iml: An R package 
-        for Interpretable Machine Learning.' JOSS, 3(26), 786. doi: 10.21105/joss.00786, 
-        http://joss.theoj.org/papers/10.21105/joss.00786."),
-      tags$hr(),
-      "Image Source: https://wallpapersafari.com/w/q8koJO"
-      )
-    )
 })
 
 
@@ -458,8 +504,8 @@ output$interaction_info <- renderUI({
         http://joss.theoj.org/papers/10.21105/joss.00786."),
       tags$hr(),
       "Image Source: https://wallpapersafari.com/w/q8koJO"
-      )
     )
+  )
 })
 
 

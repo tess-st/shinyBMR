@@ -65,6 +65,7 @@ observeEvent(input$tabs_overview, {
     shinyjs::hide("allLevels", animType = "fade")
     shinyjs::hide("paretoPlotly", animType = "fade")
     shinyjs::hide("orderBest", animType = "fade")
+    shinyjs::hide("paretoType", animType = "fade")
   }
   else if(input$tabs_bmr == "pareto"){
     shinyjs::hide("selected.measure", animType = "fade")
@@ -73,6 +74,7 @@ observeEvent(input$tabs_overview, {
     shinyjs::show("allLevels", anim = TRUE)
     shinyjs::show("paretoPlotly", anim = TRUE)
     shinyjs::show("orderBest", anim = TRUE)
+    shinyjs::show("paretoType", anim = TRUE)
   }
 })
 
@@ -156,27 +158,13 @@ valuesOfMeasure <- reactive({
 })
 
 bestValueOfMeasure <- reactive({
-  if(input$select.measure == "Not Selected"){
-    NULL
+  best <- bestPerfMod(perfAggDf(data$data))
+  value <- best[1, "value_1"]
+  if(input$roundOverview == "Off"){
+    return(value)
   }
-  else{
-    best <- bestPerfMod(perfAggDf(data$data), measure = input$select.measure)
-    pos <- findValue(best, measure = input$select.measure)
-    value <- best[1, pos]
-    # pos <- findValue(data = perfAggDf(data$data), measure = input$select.measure)
-    # if(input$select.minmax == "Minimum"){
-    #   value <- min(perfAggDf(data$data)[pos])
-    # }
-    # if(input$select.minmax == "Maximum"){
-    #   value <- max(perfAggDf(data$data)[pos])
-    # } 
-    
-    if(input$roundOverview == "Off"){
-      return(value)
-    }
-    else if(input$roundOverview == "On"){
-      return(format(round(value, digits = 3), nsmall = 3))
-    }
+  else if(input$roundOverview == "On"){
+    return(format(round(value, digits = 3), nsmall = 3))
   }
 })
 
@@ -499,22 +487,16 @@ output$crossTables <- renderPrint({
 #################################################### Best Model #####################################################
 #####################################################################################################################
 
+# Best Model Listing
 best <- reactive({
-  req(input$select.measure)
-  #req(input$select.minmax)
-  if(input$select.measure == "Not Selected"){
-    NULL
-  }
-  else{
-    bestPerfMod(dat = perfAggDf(data$data), measure = input$select.measure)#, min_max = input$select.minmax)
-  }
+  req(data$data)
+  bestPerfMod(dat = perfAggDf(data$data))
 })
 
 output$Data_Name <- renderInfoBox({
   infoBox("Name of Data", best()$task.id, icon = icon("address-card"),
     color = "navy")
 })
-
 
 output$Method <- renderInfoBox({
   infoBox("Method", best()$learner, icon = icon("cut"),
@@ -543,10 +525,47 @@ output$SMOTE <- renderInfoBox({
 
 output$Value <- renderValueBox({
   valueBox(tags$p("Value of selected Measure", style = "font-size: 55%;"), 
-    tags$p(bestValueOfMeasure(), style = "font-size: 150%;"), 
+    tags$p(bestValueOfMeasure(),#best()$value_1, 
+      style = "font-size: 150%;"), 
     icon = icon("battery-three-quarters"), color = "navy") #light-blue
 })
 
+# Best Model Plot
+size_text_Best <- reactive({
+  size <- req(input$sizeTextBest)
+  if(input$paretoPlotly){
+    size <- -1
+  }
+  return(size)
+})
+
+dat_best <- reactive({
+  req(data$data)
+  req(input$orderBest)
+  dat <- perfAggDf(data$data)
+  if(input$orderBest == "On"){
+    data <- dat[order(dat$value_1, dat$complete), ]
+    data$complete <- as.factor(data$complete)
+    data$complete <- ordered(data$complete, levels = data$complete)
+  }
+  else if(input$orderBest == "Off"){
+    data <- dat
+    data$complete <- as.factor(data$complete)
+  }
+  return(data)
+})
+
+output$ggplot_plot_bestMod <- renderPlot({
+  dat <- dat_best()
+  bestModPlot(dat, size_text = size_text_Best(), size_symbols = input$sizeSymbolsBest)
+},height = function() {
+  input$zoomBest * session$clientData$output_ggplot_plot_bestMod_width
+})
+
+output$plotly_plot_bestMod <- renderPlotly({
+  dat <- dat_best()
+  ggplotly(bestModPlot(dat, size_text = size_text_Best(), size_symbols = input$sizeSymbolsBest))
+})
 
 
 #####################################################################################################################
@@ -574,7 +593,6 @@ measure <- reactive({
   }
   return(names)
 })
-
 
 output$paretoMeasure1 <- renderUI({
   selectizeInput("pareto.measure1", "Choose Measure to be focused", 
@@ -626,53 +644,26 @@ output$paretoTab <- DT::renderDataTable({
   opt
 })
 
-output$ggplot_pareto <- renderPlot({
-  req(data$data)
-  tab <- tabImport(perfAggDf(data$data))
-  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, type = input$pareto.type)
-})
-
-output$plotly_pareto <- renderPlotly({
-  req(data$data)
-  tab <- tabImport(perfAggDf(data$data))
-  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, type = input$pareto.type)
-  
-})
-
-
-# Best Mod
-size_text_Best <- reactive({
-  size <- req(input$sizeTextBest)
+size_text_pareto <- reactive({
+  size <- req(input$sizeTextPareto)
   if(input$paretoPlotly){
     size <- -1
   }
   return(size)
 })
 
-dat_best <- reactive({
+output$ggplot_pareto <- renderPlot({
   req(data$data)
-  req(input$orderBest)
-  dat <- perfAggDf(data$data)
-  if(input$orderBest == "On"){
-    data <- dat[order(dat$value_1, dat$complete), ]
-    data$complete <- as.factor(data$complete)
-    data$complete <- ordered(data$complete, levels = data$complete)
-  }
-  else if(input$orderBest == "Off"){
-    data <- dat
-    data$complete <- as.factor(data$complete)
-  }
-  return(data)
-})
-
-output$ggplot_plot_bestMod <- renderPlot({
-  dat <- dat_best()
-  bestModPlot(dat, size_text = size_text_Best(), size_symbols = input$sizeSymbolsBest)
+  tab <- tabImport(perfAggDf(data$data))
+  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, type = input$pareto.type,
+    size_text = size_text_pareto(), size_symbols = input$sizeSymbolsPareto)
 },height = function() {
-  input$zoomBest * session$clientData$output_ggplot_plot_bestMod_width
+  input$zoomPareto * session$clientData$output_ggplot_pareto_width
 })
 
-output$plotly_plot_bestMod <- renderPlotly({
-  dat <- dat_best()
-  ggplotly(bestModPlot(dat, size_text = size_text_Best(), size_symbols = input$sizeSymbolsBest))
+output$plotly_pareto <- renderPlotly({
+  req(data$data)
+  tab <- tabImport(perfAggDf(data$data))
+  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, type = input$pareto.type,
+    size_text = size_text_pareto(), size_symbols = input$sizeSymbolsPareto)
 })

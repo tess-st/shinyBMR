@@ -3,10 +3,10 @@ tabpanel.overview =  dashboardPage(
   dashboardHeader(),
   
   dashboardSidebar(sidebarMenu(id = "tabs_overview",
-    menuItem("Basics", tabName = "basicsOverview", icon = icon("pencil-alt")),
+    menuItem("Basics", tabName = "basicsOverview", icon = icon("pencil-alt"), selected = TRUE),
     menuItem("Summary BMR", tabName = "summaryBMR", icon = icon("cubes")),
     #  menuItem("Best BMR-Modell", tabName = "bestMod", icon = icon("cube")),
-    menuItem("Pareto", tabName = "pareto"),
+    menuItem("'Best' BMR-Modell", tabName = "pareto", icon = icon("cube")),
     
     hr(),
     
@@ -128,24 +128,75 @@ overflow-y:scroll; background: ghostwhite;}"))#
       #   ),
       
       tabItem(tabName = "pareto",
-        h2("Pareto"),
+        h2("Best Modell/Learner in BMR Analysis"),
+        br(),
         conditionalPanel(condition = "output.disable_pareto == 1",
+          br(),
+          fluidRow(fillPage(box(width = 12, DT::dataTableOutput("paretoTab")))),
+          br(),
+          dropdownButton(
+            fluidRow(
+              column(12,
+                h4("Change Plotting Options"),
+                br(),
+                numericInput("sizeSymbolsPareto", "Change Size of Symbols", value = 4, min = 1, max = 10, step = 1),
+                br(),
+                h4("Only when not interactive (Plotly):"),
+                numericInput("sizeTextPareto", "Change Size of Text", value = 2, min = 1, max = 4, step = 0.5),
+                numericInput("zoomPareto", "Change Height of Plot", value = 0.4, 
+                  min = 0.05, max = 1, step = 0.05)
+              )
+              
+            ),
+            circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
+            tooltip = tooltipOptions(title = "Click for Plot Settings")
+          ),
+          
+          br(),
+          
           conditionalPanel(condition = "input.paretoPlotly == false",
             fluidRow(fillPage(plotOutput("ggplot_pareto")))
           ),
           conditionalPanel(condition = "input.paretoPlotly == true",
             fluidRow(fillPage(plotlyOutput("plotly_pareto")))
           ),
+          
           br(),
-          fluidRow(fillPage(box(width = 12, DT::dataTableOutput("paretoTab"))))
+          br(),
+          br(),
+          br(),
+          br(),
+          br(),
+          br(),
+          
+          prettySwitch(inputId = 'paretoInfo', "Show Information", value = FALSE),
+          conditionalPanel(condition = "input.paretoInfo == true",
+            fluidRow(htmlOutput("pareto_info")))
         ),
+        
         conditionalPanel(condition = "output.disable_pareto == 0",
+          h5("The following Method achieved the 'best' Value for the given Method (blue marked Point in Plot)."),
+          h5("According to interpretational, computational or similar issues one may prefer one of the other Methods 
+            shown in the Plot."),
+          br(),
+          fluidRow(infoBoxOutput("Data_Name"),
+            infoBoxOutput("Method"),
+            infoBoxOutput("Task")),
+          # #hr(),
+          fluidRow(infoBoxOutput("Measure"),
+            infoBoxOutput("Tuning"),
+            infoBoxOutput("SMOTE")),
+          # #hr(),
+          fluidRow(valueBoxOutput("Value")),
+          
+          br(),
+          
           dropdownButton(
             fluidRow(
               column(12,
                 h4("Change Plotting Options"),
                 br(),
-                numericInput("sizeSymbolsBest", "Change Size of Symbols", value = 5, min = 1, max = 10, step = 1),
+                numericInput("sizeSymbolsBest", "Change Size of Symbols", value = 4, min = 1, max = 10, step = 1),
                 br(),
                 h4("Only when not interactive (Plotly):"),
                 numericInput("sizeTextBest", "Change Size of Text", value = 2, min = 1, max = 5, step = 0.5),
@@ -166,19 +217,6 @@ overflow-y:scroll; background: ghostwhite;}"))#
           conditionalPanel(condition = "input.paretoPlotly == true",
             fluidRow(fillPage(plotlyOutput("plotly_plot_bestMod")))
           )
-          
-          # h2("Best Modell/Learner in BMR Analysis"),
-          # br(),
-          # fluidRow(infoBoxOutput("Data_Name"),
-          #   infoBoxOutput("Method"),
-          #   infoBoxOutput("Task")),
-          # #hr(),
-          # fluidRow(infoBoxOutput("Measure"),
-          #   infoBoxOutput("Tuning"),
-          #   infoBoxOutput("SMOTE")),
-          # #hr(),
-          # fluidRow(valueBoxOutput("Value")
-          # )
           
         )
       )
