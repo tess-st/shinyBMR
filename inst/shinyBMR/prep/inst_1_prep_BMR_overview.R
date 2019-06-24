@@ -87,12 +87,18 @@ crossTab <- function(dataset, vec, position){
 #####################################################################################################################
 
 paretoPref <- function(measure){
-  measure_mlr <- getFromNamespace(measure, "mlr")
-  if(measure_mlr$minimize == FALSE){
-    pref <- high_(measure)
+  m <- listMeasures()
+  if(measure %in% m){
+    measure_mlr <- getFromNamespace(measure, "mlr")
+    if(measure_mlr$minimize == FALSE){
+      pref <- high_(measure)
+    }
+    else if(measure_mlr$minimize == TRUE){
+      pref <- low_(measure)
+    }
   }
-  else if(measure_mlr$minimize == TRUE){
-    pref <- low_(measure)
+  else if(!(measure %in% m)){
+    pref <- high_(measure)
   }
   pref
 }
@@ -107,7 +113,7 @@ paretoOpt <- function(dat, measure1, measure2){
 paretoFront <- function(dat, measure1, measure2, type, size_text, size_symbols){
   sel <- paretoOpt(dat, measure1, measure2)
   sky <- psel(dat, paretoPref(measure1) * paretoPref(measure2))#, top_level = level)
-  sky <- sky[order(sky[,"fpr"]),]
+  sky <- sky[order(sky[,measure1]),]
   
   if(size_text == -1){
     t <- theme()
@@ -120,21 +126,22 @@ paretoFront <- function(dat, measure1, measure2, type, size_text, size_symbols){
   if(is.null(type)){NULL}
   
   else if(type == "Skyline Plot"){
-      s <- ggplot(sel, aes(x = get(measure1), y = get(measure2))) + 
-        geom_point(shape = 21, size = size_symbols) + 
-    geom_point(data = sky, size = size_symbols, color = "deepskyblue3", alpha = 0.8) + 
-        geom_step(data = sky, direction = "vh", color = "deepskyblue3") 
+    s <- ggplot(sel, aes(x = sel[,measure1], y = sel[,measure2])) + #aes(x = get(measure1), y = get(measure2)))
+      geom_point(shape = 21, size = size_symbols) + 
+      geom_point(data = sky, aes(x = sky[,measure1], y = sky[,measure2]), size = size_symbols, color = "deepskyblue3", 
+        alpha = 0.8) + 
+      geom_step(data = sky,  aes(x = sky[,measure1], y = sky[,measure2]), direction = "vh", color = "deepskyblue3") 
   }
   else if(type == "Skyline Level Plot (Dom. in 1 Dimension)"){
-    s <- ggplot(sel, aes(x = get(measure1), y = get(measure2), color = factor(sel$.level))) + 
-      geom_point(shape = 21, size = size_symbols) + 
-      geom_point(size = size_symbols+ 1) + geom_step(direction = "vh") 
+    s <- ggplot(sel, aes(x = sel[,measure1], y = sel[,measure2], color = factor(sel$.level))) +
+      geom_point(shape = 21, size = size_symbols) +
+      geom_point(size = size_symbols+ 1) + geom_step(direction = "vh")
   }
   else if(type == "Skyline Level Plot (Dom. in 2 Dimensions)"){
     sel2 <- dat %>% psel(paretoPref(measure1) | paretoPref(measure2), top = nrow(dat)) %>%
       arrange(get(measure1), -get(measure2))
     s <- ggplot(sel2, aes(x = get(measure1), y = get(measure2), color = factor(.level))) +
-      geom_point(size = size_symbols+ 1) + geom_step(direction = "vh") 
+      geom_point(size = size_symbols+ 1) + geom_step(direction = "vh")
   }
   s + xlab(measure1) + ylab(measure2) + t
 }
