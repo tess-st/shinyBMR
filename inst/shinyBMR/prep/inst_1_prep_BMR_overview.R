@@ -1,55 +1,6 @@
-# Extraction of the model with the highest performance
-# bestPerfMod = function(dat, measure){
-#   pos <- findValue(data = dat, measure = measure)
-#   measure <- getFromNamespace(measure, "mlr")
-#   
-#   if(measure$minimize == FALSE){
-#     min_max <- "Maximum"
-#   }
-#   else{
-#     min_max <- "Minimum"
-#   }
-#   
-#   if(min_max == "Minimum"){
-#     min <- min(dat[pos])
-#     row <- dat[dat[,pos] == min,]
-#   }
-#   if(min_max == "Maximum"){
-#     max <- max(dat[pos])
-#     row <- dat[dat[,pos] == max,]
-#   }
-#   
-#   return(row)
-# } 
-
-bestPerfMod = function(dat){#, measure
-  #pos <- findValue(data = dat, measure = measure)
-  #measure <- getFromNamespace(measure, "mlr")
-  
-  t <- grep("*._1", names(dat))
-  measure <- dat[1,names(dat)[t[2]]]
-  measure <- getFromNamespace(measure, "mlr")
-  pos <- t[1]
-  
-  if(measure$minimize == FALSE){
-    min_max <- "Maximum"
-  }
-  else{
-    min_max <- "Minimum"
-  }
-  
-  if(min_max == "Minimum"){
-    min <- min(dat[pos])
-    row <- dat[dat[,pos] == min,]
-  }
-  if(min_max == "Maximum"){
-    max <- max(dat[pos])
-    row <- dat[dat[,pos] == max,]
-  }
-  
-  return(row)
-} 
-
+#####################################################################################################################
+# Summary
+#####################################################################################################################
 
 textInfobox = function(levels){
   if(is.factor(levels)){
@@ -77,7 +28,6 @@ textInfobox = function(levels){
   return(text)
 }
 
-
 textInfoboxMeasure = function(data){
   pos <- grep("measure_*", names(data))
   names <- NA
@@ -101,7 +51,6 @@ textInfoboxMeasure = function(data){
   }
   return(text)
 }
-
 
 crossTab <- function(dataset, vec, position){
   if(sum(vec == 'Not Selected') != 3){
@@ -132,6 +81,11 @@ crossTab <- function(dataset, vec, position){
   }
 }
 
+
+#####################################################################################################################
+# Best Model/Pareto
+#####################################################################################################################
+
 paretoPref <- function(measure){
   measure_mlr <- getFromNamespace(measure, "mlr")
   if(measure_mlr$minimize == FALSE){
@@ -150,31 +104,66 @@ paretoOpt <- function(dat, measure1, measure2){
   tab
 }
 
-paretoFront <- function(dat, measure1, measure2, type){
+paretoFront <- function(dat, measure1, measure2, type, size_text, size_symbols){
   sel <- paretoOpt(dat, measure1, measure2)
   sky <- psel(dat, paretoPref(measure1) * paretoPref(measure2))#, top_level = level)
   sky <- sky[order(sky[,"fpr"]),]
   
+  if(size_text == -1){
+    t <- theme()
+  }else{
+    t <- theme(text = element_text(size = rel(size_text+2)), 
+      legend.text = element_text(size = 0.6*rel(size_text+3)), 
+      legend.key.height = unit(0.25*rel(size_text+3), "cm"))
+  }
+  
   if(is.null(type)){NULL}
   
   else if(type == "Skyline Plot"){
-      s <- ggplot(sel, aes(x = get(measure1), y = get(measure2))) + geom_point(shape = 21) + 
-    geom_point(data = sky, size = 3) + geom_step(data = sky, direction = "vh") 
+      s <- ggplot(sel, aes(x = get(measure1), y = get(measure2))) + 
+        geom_point(shape = 21, size = size_symbols) + 
+    geom_point(data = sky, size = size_symbols, color = "deepskyblue3", alpha = 0.8) + 
+        geom_step(data = sky, direction = "vh", color = "deepskyblue3") 
   }
   else if(type == "Skyline Level Plot (Dom. in 1 Dimension)"){
     s <- ggplot(sel, aes(x = get(measure1), y = get(measure2), color = factor(sel$.level))) + 
-      geom_point(shape = 21) + 
-      geom_point(size = 3) + geom_step(direction = "vh") 
+      geom_point(shape = 21, size = size_symbols) + 
+      geom_point(size = size_symbols+ 1) + geom_step(direction = "vh") 
   }
   else if(type == "Skyline Level Plot (Dom. in 2 Dimensions)"){
     sel2 <- dat %>% psel(paretoPref(measure1) | paretoPref(measure2), top = nrow(dat)) %>%
       arrange(get(measure1), -get(measure2))
     s <- ggplot(sel2, aes(x = get(measure1), y = get(measure2), color = factor(.level))) +
-      geom_point(size = 3) + geom_step(direction = "vh") 
+      geom_point(size = size_symbols+ 1) + geom_step(direction = "vh") 
   }
-  s + xlab(measure1) + ylab(measure2)
+  s + xlab(measure1) + ylab(measure2) + t
 }
 
+# Extraction of the model with the highest performance
+bestPerfMod = function(dat){#, measure
+  t <- grep("*._1", names(dat))
+  measure <- dat[1,names(dat)[t[2]]]
+  measure <- getFromNamespace(measure, "mlr")
+  pos <- t[1]
+  
+  if(measure$minimize == FALSE){
+    min_max <- "Maximum"
+  }
+  else{
+    min_max <- "Minimum"
+  }
+  
+  if(min_max == "Minimum"){
+    min <- min(dat[pos])
+    row <- dat[dat[,pos] == min,]
+  }
+  if(min_max == "Maximum"){
+    max <- max(dat[pos])
+    row <- dat[dat[,pos] == max,]
+  }
+  
+  return(row)
+} 
 
 bestModPlot <- function(dat, size_text, size_symbols){
   if(size_text == -1){
@@ -189,8 +178,9 @@ bestModPlot <- function(dat, size_text, size_symbols){
   best <- bestPerfMod(dat)
   
   ggplot(dat, aes(x = complete, y = value_1)) +
-    geom_point(size = size_symbols) + 
-    geom_point(best, mapping = aes(x = complete, y = value_1), color = "cyan", shape = 9, size = size_symbols) +
+    geom_point(best, mapping = aes(x = complete, y = value_1), color = "deepskyblue3", 
+      shape = 19, size = size_symbols) +
+    geom_point(size = size_symbols, shape = 1) + 
     xlab("Method/Learner with additional Information") +
     ylab(dat$measure_1[1]) + 
     t
