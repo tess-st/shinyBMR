@@ -58,7 +58,19 @@ observe({
 
 # Global Settings for BMR Overview
 observeEvent(input$tabs_overview, {
-  if(input$tabs_bmr == "summaryBMR"){  
+  if(input$tabs_bmr == "basicsOverview"){
+    shinyjs::hide("selected.measure", animType = "fade")
+    shinyjs::hide("paretoMeasure1", animType = "fade")
+    shinyjs::hide("paretoMeasure2", animType = "fade")
+    shinyjs::hide("allLevels", animType = "fade")
+    shinyjs::hide("paretoPlotly", animType = "fade")
+    shinyjs::hide("orderBest", animType = "fade")
+    shinyjs::hide("paretoType", animType = "fade")
+    shinyjs::hide("highLowMeasure1", animType = "fade")
+    shinyjs::hide("highLowMeasure2", animType = "fade")
+    shinyjs::hide("roundOverview", animType = "fade")
+  }
+  else if(input$tabs_bmr == "summaryBMR"){  
     shinyjs::show("selected.measure", anim = TRUE)
     shinyjs::hide("paretoMeasure1", animType = "fade")
     shinyjs::hide("paretoMeasure2", animType = "fade")
@@ -66,6 +78,8 @@ observeEvent(input$tabs_overview, {
     shinyjs::hide("paretoPlotly", animType = "fade")
     shinyjs::hide("orderBest", animType = "fade")
     shinyjs::hide("paretoType", animType = "fade")
+    shinyjs::hide("highLowMeasure1", animType = "fade")
+    shinyjs::hide("highLowMeasure2", animType = "fade")
   }
   else if(input$tabs_bmr == "pareto"){
     shinyjs::hide("selected.measure", animType = "fade")
@@ -77,7 +91,6 @@ observeEvent(input$tabs_overview, {
     shinyjs::show("paretoType", anim = TRUE)
   }
 })
-
 
 # Initialize InfoBox and ValueBox
 measure <- reactive({
@@ -607,18 +620,13 @@ output$paretoMeasure2 <- renderUI({
     multiple = FALSE)#, selected = NULL)
 })
 
-output$paretoType <- renderUI({
-  selectizeInput("pareto.type", "Choose Type of Plot",
-    choices = c("Skyline Plot", "Skyline Level Plot (Dom. in 1 Dimension)", "Skyline Level Plot (Dom. in 2 Dimensions)"), 
-    multiple = FALSE)
-})
-
 observeEvent(input$pareto.measure1,{
   req(input$pareto.measure1)
   updateSelectInput(session,'pareto.measure2',
     choices=as.list(measure2())[-c(as.list(measure2())== input$pareto.measure1)]#[-c(input$pareto.measure1)]#[-c(as.list(measure())== input$pareto.measure1)],
   )
 })
+
 # observeEvent(input$pareto.measure1,{
 #   req(input$pareto.measure1)
 #   updateSelectInput(session,'pareto.measure2',
@@ -626,15 +634,78 @@ observeEvent(input$pareto.measure1,{
 #     )
 # })
 
+
+output$paretoHighLow1 <- renderUI({
+  selectInput("highLowMeasure1", "Base Preference: Should the selected Value be preferably High or Low",
+    choices = c("High", "Low"), selected = "High")
+})
+
+output$paretoHighLow2 <- renderUI({
+  selectInput("highLowMeasure2", "Base Preference: Should the selected Value be preferably High or Low",
+       choices = c("High", "Low"), selected = "High")
+})
+
+observe({
+  m <- listMeasures()
+  if(is.null(input$pareto.measure1)){NULL}
+  else if(input$pareto.measure1 %in% m){
+    shinyjs::hide("highLowMeasure1", animType = "fade")
+  }
+  else if(!(input$pareto.measure1 %in% m)){
+    shinyjs::show("highLowMeasure1", anim = TRUE)
+  }
+})
+
+# observeEvent(input$pareto.measure1, {
+#   m <- listMeasures()
+#   if(is.null(input$pareto.measure1)){NULL}
+#   else if(input$pareto.measure1 %in% m){
+#     shinyjs::hide("highLowMeasure1", animType = "fade")
+#   }
+#   else if(!(input$pareto.measure1 %in% m)){
+#     shinyjs::show("highLowMeasure1", anim = TRUE)
+#   }
+# })
+
+observe({
+  m <- listMeasures()
+  if(is.null(input$pareto.measure2)){NULL}
+  else if(input$pareto.measure2 %in% m){
+    shinyjs::hide("highLowMeasure2", animType = "fade")
+  }
+  else if(!(input$pareto.measure2 %in% m)){
+    shinyjs::show("highLowMeasure2", anim = TRUE)
+  }
+})
+
+# observeEvent(input$pareto.measure2, {
+#   m <- listMeasures()
+#   if(is.null(input$pareto.measure2)){NULL}
+#   else if(input$pareto.measure2 %in% m){
+#     shinyjs::hide("highLowMeasure2", animType = "fade")
+#   }
+#   else if(!(input$pareto.measure2 %in% m)){
+#     shinyjs::show("highLowMeasure2", anim = TRUE)
+#   }
+# })
+
+output$paretoType <- renderUI({
+  selectizeInput("pareto.type", "Choose Type of Plot",
+    choices = c("Skyline Plot", "Skyline Level Plot (Dom. in 1 Dimension)", "Skyline Level Plot (Dom. in 2 Dimensions)"), 
+    multiple = FALSE)
+})
+
 output$paretoTab <- DT::renderDataTable({
   req(data$data)
   keep <- c("Name and Art of Task", input$pareto.measure1, input$pareto.measure2, "Learner", "Tuning", "SMOTE")
   tab <- tabImport(perfAggDf(data$data))[,keep]
   if(input$roundOverview == "Off"){
-    opt <- paretoOpt(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2)
+    opt <- paretoOpt(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2,
+      highlow1 = input$highLowMeasure1, highlow2 = input$highLowMeasure2)
   }
   else if(input$roundOverview == "On"){
-    opt <- roundDf(paretoOpt(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2),
+    opt <- roundDf(paretoOpt(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2,
+      highlow1 = input$highLowMeasure1, highlow2 = input$highLowMeasure2),
       digits = 3, nsmall = 3)
   }
   if(input$allLevels == "Off"){
@@ -655,7 +726,8 @@ size_text_pareto <- reactive({
 output$ggplot_pareto <- renderPlot({
   req(data$data)
   tab <- tabImport(perfAggDf(data$data))
-  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, type = input$pareto.type,
+  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, 
+    highlow1 = input$highLowMeasure1, highlow2 = input$highLowMeasure2, type = input$pareto.type,
     size_text = size_text_pareto(), size_symbols = input$sizeSymbolsPareto)
 },height = function() {
   input$zoomPareto * session$clientData$output_ggplot_pareto_width
@@ -664,6 +736,7 @@ output$ggplot_pareto <- renderPlot({
 output$plotly_pareto <- renderPlotly({
   req(data$data)
   tab <- tabImport(perfAggDf(data$data))
-  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, type = input$pareto.type,
+  paretoFront(dat = tab, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, 
+    highlow1 = input$highLowMeasure1, highlow2 = input$highLowMeasure2, type = input$pareto.type,
     size_text = size_text_pareto(), size_symbols = input$sizeSymbolsPareto)
 })

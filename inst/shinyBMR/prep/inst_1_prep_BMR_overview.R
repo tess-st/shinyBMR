@@ -86,7 +86,7 @@ crossTab <- function(dataset, vec, position){
 # Best Model/Pareto
 #####################################################################################################################
 
-paretoPref <- function(measure){
+paretoPref <- function(measure, highlow){
   m <- listMeasures()
   if(measure %in% m){
     measure_mlr <- getFromNamespace(measure, "mlr")
@@ -98,21 +98,27 @@ paretoPref <- function(measure){
     }
   }
   else if(!(measure %in% m)){
-    pref <- high_(measure)
+    if(is.null(highlow)){NULL}
+    else if(highlow == "High"){
+      pref <- high_(measure)
+    }
+    else if(highlow == "Low"){
+      pref <- low_(measure)
+    }
   }
   pref
 }
 
-paretoOpt <- function(dat, measure1, measure2){
-  sel <- psel(dat, paretoPref(measure1) * paretoPref(measure2), top = nrow(dat))
+paretoOpt <- function(dat, measure1, measure2, highlow1, highlow2){
+  sel <- psel(dat, paretoPref(measure1, highlow1) * paretoPref(measure2, highlow2), top = nrow(dat))
   sel$.level <- as.factor(sel$.level)
   tab <- arrange(sel, sel$.level, sel[,measure1])
   tab
 }
 
-paretoFront <- function(dat, measure1, measure2, type, size_text, size_symbols){
-  sel <- paretoOpt(dat, measure1, measure2)
-  sky <- psel(dat, paretoPref(measure1) * paretoPref(measure2))#, top_level = level)
+paretoFront <- function(dat, measure1, measure2, highlow1, highlow2, type, size_text, size_symbols){
+  sel <- paretoOpt(dat, measure1, measure2, highlow1, highlow2)
+  sky <- psel(dat, paretoPref(measure1, highlow1) * paretoPref(measure2, highlow2))#, top_level = level)
   sky <- sky[order(sky[,measure1]),]
   
   if(size_text == -1){

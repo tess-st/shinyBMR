@@ -15,7 +15,13 @@ tabpanel.overview =  dashboardPage(
     
     conditionalPanel(condition = "output.disable_pareto == 1",
       htmlOutput("paretoMeasure1"),
+      htmlOutput("paretoHighLow1"),
+      # selectInput("highLowMeasure1", "Base Preference: Should the selected Value be preferably High or Low",
+      #   choices = c("High", "Low"), selected = NULL),#"High"),
       htmlOutput("paretoMeasure2"),
+      htmlOutput("paretoHighLow2"),
+      # selectInput("highLowMeasure2", "Base Preference: Should the selected Value be preferably High or Low",
+      #   choices = c("High", "Low"), selected = NULL),#"High"),
       htmlOutput("paretoType"),
       tags$div(title="Choose 'On' for showing all Pareto Levels, not only the first one", 
         selectInput("allLevels", "Show all Pareto Levels", choices = c("Off", "On"), selected = "Off", 
