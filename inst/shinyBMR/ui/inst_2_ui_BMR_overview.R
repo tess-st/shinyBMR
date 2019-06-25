@@ -15,13 +15,13 @@ tabpanel.overview =  dashboardPage(
     
     conditionalPanel(condition = "output.disable_pareto == 1",
       htmlOutput("paretoMeasure1"),
-      htmlOutput("paretoHighLow1"),
-      # selectInput("highLowMeasure1", "Base Preference: Should the selected Value be preferably High or Low",
-      #   choices = c("High", "Low"), selected = NULL),#"High"),
+      # htmlOutput("paretoHighLow1"),
+      selectInput("highLowMeasure1", "Base Preference: Should the selected Value be preferably High or Low",
+       choices = c("High", "Low"), selected = NULL),#"High"),
       htmlOutput("paretoMeasure2"),
-      htmlOutput("paretoHighLow2"),
-      # selectInput("highLowMeasure2", "Base Preference: Should the selected Value be preferably High or Low",
-      #   choices = c("High", "Low"), selected = NULL),#"High"),
+      #htmlOutput("paretoHighLow2"),
+      selectInput("highLowMeasure2", "Base Preference: Should the selected Value be preferably High or Low",
+       choices = c("High", "Low"), selected = NULL),#"High"),
       htmlOutput("paretoType"),
       tags$div(title="Choose 'On' for showing all Pareto Levels, not only the first one", 
         selectInput("allLevels", "Show all Pareto Levels", choices = c("Off", "On"), selected = "Off", 
@@ -31,15 +31,16 @@ tabpanel.overview =  dashboardPage(
     conditionalPanel(condition = "output.disable_pareto == 0",
       tags$div(title = "Order Values of the given Measure",
         selectInput("orderBest", "Ordering", choices = c("Off", "On"), selected = "Off", 
-          multiple = FALSE, selectize = TRUE, width = '98%')),
-      prettySwitch(inputId = 'paretoPlotly', "Interactive (use Plotly)", value = FALSE)
+          multiple = FALSE, selectize = TRUE, width = '98%'))
+      #prettySwitch(inputId = 'paretoPlotly', "Interactive (use Plotly)", value = FALSE)
     ),
     
     hr(),
     
     tags$div(title="Choose 'On' for only showing 4 decimal places", 
       selectInput("roundOverview", "Round Values", choices = c("Off", "On"), selected = "On",
-        multiple = FALSE, selectize = TRUE, width = '98%'))
+        multiple = FALSE, selectize = TRUE, width = '98%')),
+    prettySwitch(inputId = 'paretoPlotly', "Interactive (use Plotly)", value = FALSE)
   )
   ),
   

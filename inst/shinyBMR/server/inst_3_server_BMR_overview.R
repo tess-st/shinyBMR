@@ -80,6 +80,7 @@ observeEvent(input$tabs_overview, {
     shinyjs::hide("paretoType", animType = "fade")
     shinyjs::hide("highLowMeasure1", animType = "fade")
     shinyjs::hide("highLowMeasure2", animType = "fade")
+    shinyjs::hide("roundOverview", animType = "fade")
   }
   else if(input$tabs_bmr == "pareto"){
     shinyjs::hide("selected.measure", animType = "fade")
@@ -89,6 +90,7 @@ observeEvent(input$tabs_overview, {
     shinyjs::show("paretoPlotly", anim = TRUE)
     shinyjs::show("orderBest", anim = TRUE)
     shinyjs::show("paretoType", anim = TRUE)
+    shinyjs::show("roundOverview", anim = TRUE)
   }
 })
 
@@ -635,15 +637,15 @@ observeEvent(input$pareto.measure1,{
 # })
 
 
-output$paretoHighLow1 <- renderUI({
-  selectInput("highLowMeasure1", "Base Preference: Should the selected Value be preferably High or Low",
-    choices = c("High", "Low"), selected = "High")
-})
-
-output$paretoHighLow2 <- renderUI({
-  selectInput("highLowMeasure2", "Base Preference: Should the selected Value be preferably High or Low",
-       choices = c("High", "Low"), selected = "High")
-})
+# output$paretoHighLow1 <- renderUI({
+#   selectInput("highLowMeasure1", "Base Preference: Should the first selected Value be preferably High or Low",
+#     choices = c("High", "Low"), selected = "High")
+# })
+# 
+# output$paretoHighLow2 <- renderUI({
+#   selectInput("highLowMeasure2", "Base Preference: Should the second selected Value be preferably High or Low",
+#        choices = c("High", "Low"), selected = "High")
+# })
 
 observe({
   m <- listMeasures()

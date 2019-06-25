@@ -134,8 +134,8 @@ paretoFront <- function(dat, measure1, measure2, highlow1, highlow2, type, size_
   else if(type == "Skyline Plot"){
     s <- ggplot(sel, aes(x = sel[,measure1], y = sel[,measure2])) + #aes(x = get(measure1), y = get(measure2)))
       geom_point(shape = 21, size = size_symbols) + 
-      geom_point(data = sky, aes(x = sky[,measure1], y = sky[,measure2]), size = size_symbols, color = "deepskyblue3", 
-        alpha = 0.8) + 
+      geom_point(data = sky, aes(x = sky[,measure1], y = sky[,measure2]), size = size_symbols + 1, 
+        color = "deepskyblue3", alpha = 0.8) + 
       geom_step(data = sky,  aes(x = sky[,measure1], y = sky[,measure2]), direction = "vh", color = "deepskyblue3") 
   }
   else if(type == "Skyline Level Plot (Dom. in 1 Dimension)"){
