@@ -34,7 +34,7 @@ tabImport <- function(data){
     names(data)[values[i]] <- names[i]
   }
   data$task.id <- with(data, paste(task.id, classif.reg, sep = ", "))
-  data_tab <- subset(data, select = -c(measures, learner.id, classif.reg, learner.info))
+  data_tab <- subset(data, select = -c(measures, learner.id, classif.reg, learner.info, complete))
   names(data_tab)[1] <- "Name and Art of Task"
   names(data_tab)[names(data_tab) == "learner"] <- "Learner"
   names(data_tab)[names(data_tab) == "tuning"] <- "Tuning"

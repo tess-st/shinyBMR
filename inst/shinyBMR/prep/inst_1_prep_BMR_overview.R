@@ -141,13 +141,15 @@ paretoFront <- function(dat, measure1, measure2, highlow1, highlow2, type, size_
   else if(type == "Skyline Level Plot (Dom. in 1 Dimension)"){
     s <- ggplot(sel, aes(x = sel[,measure1], y = sel[,measure2], color = factor(sel$.level))) +
       geom_point(shape = 21, size = size_symbols) +
-      geom_point(size = size_symbols+ 1) + geom_step(direction = "vh")
+      geom_point(size = size_symbols+ 1) + geom_step(direction = "vh") +
+      labs(color = "Pareto Level")
   }
   else if(type == "Skyline Level Plot (Dom. in 2 Dimensions)"){
     sel2 <- dat %>% psel(paretoPref(measure1) | paretoPref(measure2), top = nrow(dat)) %>%
       arrange(get(measure1), -get(measure2))
     s <- ggplot(sel2, aes(x = get(measure1), y = get(measure2), color = factor(.level))) +
-      geom_point(size = size_symbols+ 1) + geom_step(direction = "vh")
+      geom_point(size = size_symbols+ 1) + geom_step(direction = "vh") +
+      labs(color = "Pareto Level")
   }
   s + xlab(measure1) + ylab(measure2) + t
 }
