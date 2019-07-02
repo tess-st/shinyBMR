@@ -105,5 +105,5 @@ output$import.analysis <- DT::renderDataTable({
       roundDf(tabImportUnagg(perfAggDf(data_unagg)), digits = 3, nsmall = 3)
     }
   }
-}, options = list(scrollX = TRUE),
+}, options = list(scrollX = TRUE), selection = 'none',
   caption = "The Data Set for the BMR Analysis has the following structure")

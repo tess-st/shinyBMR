@@ -48,17 +48,21 @@ output$overview_info <- renderUI({
       about the uploaded data set and it's structure - in case of implemented, wrapped hyperparameter tuning the possibility
       to analyse the tuning results. As one sees the need to get more information on the data set the tab 'Cross Tables'
       can be used."),
-    p("For getting a first impression of the 'best' performing method from the BMRs, the following tab can be used.
+    p("For getting a first impression of the 'best' performing method from the BMRs, the corresponding tab can be used.
       In case your study was performed based on only one performance measure a table will show up containing the 'best'
-      performing method as well as a scatter plot marking the corresponding performance value of all BMR models."),
-    p("Elsewise in case the BMR data set contains more then one performance measure, a different analysis page will be 
+      performing method as well as a scatter plot marking the corresponding performance value of all BMR models.
+      Elsewise in case the BMR data set contains more then one performance measure a different analysis page will be 
       provided. Routines to select and visualize the maxima for a given strict partial order are shown. This especially 
       includes the computation of the so called Pareto frontier, also known as (Top-k) Skyline operator."),
     p("Definition of a Pareto Frontier: 'A set of nondominated solutions, being chosen as optimal, if no objective can be 
       improved without sacrificing at least one other objective. On the other hand a solution x* is referred to as dominated 
       by another solution x if, and only if, x is equally good or better than x* with respect to all objectives.'"),
-    p("In this sense Pareto optimal BMR methods are shown in the table and marked by 'Level = 1'. There are different ways 
-      for visualizing such Pareto optimal points."),
+    p("In this sense Pareto optimal BMR methods are shown in the table and marked by 'Level = 1'. By connecting
+      these points included in the Pareto set the Pareto Front gets displayed. One can also select the option 
+      'Skyline Level Plot' displaying all levels of Pareto Fronts based on the top-k Selection. The definion of Pareto
+      Fronts itself requires strict dominance in only one dimension, while in the other one the measures could be 
+      equally good or better, leading to possibly overlapping front lines. Instead demanding strict dominance in both
+      dimensions will solve this and probably will develop different compositions of the Pareto sets."),
     footer = tags$div(
       tagList(a("Definition Pareto Frontier", href="https://www.igi-global.com/dictionary/pareto-front/21878")),
       tags$br(),
