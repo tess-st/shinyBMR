@@ -1,3 +1,7 @@
+#####################################################################################################################
+# UI: Import Data
+#####################################################################################################################
+
 tabpanel.imlimportdat = dashboardPage(
   dashboardHeader(),
   dashboardSidebar(sidebarMenu(uiOutput("imlimport.ui"),
@@ -8,19 +12,19 @@ tabpanel.imlimportdat = dashboardPage(
       selectInput("iml.round", "Round Values",
         choices = c("On", "Off"), selected = "On", multiple = FALSE, selectize = TRUE,
         width = '98%'))
-    )),
+  )),
   
   dashboardBody(
     h2("Imported Data for IML Analysis"),
+    
     br(),
+    
     tabsetPanel(id = "dataset",
       tabPanel("Imported Data Set",
         box(width = 12,  DT::dataTableOutput("imlimport.preview", height = "auto", width = "100%"))
       ),
       
       tabPanel("Summary Data Set",
-        #verbatimTextOutput("summaryDataSet"))
-        #checkboxInput("iml_dat_round", label = "Round shown numeric values", value = TRUE),
         uiOutput("summary.dat"),
         fluidRow(
           column(12,
@@ -31,7 +35,9 @@ tabpanel.imlimportdat = dashboardPage(
             br()
           )
         ),
+        
         prettySwitch("summaryInfo", "Show Information about the Summary Table", value = FALSE),
+        
         conditionalPanel(condition = "input.summaryInfo == true",
           fluidRow(htmlOutput("summary_info")))
       )

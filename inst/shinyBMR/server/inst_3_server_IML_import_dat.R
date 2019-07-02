@@ -9,9 +9,7 @@ output$imlimport.ui <- renderUI({
   makeIMLImportSideBar(type)
 })
 
-
 dataiml <- reactiveValues(data = NULL, data.test = NULL, data.name = NULL)
-
 
 observe({
   reqAndAssign(input$imlimport.type, "imlimport.type")
@@ -105,12 +103,10 @@ df.name <- reactive({
   }
 })
 
-
 observe({
   reqAndAssign(input$imlimport.type, "imlimport.type")
   dataiml$data.name <- df.name()
 })
-
 
 output$imlimport.preview <- DT::renderDataTable({
   reqAndAssign(dataiml$data, "df_imp")
@@ -121,20 +117,13 @@ output$imlimport.preview <- DT::renderDataTable({
   else if(input$round == "On"){
     roundDf(df_imp, digits = 2, nsmall = 2)
   }
-  #   format(df_imp, digits = 3, nsmall = 3)
-  # }
-}, options = list(scrollX = TRUE),#, scrollY = '300px'),
+}, options = list(scrollX = TRUE),
   caption = "The following Data Set was imported")
-
 
 
 #####################################################################################################################
 # Summary
 #####################################################################################################################
-
-# output$summaryDataSet <- renderPrint({
-#   summary(dataiml$data)
-# })
 
 summarize.data <- reactive({
   if(is.null(dataiml$data)){
@@ -152,18 +141,12 @@ summarize.data <- reactive({
     }
     else if(input$round == "On"){
       df <- roundDf(summarizeColumns(d), digits = 3, nsmall = 3)
-      #df[is.na(df)] <- ""
     }
     df
-    }
+  }
 })
 
 output$summary.dat <- renderUI({
-  # if (input$show_help)
-  #   text = htmlOutput("summary.text")
-  # else
-  #   text = NULL
-  
   ui <- box(width = 12, title = "Summary",
     br(),
     DT::dataTableOutput("summary.datatable")
@@ -180,8 +163,8 @@ output$summary.datatable <- DT::renderDataTable({
 #####################################################################################################################
 # Summary Plots
 #####################################################################################################################
-# from shinyMlr: https://github.com/mlr-org/shinyMlr/blob/master/inst/shinyMlr/server/explanations.R
 
+# from shinyMlr: https://github.com/mlr-org/shinyMlr/blob/master/inst/shinyMlr/server/explanations.R
 numericFeatures <- reactive({
   d <- dataiml$data
   return(colnames(Filter(is.numeric, d)))

@@ -1,8 +1,12 @@
+#####################################################################################################################
+# BMR Import
+#####################################################################################################################
+
 makeImportSideBar = function(type) {
   imptype.sel.input = sidebarMenu(
     menuItem("Type"),
     selectInput("import.type", "", selected = type,
-      choices = c("examples", "RDS"))#c("RDS", "examples", "OpenML", "CSV", "ARFF"))
+      choices = c("examples", "RDS"))
   )
   switch(type,
     RDS = list(

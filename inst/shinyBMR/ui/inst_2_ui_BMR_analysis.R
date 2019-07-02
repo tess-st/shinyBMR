@@ -1,3 +1,7 @@
+#####################################################################################################################
+# UI: BMR Analysis
+#####################################################################################################################
+
 tabpanel.bmr = dashboardPage(
   dashboardHeader(),
   dashboardSidebar(sidebarMenu(id = "tabs_bmr",
@@ -33,6 +37,7 @@ tabpanel.bmr = dashboardPage(
   ),
   dashboardBody(
     tabItems(
+      # Boxplot
       tabItem(tabName = "boxplot",
         h2("Boxplots for Performance Comparison"),
         textOutput("help_bmrBoxplot"),
@@ -55,11 +60,6 @@ tabpanel.bmr = dashboardPage(
               selectInput("addLines", "Add Line per Group of Learner Information",
                 choices = c("On", "Off"), selected = "On"),
               uiOutput("sliderBoxplot")
-              
-              #sliderInput("rangeYaxisB", "Range y-Axis", value = c(0,1), min = 0, max = 10, step = 0.05)
-              #htmlOutput("rangeEndB")
-              #numericInput("rangeEndB", "Choose the upper Limit of the selected Value",
-              #  value = 10, min = 0, max = Inf, step = 1)
             ),
             column(4,
               h4("Change Labels"), 
@@ -76,7 +76,7 @@ tabpanel.bmr = dashboardPage(
             )
             
           ),
-          circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
+          circle = TRUE, status = "info", icon = icon("gear"), 
           tooltip = tooltipOptions(title = "Click for Plot Settings")
         ),
         
@@ -88,6 +88,7 @@ tabpanel.bmr = dashboardPage(
           fluidRow(fillPage(plotlyOutput("plotly", height = "100%"))))
       ),
       
+      # Heatmap
       tabItem(tabName = "heatmap",
         h2("Heatmap for Performance Comparison"),
         textOutput("help_bmrHeatmap"),
@@ -117,7 +118,7 @@ tabpanel.bmr = dashboardPage(
                 min = 0.05, max = 1, step = 0.05)
             )
           ),
-          circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
+          circle = TRUE, status = "info", icon = icon("gear"), 
           tooltip = tooltipOptions(title = "Click for Plot Settings")
         ),
         
@@ -129,6 +130,7 @@ tabpanel.bmr = dashboardPage(
           fluidRow(fillPage(plotlyOutput("plotly_heatmap"))))
       ),
       
+      # PCP
       tabItem(tabName = "pcp",
         h2("Parallel Coordinates Plot"),
         textOutput("help_bmrPcp"),
@@ -163,7 +165,7 @@ tabpanel.bmr = dashboardPage(
             )
             
           ),
-          circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
+          circle = TRUE, status = "info", icon = icon("gear"), 
           tooltip = tooltipOptions(title = "Click for Plot Settings")
         ),
         
@@ -175,11 +177,9 @@ tabpanel.bmr = dashboardPage(
           conditionalPanel(condition = "input.type == true",
             fluidRow(fillPage(plotlyOutput("plotly_pcp"))))
         )
-        # conditionalPanel(condition = "output.disable_pcp_2",
-        #   htmlOutput("unable_PCP")
-        # )
       ),
       
+      # Plot mlr
       tabItem(tabName = "plotMLR",
         h2("Boxplots: Distribution of Performance Values across Resampling Iterations (unagg. Data)"),
         textOutput("help_bmrMlr"),
@@ -206,16 +206,12 @@ tabpanel.bmr = dashboardPage(
             )
             
           ),
-          circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
+          circle = TRUE, status = "info", icon = icon("gear"), 
           tooltip = tooltipOptions(title = "Click for Plot Settings")
         ),
         
         br(),
-        #tabsetPanel(
-         # tabPanel("Boxplot mlr", 
-            fluidRow(fillPage(plotOutput("mlr_boxplot")))
-        #  )
-        #)
+        fluidRow(fillPage(plotOutput("mlr_boxplot")))
       )
     )
   )

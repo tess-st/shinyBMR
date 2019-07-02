@@ -1,3 +1,7 @@
+#####################################################################################################################
+# IML Import Model
+#####################################################################################################################
+
 #Import (final) Model
 makeIMLImportModSideBar = function(mod.type) {
   imptype.sel.iml.mod.input = sidebarMenu(
@@ -19,8 +23,7 @@ makeIMLImportModSideBar = function(mod.type) {
       imptype.sel.iml.mod.input,
       sidebarMenu(
         menuItem("Choose Example Model"),
-        # uiOutput("imlimport.example")
-          selectInput("imlimport.example", "", choices = c("BreastCancer: gbm, notuning_nosmote",###
+          selectInput("imlimport.example", "", choices = c("BreastCancer: gbm, notuning_nosmote",
           "BreastCancer: ada, untuned_nosmote", "BreastCancer: ada, tuned_nosmote",
             "BreastCancer: ranger, untuned_nosmote", "BreastCancer: ranger, tuned_nosmote", 
             "BreastCancer: svm, untuned_nosmote", "BreastCancer: svm, tuned_nosmote",  

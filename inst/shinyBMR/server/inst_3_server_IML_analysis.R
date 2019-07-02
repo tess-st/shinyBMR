@@ -2,15 +2,6 @@
 # General Settings
 #####################################################################################################################
 
-# output$iml.menu <- renderMenu({
-#   sidebarMenu(
-#     menuItem("Basics", tabName = "basics", icon = icon("pencil-alt"), selected = T),
-#     menuItem("IML Methods", tabName = "iml_plots", icon = icon("map-marked-alt"))
-#   )
-# })
-# 
-# isolate({updateTabItems(session, "tabs", "basics")})
-
 # Global 
 output$iml.set = renderUI({
   list(
@@ -67,18 +58,16 @@ predictor <- reactive({
 
 
 # Feature Importance
+
 output$modeltype <- renderText({
   t <- modiml$type
   t
 })
 outputOptions(output, "modeltype", suspendWhenHidden = FALSE)
 
-# imp_zoom <- reactive({
-#   req(input$impZoom)
-# })
-
 
 # Feature Effects
+
 observeEvent(input$effMeth, {
   if(input$effMeth == "ICE"){
     shinyjs::hide("effFeature2", animType = "fade")
@@ -120,6 +109,7 @@ eff_feature2 <- reactive({
 
 
 # Feature Interaction
+
 output$interactionFeature <- renderUI({
   selectizeInput("intFeature", "Select Feature",
     choices = c('Not Selected', 'All', as.list(modiml$mod$features)),
@@ -140,6 +130,7 @@ int_feature <- reactive({
 
 
 # LIME
+
 output$limeInterest <- renderUI({
   selectizeInput("limeInstance", "Select Instance you are intrested in",
     choices = c("Not Selected", as.list(as.numeric(rownames(dataiml$data)))),
@@ -199,6 +190,7 @@ kernel_width <- reactive({
 
 
 # Shapley
+
 output$shapleyInterest <- renderUI({
   selectizeInput("shapleyInstance", "Select Instance you are intrested in",
     choices = c('Not Selected', as.list(as.numeric(rownames(dataiml$data)))),
@@ -308,7 +300,6 @@ iml_plot_obj <- reactive({
   # Feature Interaction
   else if(input$imlPlotType == "Feature Interaction"){
     feature_int <- int_feature()
-    # if(!is.null(feature)){
     if(!is.null(feature_int)){
       if(feature_int == "All"){
         feature <- NULL
@@ -316,7 +307,6 @@ iml_plot_obj <- reactive({
       else{
         feature <- feature_int
       }
-      # }
       # cl = makePSOCKcluster(detectCores() - 1)
       # registerDoParallel(cl)
       interaction <- Interaction$new(predictor(), feature = feature, grid.size = input$interactionGrid)
@@ -327,6 +317,7 @@ iml_plot_obj <- reactive({
   }
   
   # LIME
+  
   else if(input$imlPlotType == "Local Model (LIME)"){
     if(input$limeDist == "gower"){
       dist <- "gower"
@@ -340,13 +331,17 @@ iml_plot_obj <- reactive({
     lime
   }
   
+  
   # Shapley
+  
   else if(input$imlPlotType == "Shapley Values"){
     shapley <- Shapley$new(predictor(), x.interest = data_instance_shapley(), sample.size = input$shapleySample)
     shapley
   }
   
+  
   # Tree Surrogate
+  
   else if(input$imlPlotType == "Tree Surrogate"){
     surrogate <- TreeSurrogate$new(predictor(), maxdepth = input$surrogateMaxDepth)
     surrogate
@@ -359,7 +354,6 @@ observeEvent(input$iml_sets, {
       iml_zoom() * session$clientData$output_iml_plotted_width
     }
   )
-  # output$iml_results <- renderPrint({isolate(iml_plot_obj())$results})
   output$iml_results <- DT::renderDataTable({
     results <- isolate(iml_plot_obj())$results
     tab <- data.frame(results)

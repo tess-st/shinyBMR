@@ -7,7 +7,6 @@ output$import.ui <- renderUI({
 
 data <- reactiveValues(bmr = NULL, data = NULL, data.notagg = NULL, data.name = NULL)
 
-
 observe({
   reqAndAssign(input$import.type, "import.type")
   if (is.null(import.type)) {
@@ -25,7 +24,6 @@ observe({
     data$bmr <- nam
     data$data <- getBMRAggrPerformances(nam, as.df = T)
     data$data.notagg <- getBMRPerformances(nam, as.df = T)
-    #data$data = getTaskData(get(input$import.mlr))
   } 
   else if (import.type == "RDS"){
     f = input$import.RDS$datapath
@@ -58,32 +56,6 @@ observe({
   data$data.name = data.name()
 })
 
-# output$import.preview = DT::renderDataTable({
-#   reqAndAssign(data$data, "data_imp")
-#   reqAndAssign(data$data.notagg, "data_imp.notagg")
-#   colnames(data_imp) = make.names(colnames(data_imp))
-#   colnames(data_imp.notagg) = make.names(colnames(data_imp.notagg))
-#   if(input$aggregatedBMR){
-#     if(input$round == "Off"){
-#       data_imp
-#     }
-#     else{
-#       format(data_imp, digits = 3, nsmall = 3)
-#     }
-#   }
-#   else{
-#     if(input$round == "Off"){
-#       data_imp.notagg
-#     }
-#     else{
-#       format(data_imp.notagg, digits = 3, nsmall = 3)
-#     }
-#   }
-#   
-# }, options = list(scrollX = TRUE),
-#   caption = "The following Data Set was imported")
-
-
 output$import.analysis <- DT::renderDataTable({
   reqAndAssign(data$data, "data_agg")
   reqAndAssign(data$data.notagg, "data_unagg")
@@ -94,7 +66,6 @@ output$import.analysis <- DT::renderDataTable({
     }
     else if(input$round == "On"){
       roundDf(tabImport(perfAggDf(data_agg)), digits = 3, nsmall = 3)
-    #  format.data.frame(tabImport(perfAggDf(data_agg)), digits = 3)#, nsmall = 1)
     }
   }
   else{

@@ -127,19 +127,11 @@ measure2 <- reactive({
   return(names)
 })
 
-
-
 output$selected.measure <- renderUI({
   selectizeInput("select.measure", "Choose Measure to be focused", 
     choices = as.list(measure()),
     multiple = FALSE)#, selected = NULL)
 })
-
-# output$selected.minmax <- renderUI({
-#   selectizeInput("select.minmax", "Best Performance Value signified by",
-#     choices = c("Minimum", "Maximum"),
-#     multiple = FALSE, selected = "Minimum")
-# })
 
 measureName <- reactive({
   req(input$select.measure) 
@@ -182,14 +174,6 @@ bestValueOfMeasure <- reactive({
     return(format(round(value, digits = 3), nsmall = 3))
   }
 })
-
-# observeEvent(data$data, {
-#   if(sapply(strsplit(textInfoboxMeasure(perfAggDf(data$data)), ", "), length) > 1){
-#     shinyjs::show("selected.measure", anim = TRUE)
-#   }else{
-#     shinyjs::hide("selected.measure", animType = "fade")
-#   }
-# })
 
 
 #####################################################################################################################
@@ -276,10 +260,6 @@ output$Values_Lev <- renderValueBox({
       style = "font-size: 150%;"),
     icon = icon ("battery-three-quarters"), color = "navy")
 })
-
-# output$summaryData <- renderPrint({
-#   summary(perfAggDf(data$data))
-# })
 
 
 #####################################################################################################################
@@ -540,9 +520,9 @@ output$SMOTE <- renderInfoBox({
 
 output$Value <- renderValueBox({
   valueBox(tags$p("Value of selected Measure", style = "font-size: 55%;"), 
-    tags$p(bestValueOfMeasure(),#best()$value_1, 
+    tags$p(bestValueOfMeasure(),
       style = "font-size: 150%;"), 
-    icon = icon("battery-three-quarters"), color = "navy") #light-blue
+    icon = icon("battery-three-quarters"), color = "navy") 
 })
 
 # Best Model Plot
@@ -584,7 +564,7 @@ output$plotly_plot_bestMod <- renderPlotly({
 
 
 #####################################################################################################################
-#################################################### Pareto #####################################################
+# Pareto 
 #####################################################################################################################
 
 output$disable_pareto <- reactive({

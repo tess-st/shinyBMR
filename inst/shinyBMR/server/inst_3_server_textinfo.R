@@ -367,7 +367,7 @@ output$imp_info <- renderUI({
 
 
 ########### Feature Effect
-#PDP
+# PDP
 output$pdp_info <- renderUI({
   widgetUserBox(
     title = "IML",
@@ -402,7 +402,7 @@ output$pdp_info <- renderUI({
   )
 })
 
-#ICE
+# ICE
 output$ice_info <- renderUI({
   widgetUserBox(
     title = "IML",
@@ -439,7 +439,7 @@ output$ice_info <- renderUI({
   )
 })
 
-#ALE
+# ALE
 output$ale_info <- renderUI({
   widgetUserBox(
     title = "IML",

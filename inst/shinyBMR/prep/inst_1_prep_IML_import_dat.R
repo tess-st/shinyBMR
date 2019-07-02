@@ -1,3 +1,7 @@
+#####################################################################################################################
+# IML Import Data
+#####################################################################################################################
+
 #Import Data
 makeIMLImportSideBar = function(data.type) {#, mod.type) {
   imptype.sel.iml.input = sidebarMenu(
@@ -5,7 +9,6 @@ makeIMLImportSideBar = function(data.type) {#, mod.type) {
     selectInput("imlimport.type", "", selected = data.type,
       choices = c("examples","CSV", "Rdata", "RDS"))
   )
-  
   
   switch(data.type,
     RDS = list(

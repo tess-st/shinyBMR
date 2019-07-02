@@ -1,9 +1,13 @@
+#####################################################################################################################
+# UI: IML Analysis
+#####################################################################################################################
+
 tabpanel.iml = dashboardPage(
+  
   dashboardHeader(),
   
   dashboardSidebar(
     sidebarMenu(id = "tabs",
-      #sidebarMenuOutput("iml.menu"),
       menuItem("Basics", tabName = "basics", icon = icon("pencil-alt"), selected = TRUE),
       menuItem("IML Methods", tabName = "iml_plots", icon = icon("map-marked-alt")),
       
@@ -11,8 +15,8 @@ tabpanel.iml = dashboardPage(
       
       tags$div(title = "Select a Method for Interpretation of your Model", align = "center",
         selectInput("imlPlotType", "Select IML-Method", choices = c("Not Selected", "Feature Importance",
-        "Feature Effect", "Feature Interaction", "Local Model (LIME)", "Shapley Values", "Tree Surrogate"))
-        ),
+          "Feature Effect", "Feature Interaction", "Local Model (LIME)", "Shapley Values", "Tree Surrogate"))
+      ),
       
       tags$div(title= "Plotting the Method with your selected Options", align = "center", 
         uiOutput("iml.set")),
@@ -30,7 +34,7 @@ tabpanel.iml = dashboardPage(
   ),
   dashboardBody(
     h2("Performing the IML Analysis"),
-
+    
     tabItems(
       tabItem(tabName = "basics",
         fluidRow(htmlOutput("iml_info"))
@@ -45,7 +49,7 @@ tabpanel.iml = dashboardPage(
         # Not Selected
         conditionalPanel("input.imlPlotType == 'Not Selected'",
           NULL
-          ),
+        ),
         
         # Feature Importance
         conditionalPanel("input.imlPlotType == 'Feature Importance'",
@@ -70,10 +74,7 @@ tabpanel.iml = dashboardPage(
                 
                 selectInput("impComp", "Compare by", choices = c("ratio", "difference"), selected = "ratio"),
                 
-                numericInput("impRep", "Repetition of Shuffling", value = 5, min = 1, max = Inf, step = 1)#,
-                
-               # numericInput("impZoom", "Change Height of Plot", value = 0.25, 
-                #  min = 0.05, max = 1, step = 0.05)
+                numericInput("impRep", "Repetition of Shuffling", value = 5, min = 1, max = Inf, step = 1)
               ),
               
               column(6,
@@ -88,12 +89,13 @@ tabpanel.iml = dashboardPage(
                 h4("Repetitions"),
                 textOutput("impRepInfo")
               )
-              
             ),
-            circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
+            circle = TRUE, status = "info", icon = icon("gear"),
             tooltip = tooltipOptions(title = "Click for Settings")
           ),
+          
           br(),
+          
           fluidRow(column(3,
             conditionalPanel(condition = "output.modeltype == 'classif'",
               selectInput("impLossClassif", "Choose Loss",
@@ -101,6 +103,7 @@ tabpanel.iml = dashboardPage(
                 #"accuracy", "auc", "fbeta_score", "ll", "precision","recall"
                 selected = "ce")
             ),
+            
             conditionalPanel(condition = "output.modeltype == 'regr'",
               selectInput("impLossRegr", "Choose Loss",
                 choices = c("mae", "mape", "mse", "msle", "percent_bias", 
@@ -108,9 +111,9 @@ tabpanel.iml = dashboardPage(
                 #"ae", "ape", "se", "sle"
                 selected = "mse")
             )
-            )
-            )
-          ),
+          )
+          )
+        ),
         
         # Feature Effect
         conditionalPanel("input.imlPlotType == 'Feature Effect'",
@@ -118,20 +121,14 @@ tabpanel.iml = dashboardPage(
             fluidRow(
               column(6,
                 h3("Further Settings"),
-                br(),
-                # htmlOutput("effectFeature1"),
-                # htmlOutput("effectFeature2"),
                 
-                # selectInput("effMeth", "Select Method", 
-                #   choices = c("PDP", "ICE", "PDP + ICE", "ALE")),
+                br(),
                 
                 numericInput("effGrid", "Size of Grid for evaluating Predictions", 
                   value = 20, min = 1, max = Inf, step = 1)
-                
-                # numericInput("effZoom", "Change Height of Plot", value = 0.25, 
-                #   min = 0.05, max = 1, step = 0.05)
                 #numericInput("effCenter", "Center at", value = NULL, min = -Inf, max = Inf, step = 1)
               ),
+              
               column(6,
                 h3("Information"),
                 br(),
@@ -148,14 +145,16 @@ tabpanel.iml = dashboardPage(
             circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
             tooltip = tooltipOptions(title = "Click for Settings")
           ),
+          
           br(),
+          
           fluidRow(
             column(3, htmlOutput("effectFeature1")),
             column(3, htmlOutput("effectFeature2")),
             column(3, selectInput("effMeth", "Select Method", choices = c("PDP", "ICE", "PDP + ICE", "ALE"))
-              )
+            )
           ) 
-          ),
+        ),
         
         # Feature Interaction
         conditionalPanel("input.imlPlotType == 'Feature Interaction'",
@@ -163,8 +162,9 @@ tabpanel.iml = dashboardPage(
             fluidRow(
               column(6,
                 h3("Further Settings"),
+                
                 br(),
-                #htmlOutput("interactionFeature"),
+                
                 numericInput("interactionGrid", "Grid Size: NO. of Values per Feature", 
                   value = 20, min = 1, max = Inf, step = 1)
               ),
@@ -182,11 +182,13 @@ tabpanel.iml = dashboardPage(
             circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
             tooltip = tooltipOptions(title = "Click for Settings")
           ),
+          
           br(),
+          
           fluidRow(
             column(3, htmlOutput("interactionFeature"))
           ) 
-          ),
+        ),
         
         # LIME
         conditionalPanel("input.imlPlotType == 'Local Model (LIME)'",
@@ -195,9 +197,6 @@ tabpanel.iml = dashboardPage(
               column(6,
                 h3("Further Settings"),
                 br()
-                # htmlOutput("limeInterest"),
-                #htmlOutput("limeMaxFeatures")
-                # htmlOutput("limeDistance")
               ),
               
               column(6,
@@ -216,17 +215,18 @@ tabpanel.iml = dashboardPage(
                 textOutput("limeKernelInfo")
               )   
             ),
-            circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
+            circle = TRUE, status = "info", icon = icon("gear"),
             tooltip = tooltipOptions(title = "Click for Settings")
           ),
+          
           br(),
+          
           fluidRow(
             column(3, htmlOutput("limeInterest")),
             column(3, htmlOutput("limeDistance")),
             column(3, htmlOutput("limeMaxFeatures"))
           ) 
-          ),
-        
+        ),
         
         # Shapley
         conditionalPanel("input.imlPlotType == 'Shapley Values'",
@@ -234,14 +234,13 @@ tabpanel.iml = dashboardPage(
             fluidRow(
               column(6,
                 h3("Further Settings"),
+                
                 br(),
-
-                # htmlOutput("shapleyInterest"),
-
+                
                 numericInput("shapleySample", "No. Monte Carlo Samples",
                   value = 100, min = 1, max = Inf, step = 1)
               ),
-
+              
               column(6,
                 h3("Information"),
                 br(),
@@ -255,11 +254,13 @@ tabpanel.iml = dashboardPage(
             circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
             tooltip = tooltipOptions(title = "Click for Settings")
           ),
+          
           br(),
+          
           fluidRow(
             column(3, htmlOutput("shapleyInterest"))
           ) 
-          ),
+        ),
         
         # Tree Surrogate
         conditionalPanel("input.imlPlotType == 'Tree Surrogate'",
@@ -267,9 +268,8 @@ tabpanel.iml = dashboardPage(
             fluidRow(
               column(6,
                 h3("Further Settings"),
-                br(),
                 
-                # htmlOutput("shapleyInterest"),
+                br(),
                 
                 numericInput("surrogateMaxDepth", "Max. Depth of Tree",
                   value = 5, min = 1, max = Inf, step = 1)
@@ -281,29 +281,29 @@ tabpanel.iml = dashboardPage(
                 h4("Instance"),
                 textOutput("surrogateMaxDepthInfo"),
                 br()
-                # h4("Sample Size"),
-                # textOutput("shapleySampleInfo")
               )
             ),
             circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
             tooltip = tooltipOptions(title = "Click for Settings")
           )
-          ),
+        ),
         
         br(),
+        
         tabsetPanel(
           tabPanel("IML Plot", 
             fluidRow(fillPage(addSpinner(plotOutput("iml_plotted")))) #or withSpinner()
             #fluidRow(fillPage(plotOutput("iml_plotted")))
-            ),
+          ),
           tabPanel("IML Results",
             checkboxInput("iml_round", label = "Round shown numeric values", value = TRUE),
             #verbatimTextOutput("iml_results")
             box(width = 12, DT::dataTableOutput("iml_results"))
-            )
+          )
         ),
         
         br(),
+        
         prettySwitch(inputId = 'imlInfo', "Show Information", value = FALSE),
         conditionalPanel(condition = "input.imlInfo == true && input.imlPlotType == 'Feature Importance'",
           fluidRow(htmlOutput("imp_info"))),

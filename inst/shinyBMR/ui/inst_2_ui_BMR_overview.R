@@ -1,3 +1,7 @@
+#####################################################################################################################
+# UI: BMR Overview
+#####################################################################################################################
+
 tabpanel.overview =  dashboardPage(
   
   dashboardHeader(),
@@ -5,7 +9,6 @@ tabpanel.overview =  dashboardPage(
   dashboardSidebar(sidebarMenu(id = "tabs_overview",
     menuItem("Basics", tabName = "basicsOverview", icon = icon("pencil-alt"), selected = TRUE),
     menuItem("Summary BMR", tabName = "summaryBMR", icon = icon("cubes")),
-    #  menuItem("Best BMR-Modell", tabName = "bestMod", icon = icon("cube")),
     menuItem("'Best' BMR-Modell", tabName = "pareto", icon = icon("cube")),
     
     hr(),
@@ -15,13 +18,11 @@ tabpanel.overview =  dashboardPage(
     
     conditionalPanel(condition = "output.disable_pareto == 1",
       htmlOutput("paretoMeasure1"),
-      # htmlOutput("paretoHighLow1"),
       selectInput("highLowMeasure1", "Base Preference: Should the selected Value be preferably High or Low",
-       choices = c("High", "Low"), selected = NULL),#"High"),
+        choices = c("High", "Low"), selected = NULL),
       htmlOutput("paretoMeasure2"),
-      #htmlOutput("paretoHighLow2"),
       selectInput("highLowMeasure2", "Base Preference: Should the selected Value be preferably High or Low",
-       choices = c("High", "Low"), selected = NULL),#"High"),
+        choices = c("High", "Low"), selected = NULL),
       htmlOutput("paretoType"),
       tags$div(title="Choose 'On' for showing all Pareto Levels, not only the first one", 
         selectInput("allLevels", "Show all Pareto Levels", choices = c("Off", "On"), selected = "Off", 
@@ -50,6 +51,7 @@ tabpanel.overview =  dashboardPage(
         fluidRow(htmlOutput("overview_info"))
       ),
       
+      # Summary
       tabItem(tabName = "summaryBMR",
         h2("Summary of the Benchmark Analysis"),
         br(),
@@ -82,6 +84,7 @@ tabpanel.overview =  dashboardPage(
             fluidRow(valueBoxOutput("Values_Lev"))
           ),
           
+          # Tuning Results
           tabPanel("Tuning Results",
             textOutput("help_tuning"),
             uiOutput("summary.tune"),
@@ -95,12 +98,7 @@ tabpanel.overview =  dashboardPage(
             )
           ),
           
-          # tabPanel("Tuning Results",
-          #   verbatimTextOutput("tuneResults")
-          #  tags$head(tags$style("#crossTables{font-size:12px; font-style:italic; height:70vh !important; 
-          #overflow-y:scroll; background: ghostwhite;}"))
-          # )
-          
+          # Cross Tables
           tabPanel("Cross Tables",
             textOutput("help_tables"),
             br(),
@@ -112,28 +110,10 @@ tabpanel.overview =  dashboardPage(
             tags$head(tags$style("#crossTables{font-size:12px; font-style:italic; height:60vh !important; 
 overflow-y:scroll; background: ghostwhite;}"))#
           )
-          # tabPanel("Summary of BMR-Data",
-          #   verbatimTextOutput("summaryData")
-          # ),
-          
         )
       ),
       
-      # tabItem(tabName = "bestMod",
-      # h2("Best Modell/Learner in BMR Analysis"),
-      # br(),
-      # fluidRow(infoBoxOutput("Data_Name"),
-      #   infoBoxOutput("Method"),
-      #   infoBoxOutput("Task")),
-      # #hr(),
-      # fluidRow(infoBoxOutput("Measure"),
-      #   infoBoxOutput("Tuning"),
-      #   infoBoxOutput("SMOTE")),
-      # #hr(),
-      # fluidRow(valueBoxOutput("Value")
-      # )
-      #   ),
-      
+      # Pareto
       tabItem(tabName = "pareto",
         h2("Best Modell/Learner in BMR Analysis"),
         br(),
@@ -155,7 +135,7 @@ overflow-y:scroll; background: ghostwhite;}"))#
               )
               
             ),
-            circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
+            circle = TRUE, status = "info", icon = icon("gear"), 
             tooltip = tooltipOptions(title = "Click for Plot Settings")
           ),
           
@@ -189,11 +169,9 @@ overflow-y:scroll; background: ghostwhite;}"))#
           fluidRow(infoBoxOutput("Data_Name"),
             infoBoxOutput("Method"),
             infoBoxOutput("Task")),
-          # #hr(),
           fluidRow(infoBoxOutput("Measure"),
             infoBoxOutput("Tuning"),
             infoBoxOutput("SMOTE")),
-          # #hr(),
           fluidRow(valueBoxOutput("Value")),
           
           br(),
@@ -212,7 +190,7 @@ overflow-y:scroll; background: ghostwhite;}"))#
               )
               
             ),
-            circle = TRUE, status = "info", icon = icon("gear"), #width = "300px",
+            circle = TRUE, status = "info", icon = icon("gear"),
             tooltip = tooltipOptions(title = "Click for Plot Settings")
           ),
           
@@ -224,7 +202,6 @@ overflow-y:scroll; background: ghostwhite;}"))#
           conditionalPanel(condition = "input.paretoPlotly == true",
             fluidRow(fillPage(plotlyOutput("plotly_plot_bestMod")))
           )
-          
         )
       )
     )

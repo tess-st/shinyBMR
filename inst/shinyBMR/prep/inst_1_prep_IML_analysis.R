@@ -1,12 +1,12 @@
+#####################################################################################################################
+# IML Analysis
+#####################################################################################################################
+
 TaskFromMod = function(data, model){
   desc <- getTaskDesc(model)
   if(getTaskDesc(model)$type == "classif"){
     target <- desc$target
-    # if(desc$has.weights == F){
-    #   weights <- NULL
-    # }
-    task <- makeClassifTask(data = data, target = target, positive = "ja",#NA_character_,
-                            #weights = weights, blocking = blocking, coordinates = NULL,
+    task <- makeClassifTask(data = data, target = target, positive = "ja",
                             fixup.data = "warn", check.data = TRUE
                             )  
   }
@@ -16,7 +16,6 @@ TaskFromMod = function(data, model){
   }
   
   task
-  
 }
 
 DataWithoutY = function(data, model){

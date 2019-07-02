@@ -1,4 +1,7 @@
-#Import (final) Model
+#####################################################################################################################
+# Import (final) Model
+#####################################################################################################################
+
 output$imlimportmod.ui <- renderUI({
   type = input$imlimportmod.type;
   if (is.null(type))
@@ -7,7 +10,6 @@ output$imlimportmod.ui <- renderUI({
 })
 
 modiml <- reactiveValues(mod = NULL, mod.name = NA, type = NA)
-
 
 # #
 # output$imlimport.example <- renderUI({
@@ -24,7 +26,6 @@ modiml <- reactiveValues(mod = NULL, mod.name = NA, type = NA)
 #   #, "BreastCancer: rpart, notuning_smote",
 #   # "LongleysEconomic: glmnet, untuned", "LongleysEconomic: rpart tuned"))
 # }) 
-  
 
 
 observe({
@@ -107,11 +108,10 @@ observe({
   }
   
   if(!is.null(modiml$mod)){
-    modiml$mod.name = modiml$mod$learner$id#getLearnerModel(modiml$mod)$learner$id
+    modiml$mod.name = modiml$mod$learner$id
     modiml$type = modiml$mod$learner$type
   }
 })
-
 
 output$learnerModel <- renderPrint({
   validate(need(!is.null(modiml$mod), "Choose the (final) Model for your IML Analysis"))
@@ -124,14 +124,6 @@ output$learnerModel <- renderPrint({
     }
   }
 })
-
-
-# output$overviewTask <- renderPrint({
-#   validate(need(!is.null(modiml$mod), "Choose the (final) Model for your IML Analysis"))
-#   if(!is.null(modiml$mod)){
-#     (modiml$mod)$task.desc 
-#   }
-# })
 
 output$listTask <-renderJsonedit({
   validate(need(!is.null(modiml$mod), "Choose the (final) Model for your IML Analysis"))

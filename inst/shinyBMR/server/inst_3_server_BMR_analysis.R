@@ -167,9 +167,6 @@ output$sliderBoxplot <- renderUI({
     max <- getRange(input$select.measure.ana)[2]
     }
     else{
-      # minimum <- mround(min(perfAggDf(data$data.notagg)[pos]), 0.05)
-      # maximum <- mround(max(perfAggDf(data$data.notagg)[pos]), 0.05)
-      # 
       min <- mround((minimum - 0.05* maximum), 0.05)
       max <- mround((maximum + 0.05* maximum), 0.05)
       
@@ -318,8 +315,6 @@ output$rangeHeatmap <- renderUI({
     }
     sliderInput("rangeValueH", "Range Value", value = value, 
       min = min, max = max, step = 0.05)
-    # sliderInput("rangeValueH", "Range Value", 
-    #   min = 0, max = 10, value = c(0, 1), step = 0.01)
   }
 })
 
@@ -333,7 +328,7 @@ rangeH <- reactive({
 output$ggplot_heatmap <- renderPlot({
   PerfHeatmap_Def(dat_plot(), col_text = input$colTextH, col_min = input$colMinH, col_max = input$colMaxH, 
     label_value = input$labelValueH, label_xaxis = input$labelXlabH, label_yaxis = input$labelYlabH,
-    size_text = size_text_H(), range_value = rangeH(),#range_value = input$rangeValueH, 
+    size_text = size_text_H(), range_value = rangeH(),
     aggregate = aggregation())
 }, height = function() {
   input$zoomH * session$clientData$output_ggplot_heatmap_width
@@ -342,7 +337,7 @@ output$ggplot_heatmap <- renderPlot({
 output$plotly_heatmap <- renderPlotly({
   PerfHeatmap_Def(dat_plot(), col_text = input$colTextH, col_min = input$colMinH, col_max = input$colMaxH, 
     label_value = input$labelValueH, label_xaxis = input$labelXlabH, label_yaxis = input$labelYlabH,
-    size_text = size_text_H(), range_value = rangeH(),#range_value = input$rangeValueH, 
+    size_text = size_text_H(), range_value = rangeH(),
     aggregate = aggregation())
 })
 
@@ -376,7 +371,6 @@ size_text_Pcp <- reactive({
 })
 
 output$sliderPcp <- renderUI({
-  #req(input$select.measure.ana)
   if(!is.null(data$bmr)){
     long_unagg <- getLongUnagg(dat_agg = getBMRAggrPerformances(data$bmr, as.df = T), 
       dat_unagg = getBMRPerformances(data$bmr, as.df = T))
@@ -467,8 +461,6 @@ col_Palette_Pcp <- reactive({
 })
 
 output$ggplot_pcp <- renderPlot({
-  # ggparcoord(perfAggDf(getBMRAggrPerformances(data$bmr, as.df = T)), columns = c(3,4), 
-  #   groupColumn = "learner.id", showPoints = TRUE)
   PCP(dat_agg = getBMRAggrPerformances(data$bmr, as.df = T), dat_unagg = getBMRPerformances(data$bmr, as.df = T), 
     label_xaxis = input$labelXlabPcp, label_yaxis = input$labelYlabPcp, label_lines = input$labelLinesPcp,
     col_palette = col_Palette_Pcp(), range_yaxis = rangePcp(),

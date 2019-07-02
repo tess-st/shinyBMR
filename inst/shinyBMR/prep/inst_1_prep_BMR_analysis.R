@@ -159,6 +159,7 @@ PerfHeatmap_Def = function(dat, col_min, col_max, col_text, range_value, size_te
 #####################################################################################################################
 # Parallel Coordinates Plot
 #####################################################################################################################
+
 getLongAgg = function(dat_agg, dat_unagg){
   measures <- names(dat_unagg)[unlist(lapply(dat_unagg, is.numeric))]
   measures <- measures[!measures %in% "iter"]
@@ -200,8 +201,6 @@ getLongUnagg = function(dat_agg, dat_unagg){
   
   long_unagg
 }
-
-
 
 PCP = function(dat_agg, dat_unagg, label_xaxis, label_yaxis, range_yaxis, label_lines, col_palette, 
   size_text, size_symbols, aggregate){
