@@ -23,7 +23,10 @@ tabpanel.import = dashboardPage(
   
   dashboardBody(
     h2("Imported BMR Object"),
+    textOutput("bmrImportInfo"),
+    
     br(),
+    
     box(width = 12, DT::dataTableOutput("import.analysis"))
   )
 )

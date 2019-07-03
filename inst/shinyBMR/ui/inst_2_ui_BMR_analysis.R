@@ -5,7 +5,7 @@
 tabpanel.bmr = dashboardPage(
   dashboardHeader(),
   dashboardSidebar(sidebarMenu(id = "tabs_bmr",
-    menuItem("Settings", tabName = "bmr_settings", icon = icon("pencil-alt")),
+    menuItem("Basics", tabName = "basicsAnalysis", icon = icon("pencil-alt"), selected = TRUE),
     
     hr(),
     div(align = "center", h6(" Analysis BMR: One Measure")),
@@ -37,6 +37,11 @@ tabpanel.bmr = dashboardPage(
   ),
   dashboardBody(
     tabItems(
+      # Basics
+        tabItem(tabName = "basicsAnalysis",
+          fluidRow(htmlOutput("analysis_info"))
+        ),
+      
       # Boxplot
       tabItem(tabName = "boxplot",
         h2("Boxplots for Performance Comparison"),

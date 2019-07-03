@@ -33,14 +33,13 @@ tabpanel.iml = dashboardPage(
     )
   ),
   dashboardBody(
-    h2("Performing the IML Analysis"),
-    
     tabItems(
       tabItem(tabName = "basics",
         fluidRow(htmlOutput("iml_info"))
       ),
       
       tabItem(tabName = "iml_plots",
+        h2("Performing the IML Analysis"),
         
         textOutput("imlStartInfo"),
         br(),

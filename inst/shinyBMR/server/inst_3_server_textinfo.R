@@ -16,6 +16,12 @@ observeEvent(once = TRUE,ignoreNULL = FALSE, ignoreInit = FALSE, eventExpr = dat
 })
 
 
+# Start Info
+output$bmrImportInfo <- renderText({
+  "Select the BMR object, that should be imported by either selecting one of the examples or change the 'Type' to 
+  .RDS and upload you own data."
+})
+
 #####################################################################################################################
 # BMR Overview
 #####################################################################################################################
@@ -74,6 +80,7 @@ output$overview_info <- renderUI({
       tagList(a("Vignette 'rPref'", href="https://cran.r-project.org/web/packages/rPref/vignettes/visualization.html")),
       tags$br(),
       p("provided by Roocks P. (2019). 'Package rPref.' version 1.3, https://www.p-roocks.de/rpref"),
+      tags$hr(),
       "Image Source: https://wallpapersafari.com/w/q8koJO"
     )
   )
@@ -122,6 +129,44 @@ output$pareto_info <- renderUI({
 #####################################################################################################################
 # BMR Analysis
 #####################################################################################################################
+
+output$analysis_info <- renderUI({
+  widgetUserBox(
+    title = "BMR Analysis",
+    subtitle = "Further Analysis Steps",
+    type = NULL,
+    width = 12,
+    background = TRUE,
+    backgroundUrl = "https://raw.githubusercontent.com/tess-st/shinyBMR/master/www/BlueGalaxy.jpg",
+    closable = FALSE,
+    p("Having done the first Analysis Steps one can now have a further look at the BMR itself. Therefor different ways
+      of visualizing such results are provided.'"),
+    p("Analysis of BMRs concentrationg on one selected measure included in you benchmark study:"),
+    p("* Boxplot: showing the performance grouped by learners and additonally distinguishing between different 
+      treatments/wrappers of these learners. Aggregated as well as unaggregated results can be displayed."),
+    p("* Heatmap: differences in the performance of the learners per treatment/wrapper are shown via colour gradients.
+      Aggregated as well as unaggregated results can be displayed."),
+    p("* Distribution: of Performance Values across Resampling Iterations. Only the unaggregated results can be 
+      displayed."),
+    p("Analysis of BMRs containing all performance measures provided in the BMR object:"),
+    p("* Parallel Coordinates Plot (PCP): the performance on each maesure is included by displaying each measure by an
+      own axis. Marking the performance of the learners on these axes and connecting the points in dependence of the
+      learner with specific treatment/wrapper provides the PCP. Aggregated as well as unaggregated results can be 
+      displayed."),
+    p("Many settings can be done for finally displaying and downloading the regarding to the users needs."),
+
+    footer = tags$div(
+      tagList(a("mlr Tutorial: Benchmark Experiments", 
+        href="https://mlr.mlr-org.com/articles/tutorial/benchmark_experiments.html")),
+      tags$br(),
+      p("provided by Bischl B., Lang M., Kotthoff L., Schiffner J., Richter J., Studerus E., 
+        Casalicchio G.,Jones Z. (2016). 'mlr: Machine Learning in R.' Journal of Machine Learning 
+        Research, 17(170), 1-5. http://jmlr.org/papers/v17/15-066.html."),
+      tags$hr(),
+      "Image Source: https://wallpapersafari.com/w/q8koJO"
+      )
+    )
+})
 
 output$help_bmrBoxplot <- renderText({
   "You first need to import a BMR Object. Go to 'BMR Import' and upload your Data."
