@@ -8,6 +8,7 @@ tabpanel.imlimportmod = dashboardPage(
   
   dashboardBody(
     h2("Imported Model for IML Analysis"),
+    textOutput("bmrImportModelInfo"),
     
     br(),
     

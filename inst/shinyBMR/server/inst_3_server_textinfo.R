@@ -16,16 +16,38 @@ observeEvent(once = TRUE,ignoreNULL = FALSE, ignoreInit = FALSE, eventExpr = dat
 })
 
 
-# Start Info
+#####################################################################################################################
+# BMR Import
+#####################################################################################################################
+
+# Import Info
 output$bmrImportInfo <- renderText({
-  "Select the BMR object, that should be imported by either selecting one of the examples or change the 'Type' to 
-  .RDS and upload you own data."
+  "Select the BMR object, that should be imported, by either selecting one of the examples or changing the Type to 
+  '.RDS' for uploading your own data."
 })
+
 
 #####################################################################################################################
 # BMR Overview
 #####################################################################################################################
 
+# Summary Info
+output$bmrSummaryInfo <- renderText({
+  "Summaries regarding your BMR object are provided containing the main information towards Categories/Levels of 
+  included learners, measures, etc. as well as - in case of before done tuning - Tuning Results are provided and can 
+  graphically be displayed. Supposing more information are needed one can make use of Cross Tables."
+})
+
+# Best Model Info
+output$bmrModelInfo <- renderText({
+  "In case your benchmark study is performed on only one measure a scatterplot comes up marking the point and 
+  consequently the corresponding learner with the 'best' value. Otherwise analysis based on the Pareto Front 
+  - delimited to two dimensions - are provided.
+  May other aspects then only the value of the performance measure(s) - like computation time - has to be taken into 
+  account when selecting the 'best' model such that the subjective selection is up to the user."
+})
+
+# In Case of missing Import Object
 output$help_summary <- renderText({
   "You first need to import a BMR Object. Go to 'BMR Import' and upload your Data."
 })
@@ -49,7 +71,7 @@ output$overview_info <- renderUI({
     background = TRUE,
     backgroundUrl = "https://raw.githubusercontent.com/tess-st/shinyBMR/master/www/BlueGalaxy.jpg",
     closable = FALSE,
-    p("As Benchmark Objects tend to be quite large it is helpful to first of all get an overview of the imported data 
+    p("As benchmark objects tend to be quite large it is helpful to first of all get an overview of the imported data 
       set. Therefor one can have a look at the 'Summary BMR' tab. It provides - beside the summary containing information 
       about the uploaded data set and it's structure - in case of implemented, wrapped hyperparameter tuning the possibility
       to analyse the tuning results. As one sees the need to get more information on the data set the tab 'Cross Tables'
@@ -60,13 +82,13 @@ output$overview_info <- renderUI({
       Elsewise in case the BMR data set contains more then one performance measure a different analysis page will be 
       provided. Routines to select and visualize the maxima for a given strict partial order are shown. This especially 
       includes the computation of the so called Pareto frontier, also known as (Top-k) Skyline operator."),
-    p("Definition of a Pareto Frontier: 'A set of nondominated solutions, being chosen as optimal, if no objective can be 
+    p("Definition of a Pareto frontier: 'A set of nondominated solutions, being chosen as optimal, if no objective can be 
       improved without sacrificing at least one other objective. On the other hand a solution x* is referred to as dominated 
       by another solution x if, and only if, x is equally good or better than x* with respect to all objectives.'"),
     p("In this sense Pareto optimal BMR methods are shown in the table and marked by 'Level = 1'. By connecting
-      these points included in the Pareto set the Pareto Front gets displayed. One can also select the option 
+      these points included in the Pareto set the Pareto front gets displayed. One can also select the option 
       'Skyline Level Plot' displaying all levels of Pareto Fronts based on the top-k Selection. The definion of Pareto
-      Fronts itself requires strict dominance in only one dimension, while in the other one the measures could be 
+      fronts itself requires strict dominance in only one dimension, while in the other one the measures could be 
       equally good or better, leading to possibly overlapping front lines. Instead demanding strict dominance in both
       dimensions will solve this and probably will develop different compositions of the Pareto sets."),
     footer = tags$div(
@@ -140,20 +162,24 @@ output$analysis_info <- renderUI({
     backgroundUrl = "https://raw.githubusercontent.com/tess-st/shinyBMR/master/www/BlueGalaxy.jpg",
     closable = FALSE,
     p("Having done the first Analysis Steps one can now have a further look at the BMR itself. Therefor different ways
-      of visualizing such results are provided.'"),
-    p("Analysis of BMRs concentrationg on one selected measure included in you benchmark study:"),
+      of visualizing such results are provided. Analysis of BMRs concentrationg on one selected measure included in 
+      your benchmark study are the following:"),
     p("* Boxplot: showing the performance grouped by learners and additonally distinguishing between different 
       treatments/wrappers of these learners. Aggregated as well as unaggregated results can be displayed."),
     p("* Heatmap: differences in the performance of the learners per treatment/wrapper are shown via colour gradients.
       Aggregated as well as unaggregated results can be displayed."),
     p("* Distribution: of Performance Values across Resampling Iterations. Only the unaggregated results can be 
       displayed."),
-    p("Analysis of BMRs containing all performance measures provided in the BMR object:"),
+    p("Analysis of BMRs containing all performance measures provided in the BMR object is provided by ensuing method:"),
     p("* Parallel Coordinates Plot (PCP): the performance on each maesure is included by displaying each measure by an
       own axis. Marking the performance of the learners on these axes and connecting the points in dependence of the
       learner with specific treatment/wrapper provides the PCP. Aggregated as well as unaggregated results can be 
       displayed."),
-    p("Many settings can be done for finally displaying and downloading the regarding to the users needs."),
+    p("Many settings can be done for finally displaying and downloading the regarding to the users needs. Therfor 
+      the displayed plots are implemented highly interactive such that the user is able to change for example labels of
+      the axes, colors of the graphs/curves/points, size of text and/or plotting window, etc. Also the graphics can
+      be plotted with help of Plotly, what offers the opportunity to gain information about single points by clicking on
+      these in the plot."),
 
     footer = tags$div(
       tagList(a("mlr Tutorial: Benchmark Experiments", 
@@ -201,6 +227,23 @@ output$bmrPcpInfo <- renderText({
 
 
 #####################################################################################################################
+# IML Import
+#####################################################################################################################
+
+# Import Data Info
+output$bmrImportDataInfo <- renderText({
+  "Select the Data Set your model has been train on by selecting the corresponding format '.CSV', '.Rdata', '.RDS', 
+  but also 'example' data can be choosen. Summaries of the imported Data Set in numeric and graphical form are 
+  provided as well."
+})
+
+# Import Model Info
+output$bmrImportModelInfo <- renderText({
+  "Select the (final) Model you have trained on the before uploaded data set in corresponding format '.Rdata' or 
+  '.RDS' or choose an implemented example model. A Summary of the Task is printed in form of a list."
+})
+
+#####################################################################################################################
 # IML Analysis
 #####################################################################################################################
 
@@ -213,7 +256,7 @@ output$imlDataInfo <- renderText({
 
 # Start Info
 output$imlStartInfo <- renderText({
-  "Here you can now choose the IML Method you want to use for making your Blackbox interpretabel."
+  "Here you can now choose the IML Method you want to use for making your trained (black box) method interpretabel."
 })
 
 # Feature Importance

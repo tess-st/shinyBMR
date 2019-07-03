@@ -55,7 +55,10 @@ tabpanel.overview =  dashboardPage(
       # Summary
       tabItem(tabName = "summaryBMR",
         h2("Summary of the Benchmark Analysis"),
+        textOutput("bmrSummaryInfo"),
+        
         br(),
+        
         tabsetPanel(
           tabPanel("Categories/Levels",
             textOutput("help_summary"),
@@ -117,7 +120,10 @@ overflow-y:scroll; background: ghostwhite;}"))#
       # Pareto
       tabItem(tabName = "pareto",
         h2("Best Modell/Learner in BMR Analysis"),
+        textOutput("bmrModelInfo"),
+        
         br(),
+        
         conditionalPanel(condition = "output.disable_pareto == 1",
           br(),
           fluidRow(fillPage(box(width = 12, DT::dataTableOutput("paretoTab")))),

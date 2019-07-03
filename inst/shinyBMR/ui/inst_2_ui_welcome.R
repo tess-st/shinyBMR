@@ -57,7 +57,7 @@ tabpanel.welcome = dashboardPage(
         Ludwig-Maximilians-University (LMU) of Munich. I tried to provide a framework for analysing and visualizing the most
         important aspects of the BMRs resulting from the 'benchmark'-function of the 'mlr'-package. Furthermore should methods of
         interpretability be offered for (the best) models with help of the 'iml'-package. Main focus is here on model-agnostic 
-        methods")
+        methods.")
         )),
       
       column(width = 4,

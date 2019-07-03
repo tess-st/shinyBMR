@@ -16,6 +16,7 @@ tabpanel.imlimportdat = dashboardPage(
   
   dashboardBody(
     h2("Imported Data for IML Analysis"),
+    textOutput("bmrImportDataInfo"),
     
     br(),
     
