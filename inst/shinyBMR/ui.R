@@ -26,16 +26,6 @@ ui.files <- paste0("ui/", ui.files)
 for (i in seq_along(ui.files)) {
   source(ui.files[i], local = TRUE)
 }
-# Call this function with all the regular navbarPage() parameters, plus a text parameter,
-# if you want to add text to the navbar
-navbarPageWithText <- function(..., text) {
-  navbar <- navbarPage(...)
-  textEl <- tags$p(class = "navbar-text", text)
-  navbar[[3]][[1]]$children[[1]] <- htmltools::tagAppendChild(
-    navbar[[3]][[1]]$children[[1]], textEl)
-  navbar
-}
-
 
 ui <- shinyUI(
   tagList(
@@ -47,7 +37,6 @@ ui <- shinyUI(
     div(id = "app-content",
       navbarPage(
         title=div("Analysis and Interpretation of Benchmark Studies (with mlr & iml)"),
-        #img(src="cup.png", height = 35)
         theme = shinytheme("flatly"), id = "navigation",
         tabPanel("Welcome", tabpanel.welcome),
         tabPanel("BMR Import", tabpanel.import,
@@ -70,17 +59,13 @@ ui <- shinyUI(
         footer = tagList(
           includeScript("scripts/top-nav-links.js"),
           includeScript("scripts/app.js"),
-          tags$link(rel = "stylesheet", type = "text/css",
-                    href = "custom.css"),
-          tags$link(rel = "stylesheet", type = "text/css",
-                    href = "https://fonts.googleapis.com/css?family=Roboto"),
-          tags$link(rel = "stylesheet", type = "text/css",
-                    href = "AdminLTE.css"),
-          tags$footer(title = "", # align = "right",
-                      # tags$a(id = "show_help",
-                      # href = "https://github.com/mlr-org/mlr_shiny", target = "_blank",
-                      # div(id = "copyright-container",
-                      #   column(width = 6, align = "left",
+          #tags$link(rel = "stylesheet", type = "text/css",
+          #          href = "custom.css"),
+          #tags$link(rel = "stylesheet", type = "text/css",
+          #          href = "https://fonts.googleapis.com/css?family=Roboto"),
+          #tags$link(rel = "stylesheet", type = "text/css",
+          #          href = "AdminLTE.css"),
+          tags$footer(title = "", 
                       tags$p(id = "copyright",
                              tags$img(icon("copyright")),
                              2019,

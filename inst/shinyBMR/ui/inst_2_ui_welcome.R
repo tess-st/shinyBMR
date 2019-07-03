@@ -42,22 +42,21 @@ tabpanel.welcome = dashboardPage(
             Note that these rankings could also been done based on different performance measures and therefore yield different
             results."),
           p("An easy way to perform Benchmark Experiments would be the usage of the benchmark()-function in the 'mlr'
-        package. This function especially expects the arguments learners, tasks, resamplings and measures.
-        If you are not used to the functionalities and usage of the package, I would
-        recommend the tutorial page of the 'mlr' package to you. Another way to easily get your BMR is the usage of the additional 
-        package 'shinyMlr' [2], where one can make use of most of the functions implemented in 'mlr' step by
-        step and in an interactive way as this package comes up with a ShinyApp."),
+            package. This function especially expects the arguments learners, tasks, resamplings and measures.
+            If you are not used to the functionalities and usage of the package, I would
+            recommend the tutorial page of the 'mlr' package to you. Another way to easily get your BMR is the usage of the additional 
+            package 'shinyMlr' [2], where one can make use of most of the functions implemented in 'mlr' step by
+            step and in an interactive way as this package comes up with a ShinyApp."),
           # br(),
           p("Having finally figured out your 'best' perfoming model, you probably will fit it to your data set(s) again for yielding 
-        your final model. This model could be hardly interpretable, as the used method may is a so called Blackbox. For getting to
-        know your model better or for understanding the predictions it offers you one can highly recommend the 'iml' package [3]."),
-          #An implementation of the iml-functions can be find in this ShinyApp. 
+            your final model. This model could be hardly interpretable, as the used method may is a so called Blackbox. For getting to
+            know your model better or for understanding the predictions it offers you one can highly recommend the 'iml' package [3]."),
           #br(),
           p("This ShinyApp is part of my Master Thesis at the Institut of Statistics,
-        Ludwig-Maximilians-University (LMU) of Munich. I tried to provide a framework for analysing and visualizing the most
-        important aspects of the BMRs resulting from the 'benchmark'-function of the 'mlr'-package. Furthermore should methods of
-        interpretability be offered for (the best) models with help of the 'iml'-package. Main focus is here on model-agnostic 
-        methods.")
+            Ludwig-Maximilians-University (LMU) of Munich. I tried to provide a framework for analysing and visualizing the most
+            important aspects of the BMRs resulting from the 'benchmark'-function of the 'mlr'-package. Furthermore should methods of
+            interpretability be offered for (the best) models with help of the 'iml'-package. Main focus is here on model-agnostic 
+            methods.")
         )),
       
       column(width = 4,

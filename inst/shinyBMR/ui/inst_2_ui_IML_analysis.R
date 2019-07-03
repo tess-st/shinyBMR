@@ -9,6 +9,7 @@ tabpanel.iml = dashboardPage(
   dashboardSidebar(
     sidebarMenu(id = "tabs",
       menuItem("Basics", tabName = "basics", icon = icon("pencil-alt"), selected = TRUE),
+      hr(),
       menuItem("IML Methods", tabName = "iml_plots", icon = icon("map-marked-alt")),
       
       hr(),
