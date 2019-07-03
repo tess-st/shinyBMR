@@ -26,6 +26,15 @@ ui.files <- paste0("ui/", ui.files)
 for (i in seq_along(ui.files)) {
   source(ui.files[i], local = TRUE)
 }
+# Call this function with all the regular navbarPage() parameters, plus a text parameter,
+# if you want to add text to the navbar
+navbarPageWithText <- function(..., text) {
+  navbar <- navbarPage(...)
+  textEl <- tags$p(class = "navbar-text", text)
+  navbar[[3]][[1]]$children[[1]] <- htmltools::tagAppendChild(
+    navbar[[3]][[1]]$children[[1]], textEl)
+  navbar
+}
 
 
 ui <- shinyUI(
@@ -33,7 +42,8 @@ ui <- shinyUI(
     useShinyjs(),
     loading.info,
     #change font size only of menuItems
-    tags$style(HTML(".sidebar-menu li a { font-size: 18px; }")),
+    tags$style(HTML(".sidebar-menu li a { font-size: 18px; }")), 
+    #; .navbar ul li:nth-child(7) { float: right; } .navbar ul li:nth-child(8) { float: right; } 
     div(id = "app-content",
       navbarPage(
         title=div("Analysis and Interpretation of Benchmark Studies (with mlr & iml)"),
@@ -52,40 +62,35 @@ ui <- shinyUI(
           icon = icon("file-upload")),
         tabPanel("IML Analysis", tabpanel.iml,
           icon = icon("glasses")),
+        #tabPanel(title = "", icon = icon("copyright"), align = "right"), 
         # ), value = "https://github.com/mlr-org/mlr"),
-        # tabPanel(title = "", icon = icon("github", "fa-lg"),
-        #          value = "https://github.com/mlr-org/mlr"),
+        #tabPanel(title = "", icon = icon("github", "fa-lg"),
+        #         value = "https://github.com/mlr-org/mlr"),
         # 
-        # footer = tagList(
-        #   includeScript("scripts/top-nav-links.js"),
-        #   includeScript("scripts/app.js"),
-        #   tags$link(rel = "stylesheet", type = "text/css",
-        #             href = "custom.css"),
-        #   tags$link(rel = "stylesheet", type = "text/css",
-        #             href = "https://fonts.googleapis.com/css?family=Roboto"),
-        #   tags$link(rel = "stylesheet", type = "text/css",
-        #             href = "AdminLTE.css"),
-        #   tags$footer(title = "", # align = "right",
-        #               # tags$a(id = "show_help",
-        #               # href = "https://github.com/mlr-org/mlr_shiny", target = "_blank",
-        #               # div(id = "copyright-container",
-        #               #   column(width = 6, align = "left",
-        #               tags$p(id = "copyright",
-        #                      tags$img(icon("copyright")),
-        #                      2017,
-        #                      tags$a(href = "https://github.com/Coorsaa",
-        #                             target = "_blank", "Stefan Coors, "),
-        #                      tags$a(href = "https://github.com/florianfendt",
-        #                             target = "_blank", "Florian Fendt"),
-        #                      " (members of the mlr-organization)"
-        #               ),
-        #               tags$p(id = "help_toggler",
-        #                      bsButton(inputId = "show_help", label = "show help",
-        #                               type = "toggle", icon = icon("question-circle"))
-        #               )
-        #   )
-        # ), 
-        windowTitle = "MlrBMR"
+        footer = tagList(
+          includeScript("scripts/top-nav-links.js"),
+          includeScript("scripts/app.js"),
+          tags$link(rel = "stylesheet", type = "text/css",
+                    href = "custom.css"),
+          tags$link(rel = "stylesheet", type = "text/css",
+                    href = "https://fonts.googleapis.com/css?family=Roboto"),
+          tags$link(rel = "stylesheet", type = "text/css",
+                    href = "AdminLTE.css"),
+          tags$footer(title = "", # align = "right",
+                      # tags$a(id = "show_help",
+                      # href = "https://github.com/mlr-org/mlr_shiny", target = "_blank",
+                      # div(id = "copyright-container",
+                      #   column(width = 6, align = "left",
+                      tags$p(id = "copyright",
+                             tags$img(icon("copyright")),
+                             2019,
+                             tags$a(href = "https://github.com/tess-st",
+                                    target = "_blank", "Anna Theresa Stüber"),
+                             " (Shiny App as part of my Master Thesis at LMU)"
+                      )
+          )
+         ), 
+        windowTitle = "shinyBMR"
       )
     )
   )

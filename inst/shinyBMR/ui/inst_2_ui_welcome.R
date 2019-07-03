@@ -7,7 +7,7 @@ tabpanel.welcome = dashboardPage(
   dashboardSidebar(),
   
   dashboardBody(tags$head(tags$style(
-    HTML('.wrapper {height: auto !important; position:relative; overflow-x:hidden; overflow-y:auto; max-height:90vh}'))),#680px
+    HTML('.wrapper {height: auto !important; position:relative; overflow-x:hidden; overflow-y:auto; max-height:85vh}'))),#680px
     tags$head(tags$style(HTML('
         a[href="#shiny-tab-widgets"] {
       z-index: -99999;

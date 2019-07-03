@@ -17,7 +17,8 @@ tabpanel.import = dashboardPage(
       tags$div(title="Choose 'On' for only showing 3 decimal places", 
         selectInput("round", "Round Values",
           choices = c("On", "Off"), selected = "On", multiple = FALSE, selectize = TRUE,
-          width = '98%'))
+          width = '98%')
+      )
     )
   ),
   
