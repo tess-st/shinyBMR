@@ -131,6 +131,11 @@ paretoOpt <- function(dat, measure1, measure2, type){
   tab_pareto
 }
 
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+
 paretoFront <- function(dat, measure1, measure2, type, size_text, size_symbols){
   df <- tabImport(perfAggDf(getBMRAggrPerformances(dat, as.df = T)))
   sel <- paretoOpt(dat, measure1, measure2, type = type)
@@ -148,11 +153,12 @@ paretoFront <- function(dat, measure1, measure2, type, size_text, size_symbols){
   if(is.null(type)){NULL}
   
   else if(type == "Skyline Plot"){
+    col <- gg_color_hue(nlevels(sel$.levels))[1]
     s <- ggplot(sel, aes(x = sel[,measure1], y = sel[,measure2])) + #aes(x = get(measure1), y = get(measure2)))
       geom_point(shape = 21, size = size_symbols) + 
       geom_point(data = sky, aes(x = sky[,measure1], y = sky[,measure2]), size = size_symbols + 1, 
-        color = "deepskyblue3", alpha = 0.8) + 
-      geom_step(data = sky,  aes(x = sky[,measure1], y = sky[,measure2]), direction = "vh", color = "deepskyblue3") 
+        color = col, alpha = 0.8) + 
+      geom_step(data = sky,  aes(x = sky[,measure1], y = sky[,measure2]), direction = "vh", color = col)#"deepskyblue3") 
   }
   else if(type == "Skyline Level Plot (Dom. in 1 Dimension)"){
     s <- ggplot(sel, aes(x = sel[,measure1], y = sel[,measure2], color = factor(sel$.level))) +

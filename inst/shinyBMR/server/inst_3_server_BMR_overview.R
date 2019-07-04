@@ -66,8 +66,6 @@ observeEvent(input$tabs_overview, {
     shinyjs::hide("paretoPlotly", animType = "fade")
     shinyjs::hide("orderBest", animType = "fade")
     shinyjs::hide("paretoType", animType = "fade")
-    shinyjs::hide("highLowMeasure1", animType = "fade")
-    shinyjs::hide("highLowMeasure2", animType = "fade")
     shinyjs::hide("roundOverview", animType = "fade")
   }
   else if(input$tabs_bmr == "summaryBMR"){  
@@ -78,8 +76,6 @@ observeEvent(input$tabs_overview, {
     shinyjs::hide("paretoPlotly", animType = "fade")
     shinyjs::hide("orderBest", animType = "fade")
     shinyjs::hide("paretoType", animType = "fade")
-    shinyjs::hide("highLowMeasure1", animType = "fade")
-    shinyjs::hide("highLowMeasure2", animType = "fade")
     shinyjs::hide("roundOverview", animType = "fade")
   }
   else if(input$tabs_bmr == "pareto"){
