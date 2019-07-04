@@ -54,7 +54,7 @@ With help of this function different learning methods can be applied to one or s
 
 ![alt text](pics/I_1_BMR_Import.PNG "BMR Import")
 
-Finally having uploaded your BMR object, **shinyBMR** is shwoing a data table containing all relevant information about your study: the first row contains *Name and Art of Task*. The following row(s) holds the *Value of Measure* the analysis is based on. Of course all of the measures you have used in your study will be displayed with their corresponding values for the specific learner in the table. Each *Learner* taking part in the competition is listed and the next row contains information about the *Tuning* status and - in case of a classification task - is followed by a row showing the *SMOTE* status. Other developments of the learners then tuning and SMOTE have not been implemented in **shinyBMR** yet, as these [wrappers](https://mlr.mlr-org.com/articles/tutorial/wrapper.html) seem to be on the main focus when it comes to clinical studies using methods of machine learning. 
+Finally having uploaded your BMR object, **shinyBMR** is showing a data table containing all relevant information about your study: the first row contains *Name and Art of Task*. The following row(s) holds the *Value of Measure* the analysis is based on. Of course all of the measures you have used in your study will be displayed with their corresponding values for the specific learner in the table. Each *Learner* taking part in the competition is listed and the next row contains information about the *Tuning* status and - in case of a classification task - is followed by a row showing the *SMOTE* status. Other developments of the learners then tuning and SMOTE have not been implemented in **shinyBMR** yet, as these [wrappers](https://mlr.mlr-org.com/articles/tutorial/wrapper.html) seem to be on the main focus when it comes to clinical studies using methods of machine learning. 
 
 By default you only see the aggregated performance of each learner. Clicking *Aggregated BMR* offers the opportunity to also show the unaggregated performance containing the values of each learner per iteration. Additionally the values of the measure(s) are rounded by default for a better overview. This could be undone by making the corresponding selection at *Round Values*. 
 
@@ -77,11 +77,13 @@ plotHyperParsEffect(hyperpars.effect.data, x = NULL, y = NULL,
   nested.agg = mean, partial.dep.learn = NULL)
 ```
 
-As the before listed function may already implements the first two input selection options let the user spezify what should be plotted on the x- and the y-axis for visualizing the hyperparameter validation path. The third selection tab is optional for plotting an extra axis for a particular geom. This could be for the fill on a heatmap or color aesthetic for a line. 
+As the before listed function may already implements the first two input selection options let the user specify what should be plotted on the x- and the y-axis for visualizing the hyperparameter validation path. The third selection tab is optional for plotting an extra axis for a particular geom. This could be for the fill on a heatmap or color aesthetic for a line. 
 
 In case there are still some question left concerning the structure of the BMR object one can make use of the sub-tab *Cross Tables*. As this should be self explanatory the subject won't be deepen here. 
 
 ![alt_text](pics/I_2_3_BMR_Overview_CrossTables.PNG "BMR Overview - Cross Tables")
+
+Having it made so far the question arises, which of the models may performs best on the given data set respectively within the BMR object. Therefor the tab 'Best Model' provides the opportunity to get a first impression of the ranking of the competing learners. In case the performance is assessed based on only one measure a scatterplot containing the single learners plotted against the specific measure is showing up. A blue point marks the 'best' value of the belonging machine learning model. 
 
 
 ### 3. Graphical Analysis of the competing Methods included in the Benachmark Study
