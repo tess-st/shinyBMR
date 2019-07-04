@@ -114,10 +114,10 @@ crossTab <- function(dataset, vec, position){
 #   pref
 # }
 
-paretoPref <- function(dat, measure){
-  m <- listMeasures()
+paretoPref <- function(dat, measure = NULL){
+  m <- mlr::listMeasures()
   if(is.null(measure)){NULL}
-  if(measure %in% m){
+  else if(measure %in% m){
     measure_mlr <- getFromNamespace(measure, "mlr")
   }
   # else if(!(measure %in% m)){
@@ -126,12 +126,15 @@ paretoPref <- function(dat, measure){
   if(measure == "pAUC"){
     pref <- high_(measure)
   }
-  else if(measure_mlr$minimize == FALSE){
-    pref <- high_(measure)
-  }
-  else if(measure_mlr$minimize == TRUE){
-    pref <- low_(measure)
-  }
+  else{
+    if(measure_mlr$minimize == FALSE){
+      pref <- high_(measure)
+    }
+    else if(measure_mlr$minimize == TRUE){
+      pref <- low_(measure)
+    }
+  } 
+  
   pref
 }
 

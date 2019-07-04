@@ -372,7 +372,7 @@ xaxis_T <- reactive({
   validate(
     need(input$xAxisT != "Not Selected", "Please choose what should be plotted on the x-Axis for showing 
       the Tuning Results")
-  )
+    )
   if(input$xAxisT == "Not Selected"){
     NULL
   }
@@ -385,7 +385,7 @@ yaxis_T <- reactive({
   validate(
     need(input$yAxisT != "Not Selected", "Please choose what should be plotted on the y-Axis for showing 
       the Tuning Results")
-  )
+    )
   if(input$yAxisT == "Not Selected"){
     NULL
   }
@@ -591,13 +591,13 @@ measure <- reactive({
 })
 
 output$paretoMeasure1 <- renderUI({
-   req(measure())
+  req(measure())
   if(is.null(measure())){NULL}
   else{
-     
-  selectizeInput("pareto.measure1", "Choose Measure to be focused", 
-    choices = measure(),
-    multiple = FALSE)#, selected = NULL)
+    
+    selectizeInput("pareto.measure1", "Choose Measure to be focused", 
+      choices = measure(),
+      multiple = FALSE)#, selected = NULL)
   }
 })
 
@@ -605,9 +605,9 @@ output$paretoMeasure2 <- renderUI({
   req(measure())
   if(is.null(measure())){NULL}
   else{
-      selectizeInput("pareto.measure2", "Choose Measure to be focused", 
-    choices = measure2(),#as.list(measure()),#[-c(as.list(measure()))== input$pareto.measure1],
-    multiple = FALSE)#, selected = NULL)
+    selectizeInput("pareto.measure2", "Choose Measure to be focused", 
+      choices = measure2(),#as.list(measure()),#[-c(as.list(measure()))== input$pareto.measure1],
+      multiple = FALSE)#, selected = NULL)
   }
 })
 
@@ -652,7 +652,8 @@ output$paretoType <- renderUI({
 output$paretoTab <- DT::renderDataTable({
   show("loading-paretoTab")
   req(data$bmr)
-  keep <- c("Name and Art of Task", input$pareto.measure1, input$pareto.measure2, "Learner", "Tuning", "SMOTE")
+  req(input$pareto.measure1)
+  req(input$pareto.measure2)
   #tab <- tabImport(perfAggDf(data$bmr))[,keep]
   if(input$roundOverview == "Off"){
     opt <- paretoOpt(dat = data$bmr, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2)
@@ -682,6 +683,8 @@ size_text_pareto <- reactive({
 output$ggplot_pareto <- renderPlot({
   show("loading-paretoPlot")
   req(data$bmr)
+  req(input$pareto.measure1)
+  req(input$pareto.measure2)
   #tab <- tabImport(perfAggDf(data$bmr))
   paretoFront(dat = data$bmr, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, 
     type = input$pareto.type,
