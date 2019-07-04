@@ -629,11 +629,12 @@ output$paretoTab <- DT::renderDataTable({
   req(input$pareto.measure2)
   
   if(input$roundOverview == "Off"){
-    opt <- paretoOpt(dat = data$bmr, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2)
+    opt <- paretoOpt(dat = data$bmr, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, 
+      type = input$pareto.type)
   }
   else if(input$roundOverview == "On"){
-    opt <- roundDf(paretoOpt(dat = data$bmr, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2),
-      digits = 3, nsmall = 3)
+    opt <- roundDf(paretoOpt(dat = data$bmr, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2,
+      input$pareto.type), digits = 3, nsmall = 3)
   }
   if(input$allLevels == "Off"){
     opt <- opt[opt$.level == 1,]

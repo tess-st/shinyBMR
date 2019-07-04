@@ -110,9 +110,22 @@ paretoPref <- function(dat, measure = NULL){
   pref
 }
 
-paretoOpt <- function(dat, measure1, measure2){
+# paretoOpt <- function(dat, measure1, measure2){
+#   df <- tabImport(perfAggDf(getBMRAggrPerformances(dat, as.df = T)))
+#   sel <- psel(df, paretoPref(dat, measure1) * paretoPref(dat, measure2), top = nrow(df))
+#   sel$.level <- as.factor(sel$.level)
+#   tab_pareto <- arrange(sel, sel$.level, sel[,measure1])
+#   tab_pareto
+# }
+paretoOpt <- function(dat, measure1, measure2, type){
   df <- tabImport(perfAggDf(getBMRAggrPerformances(dat, as.df = T)))
-  sel <- psel(df, paretoPref(dat, measure1) * paretoPref(dat, measure2), top = nrow(df))
+  if(type == "Skyline Level Plot (Dom. in 2 Dimensions)"){
+    sel <- df %>% psel(paretoPref(dat,measure1) | paretoPref(dat,measure2), top = nrow(dat)) %>%
+      arrange(get(measure1), -get(measure2))
+  }
+  else{
+    sel <- psel(df, paretoPref(dat, measure1) * paretoPref(dat, measure2), top = nrow(df))
+  }
   sel$.level <- as.factor(sel$.level)
   tab_pareto <- arrange(sel, sel$.level, sel[,measure1])
   tab_pareto
@@ -120,7 +133,7 @@ paretoOpt <- function(dat, measure1, measure2){
 
 paretoFront <- function(dat, measure1, measure2, type, size_text, size_symbols){
   df <- tabImport(perfAggDf(getBMRAggrPerformances(dat, as.df = T)))
-  sel <- paretoOpt(dat, measure1, measure2)
+  sel <- paretoOpt(dat, measure1, measure2, type = type)
   sky <- psel(df, paretoPref(dat, measure1) * paretoPref(dat, measure2))#, top_level = level)
   sky <- sky[order(sky[,measure1]),]
   
@@ -148,9 +161,7 @@ paretoFront <- function(dat, measure1, measure2, type, size_text, size_symbols){
       labs(color = "Pareto Level")
   }
   else if(type == "Skyline Level Plot (Dom. in 2 Dimensions)"){
-    sel2 <- df %>% psel(paretoPref(dat,measure1) | paretoPref(dat,measure2), top = nrow(dat)) %>%
-      arrange(get(measure1), -get(measure2))
-    s <- ggplot(sel2, aes(x = get(measure1), y = get(measure2), color = factor(.level))) +
+    s <- ggplot(sel, aes(x = get(measure1), y = get(measure2), color = factor(.level))) +
       geom_point(size = size_symbols+ 1) + geom_step(direction = "vh") +
       labs(color = "Pareto Level")
   }
@@ -158,7 +169,7 @@ paretoFront <- function(dat, measure1, measure2, type, size_text, size_symbols){
 }
 
 # Extraction of the model with the highest performance
-bestPerfMod = function(dat){#, measure
+bestPerfMod = function(dat){
   t <- grep("*._1", names(dat))
   measure <- dat[1,names(dat)[t[2]]]
   measure <- getFromNamespace(measure, "mlr")
