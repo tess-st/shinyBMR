@@ -33,6 +33,7 @@ Imports:
   shinydashboardPlus,
   DT,
   shinycssloaders,
+  waiter,
   stringi,
   tibble,
   ggplot2,

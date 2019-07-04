@@ -220,7 +220,9 @@ data_instance_shapley <- reactive({
 #####################################################################################################################
 
 iml_plot_obj <- reactive({
+  #show("loading-iml")
   set.seed(input$iml_seed)
+  
   #Not Selected
   if(input$imlPlotType == "Not Selected"){
     NULL
@@ -349,6 +351,10 @@ iml_plot_obj <- reactive({
 })
 
 observeEvent(input$iml_sets, {
+  show_waiter(spin_fading_circles())
+ # session$sendCustomMessage(type = 'testmessage',
+  #  message = 'Thank you for clicking')
+ # showModal(modalDialog("Calculations for your choosen iml methods running...", footer=NULL, size = "l", fade = T))
   output$iml_plotted <- renderPlot({isolate(plot(iml_plot_obj()))},
     height = function() {
       iml_zoom() * session$clientData$output_iml_plotted_width
@@ -363,6 +369,8 @@ observeEvent(input$iml_sets, {
     tab
   }, options = list(scrollX = TRUE), selection = "none",
     caption = "Results of your choosen IML Method")
+  hide_waiter()
+ # removeModal()
 }, ignoreNULL = T, ignoreInit = T)
 
 

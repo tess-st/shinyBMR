@@ -14,6 +14,7 @@ require(RColorBrewer)
 require(Rcpp)
 require(pals)
 require(shinycssloaders)
+require(waiter)
 require(listviewer)
 
 

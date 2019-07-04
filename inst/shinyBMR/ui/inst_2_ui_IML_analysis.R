@@ -292,7 +292,8 @@ tabpanel.iml = dashboardPage(
         
         tabsetPanel(
           tabPanel("IML Plot", 
-            fluidRow(fillPage(addSpinner(plotOutput("iml_plotted")))) #or withSpinner()
+            use_waiter(),
+            fluidRow(fillPage(plotOutput("iml_plotted"))) #or withSpinner() addSpinner()
             #fluidRow(fillPage(plotOutput("iml_plotted")))
           ),
           tabPanel("IML Results",
