@@ -26,7 +26,7 @@ tabpanel.overview =  dashboardPage(
         choices = c("High", "Low"), selected = NULL),
       htmlOutput("paretoType"),
       tags$div(title="Choose 'On' for showing all Pareto Levels, not only the first one", 
-        selectInput("allLevels", "Show all Pareto Levels", choices = c("Off", "On"), selected = "Off", 
+        selectInput("allLevels", "Show all Pareto Levels in Tab.", choices = c("Off", "On"), selected = "Off", 
           multiple = FALSE, selectize = TRUE, width = '98%'))
       #prettySwitch(inputId = 'paretoPlotly', "Interactive (use Plotly)", value = FALSE)
     ),

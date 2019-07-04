@@ -575,7 +575,6 @@ outputOptions(output, "disable_pareto", suspendWhenHidden = FALSE)
 
 measure <- reactive({
   req(data$data)
-  show("loading-measure")
   if(is.null(data$data)){
     names <- NULL
   }
@@ -597,7 +596,7 @@ output$paretoMeasure1 <- renderUI({
     
     selectizeInput("pareto.measure1", "Choose Measure to be focused", 
       choices = measure(),
-      multiple = FALSE)#, selected = NULL)
+      multiple = FALSE)
   }
 })
 
@@ -606,42 +605,17 @@ output$paretoMeasure2 <- renderUI({
   if(is.null(measure())){NULL}
   else{
     selectizeInput("pareto.measure2", "Choose Measure to be focused", 
-      choices = measure2(),#as.list(measure()),#[-c(as.list(measure()))== input$pareto.measure1],
-      multiple = FALSE)#, selected = NULL)
+      choices = measure2(),
+      multiple = FALSE)
   }
 })
 
 observeEvent(input$pareto.measure1,{
   req(input$pareto.measure1)
   updateSelectInput(session,'pareto.measure2',
-    choices=as.list(measure2())[-c(as.list(measure2())== input$pareto.measure1)]#[-c(input$pareto.measure1)]#[-c(as.list(measure())== input$pareto.measure1)],
+    choices=as.list(measure2())[-c(as.list(measure2())== input$pareto.measure1)]
   )
 })
-
-
-# observe({
-#   m <- listMeasures()
-#   if(is.null(input$pareto.measure1)){NULL}
-#   else if(input$pareto.measure1 %in% m){
-#     shinyjs::hide("highLowMeasure1", animType = "fade")
-#   }
-#   else if(!(input$pareto.measure1 %in% m)){
-#     shinyjs::show("highLowMeasure1", anim = TRUE)
-#   }
-# })
-# 
-# 
-# observe({
-#   m <- listMeasures()
-#   if(is.null(input$pareto.measure2)){NULL}
-#   else if(input$pareto.measure2 %in% m){
-#     shinyjs::hide("highLowMeasure2", animType = "fade")
-#   }
-#   else if(!(input$pareto.measure2 %in% m)){
-#     shinyjs::show("highLowMeasure2", anim = TRUE)
-#   }
-# })
-
 
 output$paretoType <- renderUI({
   selectizeInput("pareto.type", "Choose Type of Plot",
@@ -650,11 +624,10 @@ output$paretoType <- renderUI({
 })
 
 output$paretoTab <- DT::renderDataTable({
-  show("loading-paretoTab")
   req(data$bmr)
   req(input$pareto.measure1)
   req(input$pareto.measure2)
-  #tab <- tabImport(perfAggDf(data$bmr))[,keep]
+  
   if(input$roundOverview == "Off"){
     opt <- paretoOpt(dat = data$bmr, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2)
   }
@@ -681,11 +654,10 @@ size_text_pareto <- reactive({
 })
 
 output$ggplot_pareto <- renderPlot({
-  show("loading-paretoPlot")
   req(data$bmr)
   req(input$pareto.measure1)
   req(input$pareto.measure2)
-  #tab <- tabImport(perfAggDf(data$bmr))
+  
   paretoFront(dat = data$bmr, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, 
     type = input$pareto.type,
     size_text = size_text_pareto(), size_symbols = input$sizeSymbolsPareto)
@@ -695,9 +667,10 @@ output$ggplot_pareto <- renderPlot({
 
 output$plotly_pareto <- renderPlotly({
   req(data$bmr)
-  #tab <- tabImport(perfAggDf(data$bmr))
+  req(input$pareto.measure1)
+  req(input$pareto.measure2)
+  
   paretoFront(dat = data$bmr, measure1 = input$pareto.measure1, measure2 = input$pareto.measure2, 
-    #highlow1 = input$highLowMeasure1, highlow2 = input$highLowMeasure2, 
     type = input$pareto.type,
     size_text = size_text_pareto(), size_symbols = input$sizeSymbolsPareto)
 })
