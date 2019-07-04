@@ -159,7 +159,9 @@ overflow-y:scroll; background: ghostwhite;}"))#
           br(),
           br(),
           
-          prettySwitch(inputId = 'paretoInfo', "Show Information", value = FALSE),
+          h5("Pareto Set by definition strict dominant in one dimension vs. Intersection Preference with strict
+            dominance in both dimensions."),
+          prettySwitch(inputId = 'paretoInfo', "Show more Information", value = FALSE),
           conditionalPanel(condition = "input.paretoInfo == true",
             fluidRow(htmlOutput("pareto_info")))
         ),

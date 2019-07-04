@@ -44,7 +44,8 @@ output$bmrModelInfo <- renderText({
   consequently the corresponding learner with the 'best' value. Otherwise analysis based on the Pareto Front 
   - delimited to two dimensions - are provided.
   May other aspects then only the value of the performance measure(s) - like computation time - has to be taken into 
-  account when selecting the 'best' model such that the subjective selection is up to the user."
+  account when selecting the 'best' model such that the subjective selection is up to the user. 
+  For analysis of more then two measures at the same time 'PCP' as provided in the 'BMR Analysis' tab may be useful."
 })
 
 # In Case of missing Import Object
