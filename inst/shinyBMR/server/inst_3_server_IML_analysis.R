@@ -352,8 +352,6 @@ iml_plot_obj <- reactive({
 
 observeEvent(input$iml_sets, {
   show_waiter(spin_fading_circles())
- # session$sendCustomMessage(type = 'testmessage',
-  #  message = 'Thank you for clicking')
  # showModal(modalDialog("Calculations for your choosen iml methods running...", footer=NULL, size = "l", fade = T))
   output$iml_plotted <- renderPlot({isolate(plot(iml_plot_obj()))},
     height = function() {
