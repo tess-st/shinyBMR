@@ -21,6 +21,8 @@ II. Access to the Interpretation of Blackbox ML-Methods (IML)
   2. Import and Overview of the (Blackbox) Model
   3. Access to Interpretability provided by different tools of the [**iml**](https://github.com/christophM/iml) package
 
+Keep in mind that the shown pictures/graphics not necessarily belong to the same data respectively to the same BMR object as different use cases shall be visualized.
+
 ## Installation and starting shinyBMR
 
 You can install this package from github with help of the **devtools** package:
