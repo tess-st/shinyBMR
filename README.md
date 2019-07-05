@@ -90,7 +90,7 @@ Having it made so far the question arises, which of the models may performs best
 ![alt_text](pics/I_2_4_BMR_Overview_BestMod.PNG "BMR Overview-Best Model")
 ![alt_text](pics/I_2_4_BMR_Overview_BestMod_Plot.PNG "BMR Overview-Best Model")
 
-Elsewise, in case the BMR data set contains more then one performance measure a different analysis page will be provided. Routines to select and visualize the maxima for a given strict partial order are shown. This especially includes the computation of the so called Pareto frontier, also known as (Top-k) Skyline operator.
+Elsewise, in case the BMR data set contains more then one performance measure a different analysis page will be provided. Routines to select and visualize the maxima for a given strict partial order are shown. This especially includes the computation of the so called Pareto frontier, also known as (Top-k) Skyline operator. These functionalities can be found in the [rPref](https://cran.r-project.org/web/packages/rPref/rPref.pdf) package.
 
 Definition of a Pareto frontier: 'A set of nondominated solutions, being chosen as optimal, if no objective can be improved without sacrificing at least one other objective. On the other hand a solution x* is referred to as dominated by another solution x if, and only if, x is equally good or better than x* with respect to all objectives.'
 
