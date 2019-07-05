@@ -87,12 +87,18 @@ In case that there are still some questions left concerning the structure of the
 #### 'Best' BMR-Model
 Having it made so far the question arises, which of the models may performs best on the given data set respectively within the BMR object. For this the tab 'Best Model' provides the opportunity to get a first impression of the ranking of the competing learners. In case the performance is assessed based on only one measure a scatterplot containing the single learners plotted against the specific measure is showing up. A blue point marks the 'best' value of the belonging machine learning model. May further aspects - e.g. computation time - have to be taken into account when selecting the (subjective) best learner.
 
+![alt_text](pics/I_2_4_BMR_Overview_BestMod.PNG "BMR Overview-Best Model")
+![alt_text](pics/I_2_4_BMR_Overview_BestMod_Plot.PNG "BMR Overview-Best Model")
 
 Elsewise, in case the BMR data set contains more then one performance measure a different analysis page will be provided. Routines to select and visualize the maxima for a given strict partial order are shown. This especially includes the computation of the so called Pareto frontier, also known as (Top-k) Skyline operator.
 
 Definition of a Pareto frontier: 'A set of nondominated solutions, being chosen as optimal, if no objective can be improved without sacrificing at least one other objective. On the other hand a solution x* is referred to as dominated by another solution x if, and only if, x is equally good or better than x* with respect to all objectives.'
 
 In this sense Pareto optimal BMR methods are shown in the table and marked by 'Level = 1'. By connecting these points included in the Pareto set the Pareto front gets displayed. One can also select the option 'Skyline Level Plot' displaying all levels of Pareto Fronts based on the top-k Selection. The definition of Pareto fronts itself requires strict dominance in only one dimension, while in the other one the measures could be equally good or better, leading to possibly overlapping front lines. Instead demanding strict dominance in both dimensions will solve this and probably will develop different compositions of the Pareto sets. This different selections can be made with the tab *Choose Type of Plot* on the sidebar. 
+
+![alt_text](pics/I_2_4_BMR_Overview_Pareto.PNG "BMR Overview-Pareto")
+![alt_text](pics/I_2_4_BMR_Overview_Pareto_Skyline.PNG "BMR Overview-Pareto Skyline Plot")
+![alt_text](pics/I_2_4_BMR_Overview_Pareto_SkylineLevel.PNG "BMR Overview-Pareto Skyline Level Plot")
 
 Analyses with help of the Pareto dominance for more than two dimensions are not yet provided. In case of more than two performance measures it may be helpful to make use of the so called Parallel Coordinate Plot (PCP) provided in the next tab.
 
@@ -123,8 +129,7 @@ As before, the heatmap is only plotted when the tooltip is chosen in order to co
 #### PCP
 In case that you are generally interested in the learners performance to be compared over all measures included in your BMR object one can rely on the Parallel Coordinates Plot *PCP* for further analyses. This type of visualisation is especially useful for the plotting of multivariate, numerical data - in this case multiple performance measures. Doing so the user gets offered a overview of the relationship between the performance measures, which are achieved by the single ML methods. As reasonable consequence the PCP can only be used for analysis when at least two comparable measures are contained in the BMR object.
 
-![alt text](pics/I_3_2_BMR_Analysis_PCP.PNG "BMR Analysis - PCP")
-![alt text](pics/I_3_2_BMR_Analysis_PCP_2.PNG "BMR Analysis - PCP 2")
+![alt text](pics/I_3_3_BMR_Analysis_PCP.PNG "BMR Analysis - PCP")
 
 As for the plots mentioned before the options should be set by clicking on the tooltip button. Here some of the plotting options as well as the labels and the size can be controlled. Furthermore, the input of *Aggregated BMR* can be switched "Off" resulting in additional, shadowed lines marking the connection the performance estimates of the single measures grouped by learner per iteration. Also the PCP can be plotted *Interactive (use Plotly)* as well as downloaded via the *Download* button.  
 
