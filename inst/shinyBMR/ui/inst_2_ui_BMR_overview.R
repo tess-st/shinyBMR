@@ -10,7 +10,7 @@ tabpanel.overview =  dashboardPage(
     menuItem("Basics", tabName = "basicsOverview", icon = icon("pencil-alt"), selected = TRUE),
     hr(),
     menuItem("Summary BMR", tabName = "summaryBMR", icon = icon("cubes")),
-    menuItem("'Best' BMR-Modell", tabName = "pareto", icon = icon("cube")),
+    menuItem("'Best' BMR-Model", tabName = "pareto", icon = icon("cube")),
     
     hr(),
     

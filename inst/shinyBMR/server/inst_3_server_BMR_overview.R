@@ -131,10 +131,12 @@ output$selected.measure <- renderUI({
 
 measureName <- reactive({
   req(input$select.measure) 
+  best <- bestPerfMod(perfAggDf(data$data))
   if(input$select.measure == "Not Selected"){
     NULL
   }
   else{
+    return(best$value_1)
     pos <- findValue(data = perfAggDf(data$data), measure = input$select.measure)
     name <- names(perfAggDf(data$data))[pos]
     return(paste(input$select.measure," (",name,")", sep = ""))
@@ -500,7 +502,7 @@ output$Task <- renderInfoBox({
 })
 
 output$Measure <- renderInfoBox({
-  infoBox("Measure", measureName(), icon = icon("chart-bar"),
+  infoBox("Measure", bestPerfMod(perfAggDf(data$data))$measure_1, icon = icon("chart-bar"), 
     color = "navy")
 })
 

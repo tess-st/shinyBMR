@@ -88,7 +88,7 @@ output$overview_info <- renderUI({
       by another solution x if, and only if, x is equally good or better than x* with respect to all objectives.'"),
     p("In this sense Pareto optimal BMR methods are shown in the table and marked by 'Level = 1'. By connecting
       these points included in the Pareto set the Pareto front gets displayed. One can also select the option 
-      'Skyline Level Plot' displaying all levels of Pareto Fronts based on the top-k Selection. The definion of Pareto
+      'Skyline Level Plot' displaying all levels of Pareto Fronts based on the top-k Selection. The definition of Pareto
       fronts itself requires strict dominance in only one dimension, while in the other one the measures could be 
       equally good or better, leading to possibly overlapping front lines. Instead demanding strict dominance in both
       dimensions will solve this and probably will develop different compositions of the Pareto sets."),
