@@ -59,6 +59,7 @@ Finally, having uploaded your BMR object, **shinyBMR** will show a data table co
 By default you only see the aggregated performance of each learner. Clicking *Aggregated BMR* offers the opportunity to also show the unaggregated performance containing the values of each learner per iteration. Additionally the values of the measure(s) are rounded by default for a better overview. This can be undone by making the corresponding selection at *Round Values*. 
 
 ### 2.Overview of the Information contained in the Benchmark Object
+#### Summary BMR
 As the BMRs tend to become quite huge objects this tab ***BMR Overview*** is made up to summarize the results in a clear and structured way. First of all, summarizing the results of the whole benchmark study, you have to navigate to the ***Summary BMR*** tab on the sidebar. Doing so, there is now the sub-tab ***Categories/Levels*** displayed, which basically breaks down the information of the imported BMR object to only the most relevant.
 ![alt_text](pics/I_2_1_BMR_Overview_Summary.PNG "BMR Overview - Summary")
 
@@ -83,7 +84,17 @@ In case that there are still some questions left concerning the structure of the
 
 ![alt_text](pics/I_2_3_BMR_Overview_CrossTables.PNG "BMR Overview - Cross Tables")
 
-Having it made so far the question arises, which of the models may performs best on the given data set respectively within the BMR object. Therefor the tab 'Best Model' provides the opportunity to get a first impression of the ranking of the competing learners. In case the performance is assessed based on only one measure a scatterplot containing the single learners plotted against the specific measure is showing up. A blue point marks the 'best' value of the belonging machine learning model. 
+#### 'Best' BMR-Model
+Having it made so far the question arises, which of the models may performs best on the given data set respectively within the BMR object. For this the tab 'Best Model' provides the opportunity to get a first impression of the ranking of the competing learners. In case the performance is assessed based on only one measure a scatterplot containing the single learners plotted against the specific measure is showing up. A blue point marks the 'best' value of the belonging machine learning model. May further aspects - e.g. computation time - have to be taken into account when selecting the (subjective) best learner.
+
+
+Elsewise, in case the BMR data set contains more then one performance measure a different analysis page will be provided. Routines to select and visualize the maxima for a given strict partial order are shown. This especially includes the computation of the so called Pareto frontier, also known as (Top-k) Skyline operator.
+
+Definition of a Pareto frontier: 'A set of nondominated solutions, being chosen as optimal, if no objective can be improved without sacrificing at least one other objective. On the other hand a solution x* is referred to as dominated by another solution x if, and only if, x is equally good or better than x* with respect to all objectives.'
+
+In this sense Pareto optimal BMR methods are shown in the table and marked by 'Level = 1'. By connecting these points included in the Pareto set the Pareto front gets displayed. One can also select the option 'Skyline Level Plot' displaying all levels of Pareto Fronts based on the top-k Selection. The definition of Pareto fronts itself requires strict dominance in only one dimension, while in the other one the measures could be equally good or better, leading to possibly overlapping front lines. Instead demanding strict dominance in both dimensions will solve this and probably will develop different compositions of the Pareto sets. This different selections can be made with the tab *Choose Type of Plot* on the sidebar. 
+
+Analyses with help of the Pareto dominance for more than two dimensions are not yet provided. In case of more than two performance measures it may be helpful to make use of the so called Parallel Coordinate Plot (PCP) provided in the next tab.
 
 
 ### 3. Graphical Analysis of the competing Methods included in the Benachmark Study
